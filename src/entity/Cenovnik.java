@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Cenovnik {
-    private int id;
+    private final int id;
 
-    private HashMap<Integer, Double> cenovnikHasMap = new HashMap<>();
+    private HashMap<Integer, Double> cenovnikHasMap;
 
-    public Cenovnik(int id, HashMap ceneHashMap) {
+    public Cenovnik(int id, HashMap<Integer, Double> ceneHashMap) {
         this.id = id;
         this.cenovnikHasMap = ceneHashMap;
     }
@@ -24,7 +24,7 @@ public class Cenovnik {
     public String toFileString(){
         StringBuilder sb = new StringBuilder();
         for(Map.Entry<Integer, Double> entry : this.cenovnikHasMap.entrySet()) {
-            sb.append("," + entry.getKey() + "=" + entry.getValue());
+            sb.append(",").append(entry.getKey()).append("=").append(entry.getValue());
         }
        return this.id + sb.toString();
     }

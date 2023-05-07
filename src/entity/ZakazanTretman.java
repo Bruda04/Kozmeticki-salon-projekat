@@ -11,18 +11,18 @@ public class ZakazanTretman {
     private LocalTime vreme;
     private int idKlijenta;
     private int idKozmeticara;
-    private int idTipaTretmana;
+    private int idTipaUsluge;
     private double cena;
 
     private StanjeZakazanogTretmana stanje;
 
-    public ZakazanTretman(int id, LocalDate datum, LocalTime vreme, int idKlijenta, int idKozmeticara, int idTipaTretmana, double cena, StanjeZakazanogTretmana stanje) {
+    public ZakazanTretman(int id, LocalDate datum, LocalTime vreme, int idKlijenta, int idKozmeticara, int idTipaUsluge, double cena, StanjeZakazanogTretmana stanje) {
         this.id = id;
         this.datum = datum;
         this.vreme = vreme;
         this.idKlijenta = idKlijenta;
         this.idKozmeticara = idKozmeticara;
-        this.idTipaTretmana = idTipaTretmana;
+        this.idTipaUsluge = idTipaUsluge;
         this.cena = cena;
         this.stanje = stanje;
     }
@@ -30,7 +30,7 @@ public class ZakazanTretman {
     public String toFileString(){
         return this.id + "," + this.datum.toString() + "," +
                 this.getVremeFormatStr() + "," + this.idKlijenta + "," +
-                this.idKozmeticara + "," + this.idTipaTretmana + "," +
+                this.idKozmeticara + "," + this.idTipaUsluge + "," +
                 this.cena + "," + this.stanje.toString();
     }
 
@@ -57,9 +57,9 @@ public class ZakazanTretman {
 
     public void setIdKozmeticara(int idKozmeticara) {this.idKozmeticara = idKozmeticara;}
 
-    public int getIdTipaTretmana() {return idTipaTretmana;}
+    public int getIdTipaUsluge() {return idTipaUsluge;}
 
-    public void setIdTipaTretmana(int idTipaTretmana) {this.idTipaTretmana = idTipaTretmana;}
+    public void setIdTipaUsluge(int idTipaTretmana) {this.idTipaUsluge = idTipaTretmana;}
 
     public double getCena() {return cena;}
 

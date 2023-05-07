@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -23,8 +24,8 @@ public class TipTretmanaManager {
         return tipoviTretmanaHashMap;
     }
 
-    public void add(String nazivTretmana, String opisTretmana) {
-        this.tipoviTretmanaHashMap.put(nextId ,new TipTretmana(this.nextId, nazivTretmana, opisTretmana));
+    public void add(String naziv, ArrayList<Integer> skupTipovaUsluga) {
+        this.tipoviTretmanaHashMap.put(nextId ,new TipTretmana(this.nextId, naziv, skupTipovaUsluga));
         this.nextId++;
         this.saveData();
     }
@@ -35,7 +36,7 @@ public class TipTretmanaManager {
 
     public TipTretmana findByNazivTipaTretmana(String nazivTretmana){
         for (TipTretmana tt : this.tipoviTretmanaHashMap.values()) {
-            if (tt.getNazivTretmana().equals(nazivTretmana)) {
+            if (tt.getNaziv().equals(nazivTretmana)) {
                 return tt;
             }
         }
@@ -49,17 +50,18 @@ public class TipTretmanaManager {
 
     public void deleteByNazivTipaTretmana(String nazivTretmana){
         for (TipTretmana tt : this.tipoviTretmanaHashMap.values()) {
-            if (tt.getNazivTretmana().equals(nazivTretmana)) {
+            if (tt.getNaziv().equals(nazivTretmana)) {
                 this.tipoviTretmanaHashMap.remove(tt.getId());
                 break;
             }
         }
         this.saveData();
     }
-    public void update(int id, String nazivTretmana, String opisTretmana) {
+
+    public void update(int id, String naziv, ArrayList<Integer> skupTipovaUsluga) {
         TipTretmana updatedTipTretmana = this.tipoviTretmanaHashMap.get(id);
-        updatedTipTretmana.setNazivTretmana(nazivTretmana);
-        updatedTipTretmana.setOpisTretmana(opisTretmana);
+        updatedTipTretmana.setNaziv(naziv);
+        updatedTipTretmana.setSkupTipovaUsluga(skupTipovaUsluga);
         this.tipoviTretmanaHashMap.replace(id, updatedTipTretmana);
         this.saveData();
     }
@@ -72,7 +74,13 @@ public class TipTretmanaManager {
             while ((linija = br.readLine()) != null) {
                 String[] tokeni = linija.split(",");
                 int id = Integer.parseInt(tokeni[0]);
-                this.tipoviTretmanaHashMap.put(id ,new TipTretmana(id, tokeni[1], tokeni[2]));
+                ArrayList<Integer> ListaUsluga = new ArrayList<>();
+                if (tokeni.length == 3) {
+                    for (String i : tokeni[2].split("\\|")) {
+                        ListaUsluga.add(Integer.parseInt(i));
+                    }
+                }
+                this.tipoviTretmanaHashMap.put(id ,new TipTretmana(id, tokeni[1], ListaUsluga));
                 this.nextId = ++id;
             }
             br.close();

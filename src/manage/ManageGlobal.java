@@ -4,16 +4,16 @@ import entity.*;
 import utils.AppSettings;
 
 public class ManageGlobal {
-	private AppSettings appSettings;
-	private KlijentManager klijentMngr;
-	private MenadzerManager menadzerMngr;
-	private RecepcionerManager recepcionerMngr;
-	private KozmeticarManager kozmeticarMngr;
-	private CenovnikManager cenovnikMngr;
-	private TipTretmanaManager tipTretmanaMngr;
-	private ZakazanTretmanManager zakazanTretmanMngr;
-	private UslugaManager uslugaMngr;
-	private KozmetickiSalonManager kozmetickiSalonMngr;
+	private final AppSettings appSettings;
+	private final KlijentManager klijentMngr;
+	private final MenadzerManager menadzerMngr;
+	private final RecepcionerManager recepcionerMngr;
+	private final KozmeticarManager kozmeticarMngr;
+	private final CenovnikManager cenovnikMngr;
+	private final TipTretmanaManager tipTretmanaMngr;
+	private final ZakazanTretmanManager zakazanTretmanMngr;
+	private final UslugaManager uslugaMngr;
+	private final KozmetickiSalonManager kozmetickiSalonMngr;
 
 	public ManageGlobal(AppSettings appSettings) {
 		this.appSettings = appSettings;
@@ -83,6 +83,34 @@ public class ManageGlobal {
 		for (Klijent k: this.klijentMngr.getKlijentHashMap().values()
 		) {
 			System.out.println(k);
+		}
+	}
+
+    public void prikazTretmanUslugaCena() {
+		System.out.println();
+		for (TipTretmana tt : this.tipTretmanaMngr.getTipoviTretmanaHashMap().values()) {
+			System.out.printf("#####%s#####\n", tt.getNaziv().toUpperCase());
+			for (int uId: tt.getSkupTipovaUsluga()) {
+				Usluga u = this.uslugaMngr.findById(uId);
+				double uCena = this.cenovnikMngr.findById(1).getCenovnikHasMap().get(u.getId());
+				System.out.printf("Naziv: %s, Trajanje(minuti): %s, Tip tretmana: %s, Cena: %.2f\n", u.getNazivUsluge(), u.getTrajanjeUsluge(), tt.getNaziv(), uCena);
+			}
+		}
+    }
+
+	public void prikaziZakazaneTretmane() {
+		System.out.println();
+		System.out.println("#####ZAKAZANI TRETMANI#####");
+		for (ZakazanTretman zt: this.zakazanTretmanMngr.getZakazanTretmanHashMap().values()) {
+			System.out.printf("Klijent: %s, Kozmeticar: %s, Datum: %s, Vreme: %s, Tip usluge: %s, Cena: %.2f, Stanje: %s\n",
+					this.klijentMngr.findById(zt.getIdKlijenta()).getKorisnickoIme(),
+					this.kozmeticarMngr.findById(zt.getIdKozmeticara()).getKorisnickoIme(),
+					zt.getDatum(),
+					zt.getVremeFormatStr(),
+					this.uslugaMngr.findById(zt.getIdTipaUsluge()).getNazivUsluge(),
+					zt.getCena(),
+					zt.getStanje()
+					);
 		}
 	}
 }

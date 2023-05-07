@@ -1,11 +1,13 @@
 package main;
 
-import entity.KozmetickiSalon;
+import entity.*;
 import manage.ManageGlobal;
 import utils.AppSettings;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Main {
@@ -64,8 +66,6 @@ public class Main {
         );
 
         ArrayList<Integer> spisakTretmanaSima = new ArrayList<>();
-        spisakTretmanaSima.add(1);
-        spisakTretmanaSima.add(3);
         controlers.getKozmeticarMngr().add(
                 "SimaSimic",
                 "Sima",
@@ -95,12 +95,10 @@ public class Main {
                 10,
                 true,
                 90000.00,
-                new ArrayList<Integer>()
+                new ArrayList<>()
         );
 
         ArrayList<Integer> spisakTretmanaJadranka = new ArrayList<>();
-        spisakTretmanaJadranka.add(1);
-        spisakTretmanaJadranka.add(2);
         controlers.getKozmeticarMngr().add(
                 "JadrankaJovanovic",
                 "Jadranka",
@@ -142,22 +140,22 @@ public class Main {
                 true,
                 1000.00
         );
-
+        Kozmeticar kUpdate = controlers.getKozmeticarMngr().findByKorisnickoIme("JadrankaJovanovic");
         controlers.getKozmeticarMngr().update(
-                controlers.getKozmeticarMngr().findByKorisnickoIme("JadrankaJovanovic").getId(),
-                "JadrankaJovanovic",
+                kUpdate.getId(),
+                kUpdate.getKorisnickoIme(),
                 "Jovana",
-                "Jovanovic",
-                "F",
-                "123456",
-                "Beograd Ustanicka 12",
-                "password",
-                200.00,
-                3,
-                10,
-                true,
-                90000.00,
-                spisakTretmanaJadranka
+                kUpdate.getPrezime(),
+                kUpdate.getPol(),
+                kUpdate.getTelefon(),
+                kUpdate.getAdresa(),
+                kUpdate.getLozinka(),
+                kUpdate.getStanjeRacuna(),
+                kUpdate.getNivoStrucneSpreme(),
+                kUpdate.getGodineStaza(),
+                kUpdate.getBonus(),
+                kUpdate.getPlata(),
+                kUpdate.getSpisakTretmana()
         );
 
         controlers.prikazKorisnici();
@@ -165,43 +163,188 @@ public class Main {
         controlers.getKozmeticarMngr().deleteByKorisnickoIme("ZikaZikic");
 
         controlers.prikazKorisnici();
-//        controlers.getTipTretmanaMngr().add("Nokti", "opisNokti");
-//        controlers.getTipTretmanaMngr().add("Nokti1", "opisNokti1");
-//        controlers.getTipTretmanaMngr().add("Nokti2", "opisNokti2");
-//        controlers.getTipTretmanaMngr().update(1,"Nokti34", "opisNokti");
-//        controlers.getTipTretmanaMngr().deleteById(1);
-//        controlers.getTipTretmanaMngr().deleteByNazivTipaTretmana("Nokti2");
 
-//        HashMap<Integer, Double> hm = new HashMap<>();
-//        hm.put(333, 333.0);
-//        hm.put(11, 231233.0);
-//        hm.put(21, 111.0);
-//        controlers.getCenovnikMngr().add(hm);
-//        controlers.getCenovnikMngr().deleteById(2);
-//        controlers.getCenovnikMngr().loadData();
-//        controlers.getKorisnikMngr().add("LukaB", "Luka", "Bradic", "M", "06400000", "MMa", "password");
-//        controlers.getKorisnikMngr().add("LukaB2", "Luka", "Bradic", "M", "06400000", "MMa", "password");
-//        controlers.getKorisnikMngr().add("LukaB3", "Luka", "Bradic", "M", "06400000", "MMa", "password");
-//        System.out.println(controlers.getKorisnikMngr().findById(1));
-//        System.out.println(controlers.getKorisnikMngr().findByKorisnickoIme("LukaB3"));
-//        controlers.getKorisnikMngr().deleteByKorisnickoIme("LukaB3");
-//        controlers.getKorisnikMngr().update(2,"Lukaaaaaa", "Luka", "Bradic", "M", "06400000", "MMa", "password");
-//        System.out.println(controlers.getKorisnikMngr().getKlijentHashMap());
-//
-//        controlers.getZakazanTretmanMngr().add(LocalDate.now(), LocalTime.now(), 1, 2, 3, 233.3, StanjeZakazanogTretmana.IZVRŠEN);
-//        controlers.getZakazanTretmanMngr().deleteById(1);
-//        controlers.getZakazanTretmanMngr().update(2, LocalDate.now(), LocalTime.now(), 22, 3, 3123, 21233.3, StanjeZakazanogTretmana.NIJESEPOJAVIO);
-//
-//        ArrayList<Integer> array = new ArrayList<>();
-//        array.add(1);
-//        array.add(2);
-//        array.add(3);
-//        array.add(555);
-//        array.add(123);
-////        controlers.getUslugaMngr().add("ime", array);
-////        controlers.getUslugaMngr().add("prezime", array);
-//        controlers.getUslugaMngr().update(2,"prezime", array);
+//        PODESAVANJE TIPOVA USLUGA
+
+        controlers.getUslugaMngr().add("Relaks masaza", 45);
+        controlers.getUslugaMngr().add("Sportska masaza", 75);
+        controlers.getUslugaMngr().add("Francuski manikir", 50);
+        controlers.getUslugaMngr().add("Gel lak", 80);
+        controlers.getUslugaMngr().add("Spa manikir", 90);
+        controlers.getUslugaMngr().add("Spa pedikir", 45);
+
+//        PODESAVANJE TIPOVA TRETMANA
+
+        ArrayList<Integer> masazaListaUsluga = new ArrayList<>();
+        masazaListaUsluga.add(controlers.getUslugaMngr().findByNazivUsluge("Relaks masaza").getId());
+        masazaListaUsluga.add(controlers.getUslugaMngr().findByNazivUsluge("Sportska masaza").getId());
+        controlers.getTipTretmanaMngr().add("masaza", masazaListaUsluga);
+
+        ArrayList<Integer> manikirListaUsluga = new ArrayList<>();
+        manikirListaUsluga.add(controlers.getUslugaMngr().findByNazivUsluge("Francuski manikir").getId());
+        manikirListaUsluga.add(controlers.getUslugaMngr().findByNazivUsluge("Gel lak").getId());
+        manikirListaUsluga.add(controlers.getUslugaMngr().findByNazivUsluge("Spa manikir").getId());
+        controlers.getTipTretmanaMngr().add("manikir", manikirListaUsluga);
+
+        ArrayList<Integer> pedikirListaUsluga = new ArrayList<>();
+        controlers.getTipTretmanaMngr().add("pedikir", pedikirListaUsluga);
+
+//        PODESAVANJE CENOVNIKA
+        HashMap<Integer, Double> cenovnik = new HashMap<>();
+        cenovnik.put(controlers.getUslugaMngr().findByNazivUsluge("Relaks masaza").getId(), 2000.00);
+        cenovnik.put(controlers.getUslugaMngr().findByNazivUsluge("Sportska masaza").getId(), 2500.00);
+        cenovnik.put(controlers.getUslugaMngr().findByNazivUsluge("Francuski manikir").getId(), 1500.00);
+        cenovnik.put(controlers.getUslugaMngr().findByNazivUsluge("Gel lak").getId(), 1600.00);
+        cenovnik.put(controlers.getUslugaMngr().findByNazivUsluge("Spa manikir").getId(), 2000.00);
+        cenovnik.put(controlers.getUslugaMngr().findByNazivUsluge("Spa pedikir").getId(), 1600.00);
+        controlers.getCenovnikMngr().add(cenovnik);
+
+        controlers.prikazTretmanUslugaCena();
+
+//        IZMENE TRETMANA I USLUGA
 
 
+        Usluga uUpdate = controlers.getUslugaMngr().findByNazivUsluge("Francuski manikir");
+        controlers.getUslugaMngr().update(
+                uUpdate.getId(),
+                uUpdate.getNazivUsluge(),
+                55
+        );
+
+        int idUslugeZaPremestanje = controlers.getUslugaMngr().findByNazivUsluge("Spa pedikir").getId();
+        boolean finish = false;
+        for (TipTretmana tt : controlers.getTipTretmanaMngr().getTipoviTretmanaHashMap().values()) {
+            int i = 0;
+            for (int uId: tt.getSkupTipovaUsluga()) {
+                if (uId == idUslugeZaPremestanje) {
+                    ArrayList<Integer> ttNew = tt.getSkupTipovaUsluga();
+                    ttNew.remove(i);
+                    controlers.getTipTretmanaMngr().update(tt.getId(), tt.getNaziv(), ttNew);
+                    finish = true;
+                    break;
+                }
+                if (finish){
+                    break;
+                }
+                i++;
+            }
+        }
+
+        TipTretmana tUpdate = controlers.getTipTretmanaMngr().findByNazivTipaTretmana("pedikir");
+        ArrayList<Integer> ttNew = tUpdate.getSkupTipovaUsluga();
+        ttNew.add(idUslugeZaPremestanje);
+        controlers.getTipTretmanaMngr().update(
+                tUpdate.getId(),
+                tUpdate.getNaziv(),
+                ttNew
+        );
+
+        controlers.prikazTretmanUslugaCena();
+
+
+//        PODESAVANJE OBUCENOSTI KOZMETICARA
+
+        Kozmeticar kozmeticarUpd =  controlers.getKozmeticarMngr().findByKorisnickoIme("SimaSimic");
+        spisakTretmanaSima.add(controlers.getTipTretmanaMngr().findByNazivTipaTretmana("masaza").getId());
+        spisakTretmanaSima.add(controlers.getTipTretmanaMngr().findByNazivTipaTretmana("manikir").getId());
+        controlers.getKozmeticarMngr().update(
+                kozmeticarUpd.getId(),
+                kozmeticarUpd.getKorisnickoIme(),
+                kozmeticarUpd.getIme(),
+                kozmeticarUpd.getPrezime(),
+                kozmeticarUpd.getPol(),
+                kozmeticarUpd.getTelefon(),
+                kozmeticarUpd.getAdresa(),
+                kozmeticarUpd.getLozinka(),
+                kozmeticarUpd.getStanjeRacuna(),
+                kozmeticarUpd.getNivoStrucneSpreme(),
+                kozmeticarUpd.getGodineStaza(),
+                kozmeticarUpd.getBonus(),
+                kozmeticarUpd.getPlata(),
+                spisakTretmanaSima
+        );
+
+        kozmeticarUpd =  controlers.getKozmeticarMngr().findByKorisnickoIme("JadrankaJovanovic");
+        spisakTretmanaJadranka.add(controlers.getTipTretmanaMngr().findByNazivTipaTretmana("manikir").getId());
+        spisakTretmanaJadranka.add(controlers.getTipTretmanaMngr().findByNazivTipaTretmana("pedikir").getId());
+        controlers.getKozmeticarMngr().update(
+                kozmeticarUpd.getId(),
+                kozmeticarUpd.getKorisnickoIme(),
+                kozmeticarUpd.getIme(),
+                kozmeticarUpd.getPrezime(),
+                kozmeticarUpd.getPol(),
+                kozmeticarUpd.getTelefon(),
+                kozmeticarUpd.getAdresa(),
+                kozmeticarUpd.getLozinka(),
+                kozmeticarUpd.getStanjeRacuna(),
+                kozmeticarUpd.getNivoStrucneSpreme(),
+                kozmeticarUpd.getGodineStaza(),
+                kozmeticarUpd.getBonus(),
+                kozmeticarUpd.getPlata(),
+                spisakTretmanaJadranka
+        );
+
+        controlers.prikazKorisnici();
+
+//        ZAKAZIVANJE KONKRETNIH TRETMANA
+
+        controlers.getZakazanTretmanMngr().add(
+                LocalDate.now(),
+                LocalTime.now(),
+                controlers.getKlijentMngr().findByKorisnickoIme("MilicaMilic").getId(),
+                controlers.getKozmeticarMngr().findByKorisnickoIme("SimaSimic").getId(),
+                controlers.getUslugaMngr().findByNazivUsluge("Relaks masaza").getId(),
+                controlers.getCenovnikMngr().findById(1).getCenovnikHasMap().get(controlers.getUslugaMngr().findByNazivUsluge("Relaks masaza").getId()),
+                StanjeZakazanogTretmana.ZAKAZAN
+        );
+
+        controlers.getZakazanTretmanMngr().add(
+                LocalDate.now(),
+                LocalTime.now(),
+                controlers.getKlijentMngr().findByKorisnickoIme("MikaMikic").getId(),
+                controlers.getKozmeticarMngr().findByKorisnickoIme("SimaSimic").getId(),
+                controlers.getUslugaMngr().findByNazivUsluge("Gel lak").getId(),
+                controlers.getCenovnikMngr().findById(1).getCenovnikHasMap().get(controlers.getUslugaMngr().findByNazivUsluge("Gel lak").getId()),
+                StanjeZakazanogTretmana.ZAKAZAN
+        );
+
+        controlers.getZakazanTretmanMngr().add(
+                LocalDate.now(),
+                LocalTime.now(),
+                controlers.getKlijentMngr().findByKorisnickoIme("MikaMikic").getId(),
+                controlers.getKozmeticarMngr().findByKorisnickoIme("JadrankaJovanovic").getId(),
+                controlers.getUslugaMngr().findByNazivUsluge("Spa pedikir").getId(),
+                controlers.getCenovnikMngr().findById(1).getCenovnikHasMap().get(controlers.getUslugaMngr().findByNazivUsluge("Spa pedikir").getId()),
+                StanjeZakazanogTretmana.ZAKAZAN
+        );
+
+        controlers.getTipTretmanaMngr().deleteByNazivTipaTretmana("pedikir");
+
+        controlers.prikaziZakazaneTretmane();
+
+        ZakazanTretman ztUpdate = controlers.getZakazanTretmanMngr().findById(2);
+        controlers.getZakazanTretmanMngr().update(
+                ztUpdate.getId(),
+                ztUpdate.getDatum(),
+                ztUpdate.getVreme(),
+                ztUpdate.getIdKlijenta(),
+                ztUpdate.getIdKozmeticara(),
+                controlers.getUslugaMngr().findByNazivUsluge("Francuski manikir").getId(),
+                controlers.getCenovnikMngr().findById(1).getCenovnikHasMap().get(controlers.getUslugaMngr().findByNazivUsluge("Francuski manikir").getId()),
+                ztUpdate.getStanje()
+        );
+
+        controlers.prikaziZakazaneTretmane();
+
+
+//        IZMENE CENA
+
+        controlers.prikazTretmanUslugaCena();
+
+        HashMap<Integer, Double> cenovnikUpdate = controlers.getCenovnikMngr().findById(1).getCenovnikHasMap();
+        cenovnikUpdate.replace(controlers.getUslugaMngr().findByNazivUsluge("Relaks masaza").getId(), 1700.00);
+        controlers.getCenovnikMngr().update(1, cenovnikUpdate);
+
+        controlers.prikazTretmanUslugaCena();
     }
 }

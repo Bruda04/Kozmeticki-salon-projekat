@@ -28,8 +28,8 @@ public class ZakazanTretmanManager {
         return zakazanTretmanHashMap;
     }
 
-    public void add(LocalDate datum, LocalTime vreme, int idKlijenta, int idKozmeticara, int idTipaTretmana, double cena, StanjeZakazanogTretmana stanje) {
-        this.zakazanTretmanHashMap.put(nextId ,new ZakazanTretman(this.nextId, datum, vreme, idKlijenta, idKozmeticara, idTipaTretmana, cena, stanje));
+    public void add(LocalDate datum, LocalTime vreme, int idKlijenta, int idKozmeticara, int idTipaUsluge, double cena, StanjeZakazanogTretmana stanje) {
+        this.zakazanTretmanHashMap.put(nextId ,new ZakazanTretman(this.nextId, datum, vreme, idKlijenta, idKozmeticara, idTipaUsluge, cena, stanje));
         this.nextId++;
         this.saveData();
     }
@@ -43,13 +43,13 @@ public class ZakazanTretmanManager {
         this.saveData();
     }
 
-    public void update(int id, LocalDate datum, LocalTime vreme, int idKlijenta, int idKozmeticara, int idTipaTretmana, double cena, StanjeZakazanogTretmana stanje) {
+    public void update(int id, LocalDate datum, LocalTime vreme, int idKlijenta, int idKozmeticara, int idTipaUsluge, double cena, StanjeZakazanogTretmana stanje) {
         ZakazanTretman updatedZakazanTretman = this.zakazanTretmanHashMap.get(id);
         updatedZakazanTretman.setDatum(datum);
         updatedZakazanTretman.setVreme(vreme);
         updatedZakazanTretman.setIdKlijenta(idKlijenta);
         updatedZakazanTretman.setIdKozmeticara(idKozmeticara);
-        updatedZakazanTretman.setIdTipaTretmana(idTipaTretmana);
+        updatedZakazanTretman.setIdTipaUsluge(idTipaUsluge);
         updatedZakazanTretman.setCena(cena);
         updatedZakazanTretman.setStanje(stanje);
         this.zakazanTretmanHashMap.replace(id, updatedZakazanTretman);
