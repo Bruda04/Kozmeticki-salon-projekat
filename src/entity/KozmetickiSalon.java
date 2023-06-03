@@ -9,20 +9,33 @@ public class KozmetickiSalon {
     private LocalTime vremeOtvaranja;
     private LocalTime vremeZatvaranja;
 
-    public KozmetickiSalon(int id, String naziv, LocalTime vremeOtvaranja, LocalTime vremeZatvaranja) {
+	private Double stanje;
+
+    public KozmetickiSalon(int id, String naziv, LocalTime vremeOtvaranja, LocalTime vremeZatvaranja, Double stanje) {
         this.id = id;
         this.naziv = naziv;
         this.vremeOtvaranja = vremeOtvaranja;
         this.vremeZatvaranja = vremeZatvaranja;
+        this.stanje = stanje;
+    }
+    
+    public double izracunajPlatu(int nivoStrucneSpreme, int godineStaza, boolean bonus) {
+    	if (bonus) {
+    		return 1000.00*(nivoStrucneSpreme)+godineStaza*2000.00 + 50000.00 + 5000.00;    		
+    	} else {
+    		return 1000.00*(nivoStrucneSpreme)+godineStaza*2000.00 + 50000.00;
+    	}
+    	
+    	
     }
 
     public String toFileString(){
         return this.id + "," + this.naziv + "," + this.getVremeOtvaranjaFormatStr() + ","
-                + this.getVremeZatvaranjaFormatStr();
+                + this.getVremeZatvaranjaFormatStr() + "," + this.stanje;
     }
 
     public String toString(){
-        return String.format("Naziv: %s, Vreme otvaranja: %s, Vreme zatvaranja: %s", this.naziv, this.vremeOtvaranja.toString(), this.vremeZatvaranja.toString());
+        return String.format("Naziv: %s, Vreme otvaranja: %s, Vreme zatvaranja: %s, Stanje racuna: %f", this.naziv, this.vremeOtvaranja.toString(), this.vremeZatvaranja.toString(), this.stanje);
     }
 
     public int getId() {
@@ -69,4 +82,11 @@ public class KozmetickiSalon {
         this.setVremeZatvaranja(LocalTime.parse(vremeZatvaranja, DateTimeFormatter.ofPattern("HH:mm")));
     }
 
+    public Double getStanje() {
+    	return stanje;
+    }
+    
+    public void setStanje(Double stanje) {
+    	this.stanje = stanje;
+    }
 }

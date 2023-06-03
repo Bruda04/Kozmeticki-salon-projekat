@@ -12,10 +12,10 @@ public class ZakazanTretman {
     private int idKozmeticara;
     private int idTipaUsluge;
     private double cena;
-
+    private int idZakazaivaca;
     private StanjeZakazanogTretmana stanje;
 
-    public ZakazanTretman(int id, LocalDate datum, LocalTime vreme, int idKlijenta, int idKozmeticara, int idTipaUsluge, double cena, StanjeZakazanogTretmana stanje) {
+    public ZakazanTretman(int id, LocalDate datum, LocalTime vreme, int idKlijenta, int idKozmeticara, int idTipaUsluge, double cena, int idZakazivaca, StanjeZakazanogTretmana stanje) {
         this.id = id;
         this.datum = datum;
         this.vreme = vreme;
@@ -23,6 +23,7 @@ public class ZakazanTretman {
         this.idKozmeticara = idKozmeticara;
         this.idTipaUsluge = idTipaUsluge;
         this.cena = cena;
+        this.idZakazaivaca = idZakazivaca;
         this.stanje = stanje;
     }
 
@@ -30,7 +31,7 @@ public class ZakazanTretman {
         return this.id + "," + this.datum.toString() + "," +
                 this.getVremeFormatStr() + "," + this.idKlijenta + "," +
                 this.idKozmeticara + "," + this.idTipaUsluge + "," +
-                this.cena + "," + this.stanje.toString();
+                this.cena +"," + this.idZakazaivaca + "," + this.stanje.toString();
     }
 
     public int getId() {return id;}
@@ -45,6 +46,7 @@ public class ZakazanTretman {
     }
 
     public void setVreme(LocalTime vreme) {this.vreme = vreme.withSecond(0);}
+    
     public void setVremeByString(String vreme) {
         this.setVreme(LocalTime.parse(vreme, DateTimeFormatter.ofPattern("HH:mm")));
     }
@@ -66,4 +68,11 @@ public class ZakazanTretman {
 
     public StanjeZakazanogTretmana getStanje() {return stanje;}
     public void setStanje(StanjeZakazanogTretmana stanje) {this.stanje = stanje;}
+    
+    public int getIdZakazivaca() {
+    	return this.idZakazaivaca;
+    }
+    public void setIdZakazivaca(int idZakazivaca) {
+    	this.idZakazaivaca = idZakazivaca;
+    }
 }

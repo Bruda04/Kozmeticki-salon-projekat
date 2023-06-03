@@ -29,4 +29,8 @@ public class Cenovnik {
        return this.id + sb.toString();
     }
 
+	public int getId() {
+		return id;
+	}
+    
 }

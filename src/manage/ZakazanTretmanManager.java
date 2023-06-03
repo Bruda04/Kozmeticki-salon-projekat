@@ -28,8 +28,8 @@ public class ZakazanTretmanManager {
         return zakazanTretmanHashMap;
     }
 
-    public void add(LocalDate datum, LocalTime vreme, int idKlijenta, int idKozmeticara, int idTipaUsluge, double cena, StanjeZakazanogTretmana stanje) {
-        this.zakazanTretmanHashMap.put(nextId ,new ZakazanTretman(this.nextId, datum, vreme, idKlijenta, idKozmeticara, idTipaUsluge, cena, stanje));
+    public void add(LocalDate datum, LocalTime vreme, int idKlijenta, int idKozmeticara, int idTipaUsluge, double cena, int idZakaivaca, StanjeZakazanogTretmana stanje) {
+        this.zakazanTretmanHashMap.put(nextId ,new ZakazanTretman(this.nextId, datum, vreme, idKlijenta, idKozmeticara, idTipaUsluge, cena, idZakaivaca, stanje));
         this.nextId++;
         this.saveData();
     }
@@ -43,7 +43,7 @@ public class ZakazanTretmanManager {
         this.saveData();
     }
 
-    public void update(int id, LocalDate datum, LocalTime vreme, int idKlijenta, int idKozmeticara, int idTipaUsluge, double cena, StanjeZakazanogTretmana stanje) {
+    public void update(int id, LocalDate datum, LocalTime vreme, int idKlijenta, int idKozmeticara, int idTipaUsluge, double cena, int idZakaivaca, StanjeZakazanogTretmana stanje) {
         ZakazanTretman updatedZakazanTretman = this.zakazanTretmanHashMap.get(id);
         updatedZakazanTretman.setDatum(datum);
         updatedZakazanTretman.setVreme(vreme);
@@ -51,6 +51,7 @@ public class ZakazanTretmanManager {
         updatedZakazanTretman.setIdKozmeticara(idKozmeticara);
         updatedZakazanTretman.setIdTipaUsluge(idTipaUsluge);
         updatedZakazanTretman.setCena(cena);
+        updatedZakazanTretman.setIdZakazivaca(idZakaivaca);
         updatedZakazanTretman.setStanje(stanje);
         this.zakazanTretmanHashMap.replace(id, updatedZakazanTretman);
         this.saveData();
@@ -65,7 +66,7 @@ public class ZakazanTretmanManager {
                 String[] tokeni = linija.split(",");
                 int id = Integer.parseInt(tokeni[0]);
                 this.zakazanTretmanHashMap.put(id ,new ZakazanTretman(id, LocalDate.parse(tokeni[1]), LocalTime.parse(tokeni[2], DateTimeFormatter.ofPattern("HH:mm")), Integer.parseInt(tokeni[3]),
-                        Integer.parseInt(tokeni[4]), Integer.parseInt(tokeni[5]),  Double.parseDouble(tokeni[6]), StanjeZakazanogTretmana.valueOf(tokeni[7])));
+                        Integer.parseInt(tokeni[4]), Integer.parseInt(tokeni[5]),  Double.parseDouble(tokeni[6]), Integer.parseInt(tokeni[7]),StanjeZakazanogTretmana.valueOf(tokeni[8])));
                 this.nextId = ++id;
             }
             br.close();
