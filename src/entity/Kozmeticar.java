@@ -13,14 +13,13 @@ public class Kozmeticar extends Zaposleni{
                     String telefon,
                     String adresa,
                     String lozinka,
-                    Double stanjeRacuna,
                     int nivoStrucneSpreme,
                     int godineStaza,
                     boolean bonus,
                     double plata,
                     ArrayList<Integer> spisakTretmana
     ) {
-        super(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, stanjeRacuna, nivoStrucneSpreme, godineStaza, bonus, plata);
+        super(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, bonus, plata);
         this.spisakTretmana = spisakTretmana;
     }
 

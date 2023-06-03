@@ -8,23 +8,21 @@ public class KozmetickiSalon {
     private String naziv;
     private LocalTime vremeOtvaranja;
     private LocalTime vremeZatvaranja;
-    private Double stanjeRacuna;
 
-    public KozmetickiSalon(int id, String naziv, LocalTime vremeOtvaranja, LocalTime vremeZatvaranja, Double stanjeRacuna) {
+    public KozmetickiSalon(int id, String naziv, LocalTime vremeOtvaranja, LocalTime vremeZatvaranja) {
         this.id = id;
         this.naziv = naziv;
         this.vremeOtvaranja = vremeOtvaranja;
         this.vremeZatvaranja = vremeZatvaranja;
-        this.stanjeRacuna = stanjeRacuna;
     }
 
     public String toFileString(){
         return this.id + "," + this.naziv + "," + this.getVremeOtvaranjaFormatStr() + ","
-                + this.getVremeZatvaranjaFormatStr() + "," + this.stanjeRacuna;
+                + this.getVremeZatvaranjaFormatStr();
     }
 
     public String toString(){
-        return String.format("Naziv: %s, Vreme otvaranja: %s, Vreme zatvaranja: %s, Stanje racuna: %.2f", this.naziv, this.vremeOtvaranja.toString(), this.vremeZatvaranja.toString(), this.stanjeRacuna);
+        return String.format("Naziv: %s, Vreme otvaranja: %s, Vreme zatvaranja: %s", this.naziv, this.vremeOtvaranja.toString(), this.vremeZatvaranja.toString());
     }
 
     public int getId() {
@@ -71,11 +69,4 @@ public class KozmetickiSalon {
         this.setVremeZatvaranja(LocalTime.parse(vremeZatvaranja, DateTimeFormatter.ofPattern("HH:mm")));
     }
 
-    public Double getStanjeRacuna() {
-        return stanjeRacuna;
-    }
-
-    public void setStanjeRacuna(Double stanjeRacuna) {
-        this.stanjeRacuna = stanjeRacuna;
-    }
 }

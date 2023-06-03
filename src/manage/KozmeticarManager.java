@@ -26,14 +26,13 @@ public class KozmeticarManager {
                     String telefon,
                     String adresa,
                     String lozinka,
-                    Double stanjeRacuna,
                     int nivoStrucneSpreme,
                     int godineStaza,
                     boolean bonus,
                     double plata,
                     ArrayList<Integer> spisakTretmana) {
         this.kozmeticarHashMap.put(nextId ,new Kozmeticar(this.nextId, korisnickoIme, ime, prezime, pol, telefon, adresa,
-                lozinka, stanjeRacuna,nivoStrucneSpreme, godineStaza, bonus, plata, spisakTretmana));
+                lozinka,nivoStrucneSpreme, godineStaza, bonus, plata, spisakTretmana));
         this.nextId++;
         this.saveData();
     }
@@ -73,7 +72,6 @@ public class KozmeticarManager {
             String telefon,
             String adresa,
             String lozinka,
-            Double stanjeRacuna,
             int nivoStrucneSpreme,
             int godineStaza,
             boolean bonus,
@@ -87,7 +85,6 @@ public class KozmeticarManager {
         updatedKozmeticar.setTelefon(telefon);
         updatedKozmeticar.setAdresa(adresa);
         updatedKozmeticar.setLozinka(lozinka);
-        updatedKozmeticar.setStanjeRacuna(stanjeRacuna);
         updatedKozmeticar.setNivoStrucneSpreme(nivoStrucneSpreme);
         updatedKozmeticar.setGodineStaza(godineStaza);
         updatedKozmeticar.setBonus(bonus);
@@ -111,8 +108,11 @@ public class KozmeticarManager {
                         listaTretmana.add(Integer.parseInt(i));
                     }
                 }
-                this.kozmeticarHashMap.put(id ,new Kozmeticar(id, tokeni[1], tokeni[2], tokeni[3], tokeni[4], tokeni[5], tokeni[6], tokeni[7], Double.parseDouble(tokeni[8]),
+                this.kozmeticarHashMap.put(id ,new Kozmeticar(id, tokeni[1], tokeni[2], tokeni[3], tokeni[4], tokeni[5], tokeni[6], tokeni[7],
                         Integer.parseInt(tokeni[9]), Integer.parseInt(tokeni[10]), Boolean.parseBoolean(tokeni[11]), Double.parseDouble(tokeni[12]), listaTretmana));
+                if (Boolean.parseBoolean(tokeni[8])) {
+                    this.kozmeticarHashMap.get(id).setObrisan(true);
+                }
                 this.nextId = ++id;
             }
             br.close();

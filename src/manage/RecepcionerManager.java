@@ -23,8 +23,8 @@ public class RecepcionerManager {
         return recepcionerHashMap;
     }
 
-    public void add(String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, Double stanjeRacuna,int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
-        this.recepcionerHashMap.put(nextId ,new Recepcioner(this.nextId, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, stanjeRacuna,nivoStrucneSpreme, godineStaza, bonus, plata));
+    public void add(String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
+        this.recepcionerHashMap.put(nextId ,new Recepcioner(this.nextId, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka,nivoStrucneSpreme, godineStaza, bonus, plata));
         this.nextId++;
         this.saveData();
     }
@@ -56,7 +56,7 @@ public class RecepcionerManager {
         this.saveData();
     }
 
-    public void update(int id, String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, Double stanjeRacuna, int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
+    public void update(int id, String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
         Recepcioner updatedRecepcioner = this.recepcionerHashMap.get(id);
         updatedRecepcioner.setKorisnickoIme(korisnickoIme);
         updatedRecepcioner.setIme(ime);
@@ -65,7 +65,6 @@ public class RecepcionerManager {
         updatedRecepcioner.setTelefon(telefon);
         updatedRecepcioner.setAdresa(adresa);
         updatedRecepcioner.setLozinka(lozinka);
-        updatedRecepcioner.setStanjeRacuna(stanjeRacuna);
         updatedRecepcioner.setNivoStrucneSpreme(nivoStrucneSpreme);
         updatedRecepcioner.setGodineStaza(godineStaza);
         updatedRecepcioner.setBonus(bonus);
@@ -82,7 +81,10 @@ public class RecepcionerManager {
             while ((linija = br.readLine()) != null) {
                 String[] tokeni = linija.split(",");
                 int id = Integer.parseInt(tokeni[0]);
-                this.recepcionerHashMap.put(id ,new Recepcioner(id, tokeni[1], tokeni[2], tokeni[3], tokeni[4], tokeni[5], tokeni[6], tokeni[7], Double.parseDouble(tokeni[8]), Integer.parseInt(tokeni[9]), Integer.parseInt(tokeni[10]), Boolean.parseBoolean(tokeni[11]),Double.parseDouble(tokeni[12])));
+                this.recepcionerHashMap.put(id ,new Recepcioner(id, tokeni[1], tokeni[2], tokeni[3], tokeni[4], tokeni[5], tokeni[6], tokeni[7], Integer.parseInt(tokeni[9]), Integer.parseInt(tokeni[10]), Boolean.parseBoolean(tokeni[11]),Double.parseDouble(tokeni[12])));
+                if (Boolean.parseBoolean(tokeni[8])) {
+                    this.recepcionerHashMap.get(id).setObrisan(true);
+                }
                 this.nextId = ++id;
             }
             br.close();

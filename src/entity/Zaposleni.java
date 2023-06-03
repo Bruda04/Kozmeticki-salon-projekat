@@ -17,14 +17,13 @@ public abstract class Zaposleni extends Korisnik{
               String telefon,
               String adresa,
               String lozinka,
-              Double stanjeRacuna,
               int nivoStrucneSpreme,
               int godineStaza,
               boolean bonus,
               double plata
               ) {
 
-        super(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, stanjeRacuna);
+        super(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka);
         this.nivoStrucneSpreme = nivoStrucneSpreme;
         this.godineStaza = godineStaza;
         this.bonus = bonus;
@@ -36,7 +35,7 @@ public abstract class Zaposleni extends Korisnik{
     }
 
     public String toString() {
-        return super.toString() + ", " + String.format("Nivo strucne spreme: %d, Godine staza: %d, Bonus: %b, Plata: %f", this.nivoStrucneSpreme,this.godineStaza,this.bonus,this.plata);
+        return super.toString() + ", " + String.format("Nivo strucne spreme: %d, Godine staza: %d, Bonus: %b, Plata: %.2f", this.nivoStrucneSpreme,this.godineStaza,this.bonus,this.plata);
     }
 
     public int getNivoStrucneSpreme() {

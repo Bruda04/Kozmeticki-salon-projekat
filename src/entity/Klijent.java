@@ -4,8 +4,8 @@ public class Klijent extends Korisnik {
      private boolean karticaLojalnosti;
      private double potroseno;
 
-     public Klijent(int id,String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, Double stanjeRacuna, boolean karticaLojalnosti, double potroseno){
-          super(id, korisnickoIme,  ime,  prezime,  pol,  telefon,  adresa,  lozinka, stanjeRacuna);
+     public Klijent(int id,String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, boolean karticaLojalnosti, double potroseno){
+          super(id, korisnickoIme,  ime,  prezime,  pol,  telefon,  adresa,  lozinka);
           this.karticaLojalnosti = karticaLojalnosti;
           this.potroseno = potroseno;
      }
@@ -15,7 +15,7 @@ public class Klijent extends Korisnik {
      }
 
      public String toString(){
-          return super.toString() + ", " + String.format("Kartica lojalnosti: %b, Potroseno sredstava: %f", this.karticaLojalnosti, this.potroseno);
+          return super.toString() + ", " + String.format("Kartica lojalnosti: %b, Potroseno sredstava: %.2f", this.karticaLojalnosti, this.potroseno);
      }
 
      public boolean isKarticaLojalnosti() {

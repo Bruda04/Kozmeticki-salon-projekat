@@ -22,8 +22,8 @@ public class MenadzerManager {
         return menadzerHashMap;
     }
 
-    public void add(String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, Double stanjeRacuna,int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
-        this.menadzerHashMap.put(nextId ,new Menadzer(this.nextId, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, stanjeRacuna ,nivoStrucneSpreme, godineStaza, bonus, plata));
+    public void add(String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka,int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
+        this.menadzerHashMap.put(nextId ,new Menadzer(this.nextId, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka ,nivoStrucneSpreme, godineStaza, bonus, plata));
         this.nextId++;
         this.saveData();
     }
@@ -54,7 +54,7 @@ public class MenadzerManager {
         this.saveData();
     }
 
-    public void update(int id, String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, Double stanjeRacuna, int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
+    public void update(int id, String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
         Menadzer updatedMenadzer = this.menadzerHashMap.get(id);
         updatedMenadzer.setKorisnickoIme(korisnickoIme);
         updatedMenadzer.setIme(ime);
@@ -63,7 +63,6 @@ public class MenadzerManager {
         updatedMenadzer.setTelefon(telefon);
         updatedMenadzer.setAdresa(adresa);
         updatedMenadzer.setLozinka(lozinka);
-        updatedMenadzer.setStanjeRacuna(stanjeRacuna);
         updatedMenadzer.setNivoStrucneSpreme(nivoStrucneSpreme);
         updatedMenadzer.setGodineStaza(godineStaza);
         updatedMenadzer.setBonus(bonus);
@@ -80,7 +79,10 @@ public class MenadzerManager {
             while ((linija = br.readLine()) != null) {
                 String[] tokeni = linija.split(",");
                 int id = Integer.parseInt(tokeni[0]);
-                this.menadzerHashMap.put(id ,new Menadzer(id, tokeni[1], tokeni[2], tokeni[3], tokeni[4], tokeni[5], tokeni[6], tokeni[7], Double.parseDouble(tokeni[8]),Integer.parseInt(tokeni[9]), Integer.parseInt(tokeni[10]), Boolean.parseBoolean(tokeni[11]),Double.parseDouble(tokeni[12])));
+                this.menadzerHashMap.put(id ,new Menadzer(id, tokeni[1], tokeni[2], tokeni[3], tokeni[4], tokeni[5], tokeni[6], tokeni[7],Integer.parseInt(tokeni[9]), Integer.parseInt(tokeni[10]), Boolean.parseBoolean(tokeni[11]),Double.parseDouble(tokeni[12])));
+                if (Boolean.parseBoolean(tokeni[8])) {
+                    this.menadzerHashMap.get(id).setObrisan(true);
+                }
                 this.nextId = ++id;
             }
             br.close();

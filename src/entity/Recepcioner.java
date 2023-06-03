@@ -9,12 +9,11 @@ public class Recepcioner extends Zaposleni{
                     String adresa,
                     String korisnickoIme,
                     String lozinka,
-                    Double stanjeRacuna,
                     int nivoStrucneSpreme,
                     int godineStaza,
                     boolean bonus,
                     double plata
     ) {
-        super(id, ime, prezime, pol, telefon, adresa, korisnickoIme, lozinka, stanjeRacuna,nivoStrucneSpreme, godineStaza, bonus, plata);
+        super(id, ime, prezime, pol, telefon, adresa, korisnickoIme, lozinka,nivoStrucneSpreme, godineStaza, bonus, plata);
     }
 }
