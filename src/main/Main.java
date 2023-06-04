@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import entity.Kozmeticar;
 import entity.ZakazanTretman;
+import entity.Zaposleni;
 import manage.Controler;
 import manage.ManageGlobal;
 import utils.AppSettings;
@@ -160,7 +161,10 @@ public class Main {
         );
         
 
-        
+//        crudManagers.prikazKozmetickiSalon();
+//        crudManagers.prikazKorisnici();
+//        crudManagers.prikazTretmanUslugaCena();
+//        System.out.println("\n--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
         // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         
         controler.zakaziTretman(LocalDate.of(2023, 6, 10),
@@ -193,6 +197,7 @@ public class Main {
 								controler.pronadjiRecepcionera("PeraPeric").getId());
         
         
+        System.out.println("\n#####NEUSPESNO ZAKAZIVANJE MIKA#####");
         Boolean znaTretman = controler.kozmeticarZnaUslugu(controler.pronadjiKozmeticara("JovanaJovanovic").getId(), controler.pronadjiUslugu("Francuski manikir").getId());
         if (!znaTretman) {
         	System.out.println("Kozmeticar ne zna taj tretman");
@@ -209,20 +214,41 @@ public class Main {
 //				controler.pronadjiUslugu("Francuski manikir").getId(),
 //				0);
         
+        System.out.println("\n#####RASPORED TRETMANA ZIKA#####");
         ArrayList<ZakazanTretman> rasporedZika = controler.zakazaniTretmaniKozmeticara(controler.pronadjiKozmeticara("ZikaZikic").getId());
         for (ZakazanTretman zt : rasporedZika) {
 			System.out.printf("Datum: %s, Vreme: %s, Klijent: %s, Usluga: %s\n", zt.getDatum(), zt.getVreme(), controler.pronadjiKlijenta(zt.getIdKlijenta()).getKorisnickoIme(), controler.pronadjiUslugu(zt.getIdTipaUsluge()).getNazivUsluge());
 		}
         
+        
         controler.postaviPragZaKarticuLojalnosti(3500.00);
+        System.out.println("\n#####PROMENA PRAGA ZA KARTICU LOJALNOSTI#####");
+        crudManagers.prikazKlijenti();
         
+        System.out.println("\n----------------------------------IZVRSAVANJE PRVOG TRETMANA MILICEMILIC---------------------------------------------\n");
         controler.izvrsiTretman(1);
+        crudManagers.prikaziZakazaneTretmane();
+        crudManagers.prikazKlijenti();
+        crudManagers.prikazKozmetickiSalon();
         
+        System.out.println("\n----------------------------------MILICEMILIC OTKAZUJE DRUGI TRETMAN---------------------------------------------\n");
         controler.otkaziTretmanKlijent(2);
+        crudManagers.prikaziZakazaneTretmane();
+        crudManagers.prikazKlijenti();
+        crudManagers.prikazKozmetickiSalon();
         
+        System.out.println("\n----------------------------------MIKAMIKIC SALON OTKAZUJE PRVI TRETMAN---------------------------------------------\n");
         controler.otkaziTretmanSalon(3);
+        crudManagers.prikaziZakazaneTretmane();
+        crudManagers.prikazKlijenti();
+        crudManagers.prikazKozmetickiSalon();
         
+        System.out.println("\n----------------------------------MIKAMIKIC NIJE SE POJAVIO ZA DRUGI TRETMAN---------------------------------------------\n");
         controler.propustenTretmanKlijent(4);
+        crudManagers.prikaziZakazaneTretmane();
+        crudManagers.prikazKlijenti();
+        crudManagers.prikazKozmetickiSalon();
+        
         
         controler.zakaziTretman(LocalDate.of(2023, 6, 14),
 								LocalTime.of(9, 0),
@@ -238,15 +264,26 @@ public class Main {
 								controler.pronadjiUslugu("Spa manikir").getId(),
 								controler.dodeliKozmeticara(controler.pronadjiUslugu("Spa manikir").getId(), LocalDate.of(2023, 6, 14), LocalTime.of(9, 0)).getId());
         
+        System.out.println("\n----------------------------------IZVRSAVANJE TRETMANA MIKEMIKIC AUTOMATSKI DODELJEN KOZMETICAR---------------------------------------------\n");
         controler.izvrsiTretman(6);
+        crudManagers.prikaziZakazaneTretmane();
+        crudManagers.prikazKlijenti();
+        crudManagers.prikazKozmetickiSalon();
         
-        
+        System.out.println("\n#####ISTORIJA TRETMANA MIKA#####");
         for (ZakazanTretman zakazanTretman : controler.tretmaniKlijenta(controler.pronadjiKlijenta("MikaMikic").getId())) {
-			System.out.printf("Datum: %s, Vreme: %s, Klijent: %s, Usluga: %s\n", zakazanTretman.getDatum(), zakazanTretman.getVreme(), controler.pronadjiKlijenta(zakazanTretman.getIdKlijenta()).getKorisnickoIme(), controler.pronadjiUslugu(zakazanTretman.getIdTipaUsluge()).getNazivUsluge());
+			System.out.printf("Datum: %s, Vreme: %s, Kozmeticar: %s, Usluga: %s, Status: %s\n", zakazanTretman.getDatum(), zakazanTretman.getVreme(), controler.pronadjiKozmeticara(zakazanTretman.getIdKozmeticara()).getKorisnickoIme(), controler.pronadjiUslugu(zakazanTretman.getIdTipaUsluge()).getNazivUsluge(), zakazanTretman.getStanje());
 		}
         
+        System.out.println("\n#####PRIHODI RASHODI#####");
         double[] izvestaj = controler.izvestajPrihodiRashodi(LocalDate.of(2023, 6, 1), LocalDate.of(2023, 6, 30));
         System.out.printf("Prihodi: %.2f, Rashodi: %.2f\n", izvestaj[0], izvestaj[1]);
+        
+        
+        System.out.println("\n#####ZAPOSLENI SA BONUSOM#####");
+        for (Zaposleni zap : controler.zaposleniSaBonusom()) {
+			System.out.println(zap.toString());
+		}
         
         
     }

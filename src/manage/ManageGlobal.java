@@ -52,6 +52,7 @@ public class ManageGlobal {
 
 	public void prikazKozmetickiSalon(){
 			System.out.println();
+			System.out.println("#####Kozmeticki salon#####");
 		for (KozmetickiSalon ks: this.kozmetickiSalonMngr.getkozmetickiSalonHashMap().values()
 		) {
 			System.out.println(ks);
@@ -79,6 +80,14 @@ public class ManageGlobal {
 			System.out.println(k);
 		}
 		System.out.println();
+		System.out.println("#####Klijenti#####");
+		for (Klijent k: this.klijentMngr.getKlijentHashMap().values()
+		) {
+			System.out.println(k);
+		}
+	}
+	
+	public void prikazKlijenti() {
 		System.out.println("#####Klijenti#####");
 		for (Klijent k: this.klijentMngr.getKlijentHashMap().values()
 		) {

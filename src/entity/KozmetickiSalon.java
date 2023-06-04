@@ -36,7 +36,7 @@ public class KozmetickiSalon {
     }
 
     public String toString(){
-        return String.format("Naziv: %s, Vreme otvaranja: %s, Vreme zatvaranja: %s, Stanje racuna: %f", this.naziv, this.vremeOtvaranja.toString(), this.vremeZatvaranja.toString(), this.stanje);
+        return String.format("Naziv: %s, Vreme otvaranja: %s, Vreme zatvaranja: %s, Stanje racuna: %.2f", this.naziv, this.vremeOtvaranja.toString(), this.vremeZatvaranja.toString(), this.stanje);
     }
 
     public int getId() {
