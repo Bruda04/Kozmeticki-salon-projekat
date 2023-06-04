@@ -33,6 +33,7 @@ public class ZakazanTretman {
                 this.idKozmeticara + "," + this.idTipaUsluge + "," +
                 this.cena +"," + this.idZakazaivaca + "," + this.stanje.toString();
     }
+    
 
     public int getId() {return id;}
 

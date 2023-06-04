@@ -85,27 +85,22 @@ public class Main {
 					                "Beograd Ustanicka 12",
 					                "password");
         
-        controler.dodajUslugu("Relaks masaza", 45, 2000.00);
-        controler.dodajUslugu("Sportska masaza", 75, 2500.00);
-        controler.dodajUslugu("Francuski manikir", 50, 1500.00);
-        controler.dodajUslugu("Gel lak", 80, 1600.00);
-        controler.dodajUslugu("Spa manikir", 90, 2000.00);
-        controler.dodajUslugu("Spa pedikir", 45, 1600.00);
-        
         ArrayList<Integer> masazaListaUsluga = new ArrayList<>();
-        masazaListaUsluga.add(controler.pronadjiUslugu("Relaks masaza").getId());
-        masazaListaUsluga.add(controler.pronadjiUslugu("Sportska masaza").getId());
         controler.dodajTipTretmana("masaza", masazaListaUsluga);
-
+        
         ArrayList<Integer> manikirListaUsluga = new ArrayList<>();
-        manikirListaUsluga.add(controler.pronadjiUslugu("Francuski manikir").getId());
-        manikirListaUsluga.add(controler.pronadjiUslugu("Gel lak").getId());
-        manikirListaUsluga.add(controler.pronadjiUslugu("Spa manikir").getId());
         controler.dodajTipTretmana("manikir", manikirListaUsluga);
-
+        
         ArrayList<Integer> pedikirListaUsluga = new ArrayList<>();
-        pedikirListaUsluga.add(controler.pronadjiUslugu("Spa pedikir").getId());
         controler.dodajTipTretmana("pedikir", pedikirListaUsluga);
+        
+        controler.dodajUslugu("Relaks masaza", 45, 2000.00, controler.pronadjiTipTretmana("masaza").getId());
+        controler.dodajUslugu("Sportska masaza", 75, 2500.00, controler.pronadjiTipTretmana("masaza").getId());
+        controler.dodajUslugu("Francuski manikir", 50, 1500.00, controler.pronadjiTipTretmana("manikir").getId());
+        controler.dodajUslugu("Gel lak", 80, 1600.00, controler.pronadjiTipTretmana("manikir").getId());
+        controler.dodajUslugu("Spa manikir", 90, 2000.00, controler.pronadjiTipTretmana("manikir").getId());
+        controler.dodajUslugu("Spa pedikir", 45, 1600.00, controler.pronadjiTipTretmana("pedikir").getId());
+        
         
         Kozmeticar kozmeticarUpd =  controler.pronadjiKozmeticara("SimaSimic");
         spisakTretmanaSima.add(controler.pronadjiTipTretmana("masaza").getId());
@@ -166,7 +161,7 @@ public class Main {
         
 
         
-        // ---------------------------------------------------------------------------------------------------------------------------------
+        // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         
         controler.zakaziTretman(LocalDate.of(2023, 6, 10),
         						LocalTime.of(18, 0),
@@ -176,28 +171,43 @@ public class Main {
         						0);
         
         controler.zakaziTretman(LocalDate.of(2023, 6, 11),
-				LocalTime.of(9, 0),
-				controler.pronadjiKlijenta("MilicaMilic").getId(),
-				controler.pronadjiKozmeticara("ZikaZikic").getId(),
-				controler.pronadjiUslugu("Spa pedikir").getId(),
-				controler.pronadjiRecepcionera("PeraPeric").getId());
+								LocalTime.of(9, 0),
+								controler.pronadjiKlijenta("MilicaMilic").getId(),
+								controler.pronadjiKozmeticara("ZikaZikic").getId(),
+								controler.pronadjiUslugu("Spa pedikir").getId(),
+								controler.pronadjiRecepcionera("PeraPeric").getId());
         
         
         controler.zakaziTretman(LocalDate.of(2023, 6, 12),
-				LocalTime.of(8, 0),
-				controler.pronadjiKlijenta("MikaMikic").getId(),
-				controler.pronadjiKozmeticara("SimaSimic").getId(),
-				controler.pronadjiUslugu("Sportska masaza").getId(),
-				0);
+								LocalTime.of(8, 0),
+								controler.pronadjiKlijenta("MikaMikic").getId(),
+								controler.pronadjiKozmeticara("SimaSimic").getId(),
+								controler.pronadjiUslugu("Sportska masaza").getId(),
+								0);
         
         controler.zakaziTretman(LocalDate.of(2023, 6, 13),
-				LocalTime.of(19, 0),
-				controler.pronadjiKlijenta("MikaMikic").getId(),
-				controler.pronadjiKozmeticara("ZikaZikic").getId(),
-				controler.pronadjiUslugu("Relaks masaza").getId(),
-				controler.pronadjiRecepcionera("PeraPeric").getId());
+								LocalTime.of(19, 0),
+								controler.pronadjiKlijenta("MikaMikic").getId(),
+								controler.pronadjiKozmeticara("ZikaZikic").getId(),
+								controler.pronadjiUslugu("Relaks masaza").getId(),
+								controler.pronadjiRecepcionera("PeraPeric").getId());
         
-        /// NEUSPESAN TERMIN I KOZMETICAR UBACITII TODO
+        
+        Boolean znaTretman = controler.kozmeticarZnaUslugu(controler.pronadjiKozmeticara("JovanaJovanovic").getId(), controler.pronadjiUslugu("Francuski manikir").getId());
+        if (!znaTretman) {
+        	System.out.println("Kozmeticar ne zna taj tretman");
+        }
+        ArrayList<LocalTime> moguciTermini = controler.kozmeticarSlobodan(controler.pronadjiKozmeticara("JovanaJovanovic").getId(), LocalDate.of(2023, 6, 10));
+        if (!moguciTermini.contains(LocalTime.of(18, 0))) {
+        	System.out.println("Kozmeticar nije slobodan u tom terminu");
+        }
+        
+//        controler.zakaziTretman(LocalDate.of(2023, 6, 10),
+//				LocalTime.of(18, 0),
+//				controler.pronadjiKlijenta("MikaMikic").getId(),
+//				controler.pronadjiKozmeticara("JovanaJovanovic").getId(),
+//				controler.pronadjiUslugu("Francuski manikir").getId(),
+//				0);
         
         ArrayList<ZakazanTretman> rasporedZika = controler.zakazaniTretmaniKozmeticara(controler.pronadjiKozmeticara("ZikaZikic").getId());
         for (ZakazanTretman zt : rasporedZika) {
@@ -215,22 +225,28 @@ public class Main {
         controler.propustenTretmanKlijent(4);
         
         controler.zakaziTretman(LocalDate.of(2023, 6, 14),
-				LocalTime.of(9, 0),
-				controler.pronadjiKlijenta("MilicaMilic").getId(),
-				controler.pronadjiKozmeticara("SimaSimic").getId(),
-				controler.pronadjiUslugu("Gel lak").getId(),
-				0);
+								LocalTime.of(9, 0),
+								controler.pronadjiKlijenta("MilicaMilic").getId(),
+								controler.pronadjiKozmeticara("SimaSimic").getId(),
+								controler.pronadjiUslugu("Gel lak").getId(),
+								0);
         
         controler.zakaziTretman(LocalDate.of(2023, 6, 14),
 								LocalTime.of(9, 0),
 								controler.pronadjiKlijenta("MikaMikic").getId(),
 								controler.pronadjiKozmeticara("SimaSimic").getId(),
-								controler.pronadjiUslugu("Spa Manikir").getId(),
-								controler.dodeliKozmeticara(controler.pronadjiKozmeticara("SimaSimic").getId(), LocalDate.of(2023, 6, 14), LocalTime.of(9, 0)).getId());
+								controler.pronadjiUslugu("Spa manikir").getId(),
+								controler.dodeliKozmeticara(controler.pronadjiUslugu("Spa manikir").getId(), LocalDate.of(2023, 6, 14), LocalTime.of(9, 0)).getId());
+        
+        controler.izvrsiTretman(6);
+        
         
         for (ZakazanTretman zakazanTretman : controler.tretmaniKlijenta(controler.pronadjiKlijenta("MikaMikic").getId())) {
-        	System.out.print(zakazanTretman);
+			System.out.printf("Datum: %s, Vreme: %s, Klijent: %s, Usluga: %s\n", zakazanTretman.getDatum(), zakazanTretman.getVreme(), controler.pronadjiKlijenta(zakazanTretman.getIdKlijenta()).getKorisnickoIme(), controler.pronadjiUslugu(zakazanTretman.getIdTipaUsluge()).getNazivUsluge());
 		}
+        
+        double[] izvestaj = controler.izvestajPrihodiRashodi(LocalDate.of(2023, 6, 1), LocalDate.of(2023, 6, 30));
+        System.out.printf("Prihodi: %.2f, Rashodi: %.2f\n", izvestaj[0], izvestaj[1]);
         
         
     }

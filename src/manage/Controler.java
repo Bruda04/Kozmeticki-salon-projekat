@@ -5,19 +5,21 @@ import entity.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Controler {
     private ManageGlobal manager;
-    private KozmetickiSalon salon;
     public Controler() {}
     public Controler(ManageGlobal manager){
         this.manager = manager;
-        manager.loadData();
+//        manager.loadData();
         if (manager.getKozmetickiSalonMngr().getkozmetickiSalonHashMap().size() == 0) {
-        	manager.getKozmetickiSalonMngr().add("Bruda beauty", LocalTime.of(8, 0), LocalTime.of(22, 0), 0.00);
-        }
-        this.salon = manager.getKozmetickiSalonMngr().findById(1);
-        
+        	manager.getKozmetickiSalonMngr().add("Bruda beauty", LocalTime.of(8, 0), LocalTime.of(22, 0), 0.00, 1500.00);
+        }        
+        if (manager.getCenovnikMngr().getCenovnikHashMapp().size() == 0) {
+        	manager.getCenovnikMngr().add(new HashMap<Integer, Double>());
+        }  
     }
     
     public Klijent pronadjiKlijenta(String korisnickoIme) {
@@ -102,6 +104,7 @@ public class Controler {
                                       String lozinka,
                                       int nivoStrucneSpreme,
                                       int godineStaza) {
+    	KozmetickiSalon salon = manager.getKozmetickiSalonMngr().findById(1);
     	Double plata = salon.izracunajPlatu(nivoStrucneSpreme, godineStaza, false);
         manager.getRecepcionerMngr().add(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, false, plata);
 
@@ -115,6 +118,7 @@ public class Controler {
                                       String lozinka,
                                       int nivoStrucneSpreme,
                                       int godineStaza) {
+    	KozmetickiSalon salon = manager.getKozmetickiSalonMngr().findById(1);
     	Double plata = salon.izracunajPlatu(nivoStrucneSpreme, godineStaza, false);
         manager.getMenadzerMngr().add(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, false, plata);
 
@@ -130,6 +134,7 @@ public class Controler {
                                      int nivoStrucneSpreme,
                                      int godineStaza,
                                      ArrayList<Integer> spisakTretmana) {
+    	KozmetickiSalon salon = manager.getKozmetickiSalonMngr().findById(1);
     	Double plata = salon.izracunajPlatu(nivoStrucneSpreme, godineStaza, false);
         manager.getKozmeticarMngr().add(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, false, plata, spisakTretmana);
     }
@@ -175,11 +180,12 @@ public class Controler {
         manager.getKozmeticarMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, bonus, plata, spisakTretmana);
     }
 
-    public void dodajUslugu(String nazivUsluge, int vremeTrajanja, double cena) {
+    public void dodajUslugu(String nazivUsluge, int vremeTrajanja, double cena, int idTipaTretmna) {
     	Cenovnik cenovnik = manager.getCenovnikMngr().findById(1);
         manager.getUslugaMngr().add(nazivUsluge, vremeTrajanja);
         cenovnik.getCenovnikHasMap().put(pronadjiUslugu(nazivUsluge).getId(), cena);
         manager.getCenovnikMngr().update(cenovnik.getId(), cenovnik.getCenovnikHasMap());
+        pridruziUsluguTipu(manager.getUslugaMngr().findByNazivUsluge(nazivUsluge).getId(), idTipaTretmna);
     }
 
     public void dodajTipTretmana(String naziv, ArrayList<Integer> skupTipovaUsluga) {
@@ -238,33 +244,58 @@ public class Controler {
         double novoStanjePotroseno = k.getPotroseno() + cenaNew;
         manager.getKlijentMngr().update(idKlijenta, k.getKorisnickoIme(), k.getIme(), k.getPrezime(), k.getPol(), k.getTelefon(), k.getAdresa(), k.getLozinka(), k.isKarticaLojalnosti(), novoStanjePotroseno);
     }
+    
     public void izmeniZakazanTretman(int id, LocalDate datum, LocalTime vreme, int idKlijenta, int idKozmeticara, int idTipaUsluge, double cena, int IdZakzivaca,StanjeZakazanogTretmana stanje) {
         manager.getZakazanTretmanMngr().update(id, datum, vreme, idKlijenta, idKozmeticara, idTipaUsluge, cena, IdZakzivaca, stanje);
     }
-//    public void obrisiZakazanTretman(int id) {
-//        manager.getZakazanTretmanMngr().deleteById(id);
-//    }
+    
+    public void obrisiZakazanTretman(int id) {
+        manager.getZakazanTretmanMngr().deleteById(id);
+    }
+    
     public void otkaziTretmanKlijent(int idZakazanogTretmana) {
         ZakazanTretman zt = manager.getZakazanTretmanMngr().findById(idZakazanogTretmana);
         manager.getZakazanTretmanMngr().update(idZakazanogTretmana, zt.getDatum(), zt.getVreme(), zt.getIdKlijenta(), zt.getIdKozmeticara(), zt.getIdTipaUsluge(), zt.getCena(), zt.getIdZakazivaca(),StanjeZakazanogTretmana.OTKAZAOKLIJENT);
         Klijent k = manager.getKlijentMngr().findById(zt.getIdKlijenta());
+        
         double potrosenoNew = k.getPotroseno() - zt.getCena()*0.9;
         manager.getKlijentMngr().update(k.getId(), k.getKorisnickoIme(), k.getIme(), k.getPrezime(), k.getPol(), k.getTelefon(), k.getAdresa(), k.getLozinka(), k.isKarticaLojalnosti(), potrosenoNew);
+        
+        KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
+        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje()+zt.getCena()*0.1, ks.getPragBonus());
     }
+    
     public void otkaziTretmanSalon(int idZakazanogTretmana) {
         ZakazanTretman zt = manager.getZakazanTretmanMngr().findById(idZakazanogTretmana);
         manager.getZakazanTretmanMngr().update(idZakazanogTretmana, zt.getDatum(), zt.getVreme(), zt.getIdKlijenta(), zt.getIdKozmeticara(), zt.getIdTipaUsluge(), zt.getCena(), zt.getIdZakazivaca(), StanjeZakazanogTretmana.OTKAZAOSALON);
+        
         Klijent k = manager.getKlijentMngr().findById(zt.getIdKlijenta());
         double potrosenoNew = k.getPotroseno() - zt.getCena();
+        
         manager.getKlijentMngr().update(k.getId(), k.getKorisnickoIme(), k.getIme(), k.getPrezime(), k.getPol(), k.getTelefon(), k.getAdresa(), k.getLozinka(), k.isKarticaLojalnosti(), potrosenoNew);
+        
+//        KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
+//        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje()-zt.getCena());
     }
+    
     public void propustenTretmanKlijent(int idZakazanogTretmana) {
         ZakazanTretman zt = manager.getZakazanTretmanMngr().findById(idZakazanogTretmana);
         manager.getZakazanTretmanMngr().update(idZakazanogTretmana, zt.getDatum(), zt.getVreme(), zt.getIdKlijenta(), zt.getIdKozmeticara(), zt.getIdTipaUsluge(), zt.getCena(), zt.getIdZakazivaca(), StanjeZakazanogTretmana.NIJESEPOJAVIO);
+        
+        KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
+        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje()+zt.getCena(), ks.getPragBonus());
+        
+        refaktorisiBonuse();
     }
+    
     public void izvrsiTretman(int idZakazanogTretmana) {
         ZakazanTretman zt = manager.getZakazanTretmanMngr().findById(idZakazanogTretmana);
         manager.getZakazanTretmanMngr().update(idZakazanogTretmana, zt.getDatum(), zt.getVreme(), zt.getIdKlijenta(), zt.getIdKozmeticara(), zt.getIdTipaUsluge(), zt.getCena(), zt.getIdZakazivaca(), StanjeZakazanogTretmana.IZVRŠEN);
+        
+        KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
+        
+        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje()+zt.getCena(), ks.getPragBonus());
+        refaktorisiBonuse();
     }
 
     public void postaviPragZaKarticuLojalnosti(double prag) {
@@ -276,7 +307,16 @@ public class Controler {
     }
 
     public Boolean kozmeticarZnaUslugu(int idKozmeticara, int idUsluge) {
-        return manager.getKozmeticarMngr().findById(idKozmeticara).getSpisakTretmana().contains(idUsluge);
+    	int idTipaTretmana = 0;
+    	for (TipTretmana tt : manager.getTipTretmanaMngr().getTipoviTretmanaHashMap().values()) {
+			if (tt.getSkupTipovaUsluga().contains(idUsluge)) {
+				idTipaTretmana = tt.getId();
+			}
+		}
+        if(manager.getKozmeticarMngr().findById(idKozmeticara).getSpisakTretmana().contains(idTipaTretmana)) {
+        	return true;
+        }
+        return false;
     }
 
     public ArrayList<Kozmeticar> kozmeticariKojiZnajuUslugu(int idUsluge) {
@@ -328,9 +368,11 @@ public class Controler {
 				pogodniKozmeticari.add(kozmeticar);
 			}
 		}
+    	
     	int idnex =((int) (Math.random()*10))%pogodniKozmeticari.size();
     	return pogodniKozmeticari.get(idnex);
     }
+    
     public ArrayList<LocalTime> kozmeticarSlobodan(int idKozmeticara, LocalDate datum) {
         ArrayList<LocalTime> listaTermina = new ArrayList<>();
         KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
@@ -359,15 +401,88 @@ public class Controler {
 
     public void izmeniVremeOtvaranjaSalona(LocalTime vremeOtvaranja) {
         KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
-        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), vremeOtvaranja, ks.getVremeZatvaranja(), ks.getStanje());
+        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), vremeOtvaranja, ks.getVremeZatvaranja(), ks.getStanje(), ks.getPragBonus());
     }
     public void izmeniVremeZatvaranjaSalona(LocalTime vremeZatvaranja) {
         KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
-        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), vremeZatvaranja, ks.getStanje());
+        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), vremeZatvaranja, ks.getStanje(), ks.getPragBonus());
     }
     
+    public double[] izvestajPrihodiRashodi(LocalDate datumPocetka, LocalDate datumKraja) {
+    	double prihodi = 0.00;
+    	double rashodi = 0.00;
+    	double[] ret = new double[2];
+
+    	for (ZakazanTretman zt : manager.getZakazanTretmanMngr().getZakazanTretmanHashMap().values()) {
+    		if (zt.getDatum().isAfter(datumPocetka) && zt.getDatum().isBefore(datumKraja)) {
+    			if (zt.getStanje() == StanjeZakazanogTretmana.IZVRŠEN || zt.getStanje() == StanjeZakazanogTretmana.NIJESEPOJAVIO) {
+    				prihodi += zt.getCena();
+    			} else if (zt.getStanje() == StanjeZakazanogTretmana.OTKAZAOKLIJENT) {
+    				prihodi += zt.getCena()*0.1;
+    			}				
+			}
+		}
+    	HashMap<Integer, Zaposleni> zaposleni = new HashMap<>();
+    	zaposleni.putAll(manager.getKozmeticarMngr().getKozmeticarHashMap());
+    	zaposleni.putAll(manager.getMenadzerMngr().getMenadzerHashMap());
+    	zaposleni.putAll(manager.getRecepcionerMngr().getRecepcionerHashMap());
+    	
+    	LocalDate datumTmp = datumPocetka;
+    	while (datumTmp.isBefore(datumKraja)) {
+    		if (datumTmp.getDayOfMonth() == 1) {
+    			for (Zaposleni zap : zaposleni.values()) {
+    				rashodi += zap.getPlata();
+    			}
+			}
+    		datumTmp = datumTmp.plusDays(1);
+		}
+    	
+    	ret[0] = prihodi;
+    	ret[1] = rashodi;
+    	return ret;
+    }
+
+    public ArrayList<Zaposleni> zaposleniSaBonusom() {
+    	HashMap<Integer, Zaposleni> zaposleni = new HashMap<>();
+    	zaposleni.putAll(manager.getKozmeticarMngr().getKozmeticarHashMap());
+    	zaposleni.putAll(manager.getMenadzerMngr().getMenadzerHashMap());
+    	zaposleni.putAll(manager.getRecepcionerMngr().getRecepcionerHashMap());
+    	ArrayList<Zaposleni> listaZaposlenihSaBonusm = new ArrayList<>();
+    	for (Zaposleni z : zaposleni.values()) {
+			if (z.getBonus()) {
+				listaZaposlenihSaBonusm.add(z);
+			}
+		}
+		return listaZaposlenihSaBonusm;
+    }
     
-
-
+    public void izmeniPragBonusa(double pragBonusa) {
+    	KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
+    	manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje(), pragBonusa);
+    	refaktorisiBonuse();
+    }
+    
+    public void refaktorisiBonuse() {
+    	HashMap<Integer, Double> zaposleniScore = new HashMap<>();
+    	KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
+    	
+    	for (ZakazanTretman zt : manager.getZakazanTretmanMngr().getZakazanTretmanHashMap().values()) {
+    		if (zt.getStanje() == StanjeZakazanogTretmana.IZVRŠEN || zt.getStanje() == StanjeZakazanogTretmana.NIJESEPOJAVIO) {
+    			if (!zaposleniScore.containsKey(zt.getIdKozmeticara())) {
+    				zaposleniScore.put(zt.getIdKozmeticara(), zt.getCena());
+    			} else {
+    				zaposleniScore.put(zt.getIdKozmeticara(), zaposleniScore.get(zt.getIdKozmeticara()) + zt.getCena());
+    			}				
+			}
+		}
+    	
+    	for (Map.Entry<Integer, Double> entry : zaposleniScore.entrySet()) {
+			if (entry.getValue() >= ks.getPragBonus()) {
+				Kozmeticar ktmp = manager.getKozmeticarMngr().findById(entry.getKey());
+				Double newPlata = manager.getKozmetickiSalonMngr().findById(1).izracunajPlatu(ktmp.getNivoStrucneSpreme(), ktmp.getGodineStaza(), true);
+				manager.getKozmeticarMngr().update(ktmp.getId(), ktmp.getKorisnickoIme(), ktmp.getIme(), ktmp.getPrezime(), ktmp.getPol(), ktmp.getTelefon(), ktmp.getAdresa(), ktmp.getLozinka(), ktmp.getNivoStrucneSpreme(), ktmp.getGodineStaza(), true, newPlata, ktmp.getSpisakTretmana());
+			}
+		}    	
+    }
 }
 
