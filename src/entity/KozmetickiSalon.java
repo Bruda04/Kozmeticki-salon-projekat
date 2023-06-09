@@ -10,19 +10,21 @@ public class KozmetickiSalon {
     private LocalTime vremeZatvaranja;
 	private double stanje;
 	private double pragBonus;
+	private double bonusIznos;
 	
-    public KozmetickiSalon(int id, String naziv, LocalTime vremeOtvaranja, LocalTime vremeZatvaranja, double stanje, double pragBonus) {
+    public KozmetickiSalon(int id, String naziv, LocalTime vremeOtvaranja, LocalTime vremeZatvaranja, double stanje, double pragBonus, double bonusIznos) {
         this.id = id;
         this.naziv = naziv;
         this.vremeOtvaranja = vremeOtvaranja;
         this.vremeZatvaranja = vremeZatvaranja;
         this.stanje = stanje;
         this.pragBonus = pragBonus;
+        this.bonusIznos = bonusIznos;
     }
     
     public double izracunajPlatu(int nivoStrucneSpreme, int godineStaza, boolean bonus) {
     	if (bonus) {
-    		return 1000.00*(nivoStrucneSpreme)+godineStaza*2000.00 + 50000.00 + 5000.00;    		
+    		return 1000.00*(nivoStrucneSpreme)+godineStaza*2000.00 + 50000.00 + this.bonusIznos;    		
     	} else {
     		return 1000.00*(nivoStrucneSpreme)+godineStaza*2000.00 + 50000.00;
     	}
@@ -32,7 +34,7 @@ public class KozmetickiSalon {
 
     public String toFileString(){
         return this.id + "," + this.naziv + "," + this.getVremeOtvaranjaFormatStr() + ","
-                + this.getVremeZatvaranjaFormatStr() + "," + this.stanje + "," + this.pragBonus;
+                + this.getVremeZatvaranjaFormatStr() + "," + this.stanje + "," + this.pragBonus + "," + this.bonusIznos;
     }
 
     public String toString(){
@@ -98,6 +100,13 @@ public class KozmetickiSalon {
 	public void setPragBonus(double pragBonus) {
 		this.pragBonus = pragBonus;
 	}
-    
+
+	public double getBonusIznos() {
+		return bonusIznos;
+	}
+
+	public void setBonusIznos(double bonusIznos) {
+		this.bonusIznos = bonusIznos;
+	}
     
 }

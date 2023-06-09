@@ -21,8 +21,8 @@ public class KozmetickiSalonManager {
         this.kozmetickiSalonFile = kozmetickiSalonFile;
     }
 
-    public void add(String naziv, LocalTime vremeOtvaranja, LocalTime vremeZatvaranja, double stanje, double pragBonus) {
-        this.kozmetickiSalonHashMap.put(nextId ,new KozmetickiSalon(this.nextId, naziv, vremeOtvaranja, vremeZatvaranja, stanje, pragBonus));
+    public void add(String naziv, LocalTime vremeOtvaranja, LocalTime vremeZatvaranja, double stanje, double pragBonus, double bonusIznos) {
+        this.kozmetickiSalonHashMap.put(nextId ,new KozmetickiSalon(this.nextId, naziv, vremeOtvaranja, vremeZatvaranja, stanje, pragBonus, bonusIznos));
         this.nextId++;
         this.saveData();
     }
@@ -36,13 +36,14 @@ public class KozmetickiSalonManager {
         this.saveData();
     }
 
-    public void update(int id, String naziv, LocalTime vremeOtvaranja, LocalTime vremeZatvaranja, double stanje, double pragBonus) {
+    public void update(int id, String naziv, LocalTime vremeOtvaranja, LocalTime vremeZatvaranja, double stanje, double pragBonus, double bonusIznos) {
         KozmetickiSalon updatedKozmetickiSalon = this.kozmetickiSalonHashMap.get(id);
         updatedKozmetickiSalon.setNaziv(naziv);
         updatedKozmetickiSalon.setVremeOtvaranja(vremeOtvaranja);
         updatedKozmetickiSalon.setVremeZatvaranja(vremeZatvaranja);
         updatedKozmetickiSalon.setStanje(stanje);
         updatedKozmetickiSalon.setPragBonus(pragBonus);
+        updatedKozmetickiSalon.setBonusIznos(bonusIznos);
         this.kozmetickiSalonHashMap.replace(id, updatedKozmetickiSalon);
         this.saveData();
     }
@@ -59,7 +60,8 @@ public class KozmetickiSalonManager {
             while ((linija = br.readLine()) != null) {
                 String[] tokeni = linija.split(",");
                 int id = Integer.parseInt(tokeni[0]);
-                this.kozmetickiSalonHashMap.put(id ,new KozmetickiSalon(id, tokeni[1], LocalTime.parse(tokeni[2], DateTimeFormatter.ofPattern("HH:mm")), LocalTime.parse(tokeni[3], DateTimeFormatter.ofPattern("HH:mm")), Double.parseDouble(tokeni[4]), Double.parseDouble(tokeni[5])));
+                this.kozmetickiSalonHashMap.put(id ,new KozmetickiSalon(id, tokeni[1], LocalTime.parse(tokeni[2], DateTimeFormatter.ofPattern("HH:mm")),
+                		LocalTime.parse(tokeni[3], DateTimeFormatter.ofPattern("HH:mm")), Double.parseDouble(tokeni[4]), Double.parseDouble(tokeni[5]),Double.parseDouble(tokeni[6])));
                 this.nextId = ++id;
             }
             br.close();

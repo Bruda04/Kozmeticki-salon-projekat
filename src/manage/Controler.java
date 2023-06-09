@@ -13,13 +13,16 @@ public class Controler {
     public Controler() {}
     public Controler(ManageGlobal manager){
         this.manager = manager;
-//        manager.loadData();
+        manager.loadData();
         if (manager.getKozmetickiSalonMngr().getkozmetickiSalonHashMap().size() == 0) {
-        	manager.getKozmetickiSalonMngr().add("Bruda beauty", LocalTime.of(8, 0), LocalTime.of(22, 0), 0.00, 1500.00);
+        	manager.getKozmetickiSalonMngr().add("Bruda beauty", LocalTime.of(8, 0), LocalTime.of(22, 0), 0.00, 1500.00, 5000.00);
         }        
         if (manager.getCenovnikMngr().getCenovnikHashMapp().size() == 0) {
         	manager.getCenovnikMngr().add(new HashMap<Integer, Double>());
-        }  
+        }
+        if (manager.getMenadzerMngr().getMenadzerHashMap().size() == 0) {
+        	manager.getMenadzerMngr().add("", "Admin", "Admin", "null", "null", "null", "", 0, 0, false, 0);
+        }
     }
     
     public Klijent pronadjiKlijenta(String korisnickoIme) {
@@ -64,6 +67,9 @@ public class Controler {
     	return manager.getTipTretmanaMngr().findById(id);
     }
     
+    public KozmetickiSalon pronadjiKozmetickiSalon() {
+    	return manager.getKozmetickiSalonMngr().findById(1);
+    }
     
     public Korisnik prijava(String korisnickoIme, String lozinka) {
         Klijent k = manager.getKlijentMngr().findByKorisnickoIme(korisnickoIme);
@@ -262,7 +268,7 @@ public class Controler {
         manager.getKlijentMngr().update(k.getId(), k.getKorisnickoIme(), k.getIme(), k.getPrezime(), k.getPol(), k.getTelefon(), k.getAdresa(), k.getLozinka(), k.isKarticaLojalnosti(), potrosenoNew);
         
         KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
-        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje()+zt.getCena()*0.1, ks.getPragBonus());
+        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje()+zt.getCena()*0.1, ks.getPragBonus(), ks.getBonusIznos());
     }
     
     public void otkaziTretmanSalon(int idZakazanogTretmana) {
@@ -273,9 +279,6 @@ public class Controler {
         double potrosenoNew = k.getPotroseno() - zt.getCena();
         
         manager.getKlijentMngr().update(k.getId(), k.getKorisnickoIme(), k.getIme(), k.getPrezime(), k.getPol(), k.getTelefon(), k.getAdresa(), k.getLozinka(), k.isKarticaLojalnosti(), potrosenoNew);
-        
-//        KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
-//        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje()-zt.getCena());
     }
     
     public void propustenTretmanKlijent(int idZakazanogTretmana) {
@@ -283,7 +286,7 @@ public class Controler {
         manager.getZakazanTretmanMngr().update(idZakazanogTretmana, zt.getDatum(), zt.getVreme(), zt.getIdKlijenta(), zt.getIdKozmeticara(), zt.getIdTipaUsluge(), zt.getCena(), zt.getIdZakazivaca(), StanjeZakazanogTretmana.NIJESEPOJAVIO);
         
         KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
-        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje()+zt.getCena(), ks.getPragBonus());
+        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje()+zt.getCena(), ks.getPragBonus(), ks.getBonusIznos());
         
         refaktorisiBonuse();
     }
@@ -294,7 +297,7 @@ public class Controler {
         
         KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
         
-        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje()+zt.getCena(), ks.getPragBonus());
+        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje()+zt.getCena(), ks.getPragBonus(), ks.getBonusIznos());
         refaktorisiBonuse();
     }
 
@@ -401,11 +404,11 @@ public class Controler {
 
     public void izmeniVremeOtvaranjaSalona(LocalTime vremeOtvaranja) {
         KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
-        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), vremeOtvaranja, ks.getVremeZatvaranja(), ks.getStanje(), ks.getPragBonus());
+        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), vremeOtvaranja, ks.getVremeZatvaranja(), ks.getStanje(), ks.getPragBonus(), ks.getBonusIznos());
     }
     public void izmeniVremeZatvaranjaSalona(LocalTime vremeZatvaranja) {
         KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
-        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), vremeZatvaranja, ks.getStanje(), ks.getPragBonus());
+        manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), vremeZatvaranja, ks.getStanje(), ks.getPragBonus(), ks.getBonusIznos());
     }
     
     public double[] izvestajPrihodiRashodi(LocalDate datumPocetka, LocalDate datumKraja) {
@@ -456,9 +459,9 @@ public class Controler {
 		return listaZaposlenihSaBonusm;
     }
     
-    public void izmeniPragBonusa(double pragBonusa) {
+    public void izmeniPragBonusa(double pragBonusa, double bonusIznos) {
     	KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
-    	manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje(), pragBonusa);
+    	manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje(), pragBonusa, bonusIznos);
     	refaktorisiBonuse();
     }
     
@@ -483,6 +486,11 @@ public class Controler {
 				manager.getKozmeticarMngr().update(ktmp.getId(), ktmp.getKorisnickoIme(), ktmp.getIme(), ktmp.getPrezime(), ktmp.getPol(), ktmp.getTelefon(), ktmp.getAdresa(), ktmp.getLozinka(), ktmp.getNivoStrucneSpreme(), ktmp.getGodineStaza(), true, newPlata, ktmp.getSpisakTretmana());
 			}
 		}    	
+    }
+    
+    public void izmeniNazivKozmetickogSalona(String naziv) {
+    	KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
+    	manager.getKozmetickiSalonMngr().update(1, naziv, ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje(), ks.getPragBonus(), ks.getBonusIznos());
     }
 }
 
