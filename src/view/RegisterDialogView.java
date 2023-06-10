@@ -3,6 +3,7 @@ package view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -24,13 +25,13 @@ public class RegisterDialogView extends JDialog{
 
 		this.controler = controler;
 		setTitle("Registracija");
-		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setIconImage(new ImageIcon("img/icon.png").getImage());
 		setResizable(false);
 		setModal(true);
 		registerGUI(frame);
-
 		pack();
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 
@@ -94,7 +95,7 @@ public class RegisterDialogView extends JDialog{
 				
 				
 				if (korisnickoIme == null || lozinka == null || ime == null || prezime == null || telefon == null || adresa == null || pol == null) {
-					JOptionPane.showMessageDialog(null, "Niste uneli sve podatke.");				
+					JOptionPane.showMessageDialog(RegisterDialogView.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
 				} else {
 					controler.registrujKlijenta(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka);
 					

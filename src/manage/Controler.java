@@ -167,7 +167,7 @@ public class Controler {
     public void izmeniRecepcionera(int id, String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
         manager.getRecepcionerMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, bonus, plata);
     }
-    public void izmeniMMenadzera(int id, String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
+    public void izmeniMenadzera(int id, String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
         manager.getMenadzerMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, bonus, plata);
     }
     public void izmeniKozmeticara(int id,
@@ -492,5 +492,23 @@ public class Controler {
     	KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
     	manager.getKozmetickiSalonMngr().update(1, naziv, ks.getVremeOtvaranja(), ks.getVremeZatvaranja(), ks.getStanje(), ks.getPragBonus(), ks.getBonusIznos());
     }
+    
+    public HashMap<Integer, Menadzer> sviMenadzeri() {
+    	return manager.getMenadzerMngr().getMenadzerHashMap();
+    }
+    
+    public HashMap<Integer, Kozmeticar> sviKozmeticari() {
+    	return manager.getKozmeticarMngr().getKozmeticarHashMap();
+    }
+    
+    public HashMap<Integer, TipTretmana> sviTipoviTretmana() {
+    	return manager.getTipTretmanaMngr().getTipoviTretmanaHashMap();
+    }
+	public HashMap<Integer, Recepcioner> sviRecepcioneri() {
+		return manager.getRecepcionerMngr().getRecepcionerHashMap();
+	}
+	public HashMap<Integer, Klijent> sviKlijenti() {
+		return manager.getKlijentMngr().getKlijentHashMap();
+	}
 }
 

@@ -1,3 +1,9 @@
-1,masaza,1|2
-2,manikir,3|4|5
-3,pedikir,6
+1,masaza,1|2|1|2|1|2
+2,manikir,3|4|5|3|4|5|3|4|5
+3,pedikir,6|6|6
+4,masaza,
+5,manikir,
+6,pedikir,
+7,masaza,
+8,manikir,
+9,pedikir,

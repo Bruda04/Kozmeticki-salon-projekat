@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,13 +26,13 @@ public class IzmenaKozmeticiSalonDialog extends JDialog{
 		super(frame);
 		
 		setTitle("Izmena Kozmetičkog salona");
-		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		setModal(true);
 		izmenaGUI(controler, kozmetickiSalon);
 
 		pack();
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 
@@ -47,6 +48,10 @@ public class IzmenaKozmeticiSalonDialog extends JDialog{
 		tfVremeZatvaranja.setText(ks.getVremeZatvaranjaFormatStr());
 		JSpinner spnPragBonus = new JSpinner(new SpinnerNumberModel(ks.getPragBonus(), 0.0, 999999.00, 1.00));
 		JSpinner spnIznosBonus = new JSpinner(new SpinnerNumberModel(ks.getBonusIznos(), 0.0, 999999.00, 1.00));
+		JCheckBox chbIzmenaLojalnosti = new JCheckBox("Refaktoriši kartice lojalnosti");
+		JSpinner spnPragKarticaLojalnosti = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 999999.00, 1.00));
+		
+
 		
 		JButton btnOk = new JButton("Sačuvaj izmene");
 		JButton btnCancel = new JButton("Odustani");
@@ -70,9 +75,26 @@ public class IzmenaKozmeticiSalonDialog extends JDialog{
 		add(new JLabel("Iznos bonusa: "), "al right");
 		add(spnIznosBonus);
 
+		add(chbIzmenaLojalnosti, "al left, span 2");
+		
+		add(new JLabel("Prag za karticu lojalnosti: "), "al right");
+		add(spnPragKarticaLojalnosti);
+		spnPragKarticaLojalnosti.setEnabled(false);
 
 		add(btnOk);
 		add(btnCancel);
+		
+		chbIzmenaLojalnosti.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!chbIzmenaLojalnosti.isSelected()) {
+					spnPragKarticaLojalnosti.setEnabled(false);
+				} else {
+					spnPragKarticaLojalnosti.setEnabled(true);
+				}
+			}
+		});
 		
 		btnOk.addActionListener(new ActionListener() {
 			@Override
@@ -82,15 +104,20 @@ public class IzmenaKozmeticiSalonDialog extends JDialog{
 				String vremeZatvranja = tfVremeZatvaranja.getText().trim();
 				Double pragBonus = (Double) (spnPragBonus.getValue());
 				Double iznosBonus = (Double) (spnIznosBonus.getValue());
+				Double pragKarticaLojalnosti = (Double) (spnPragKarticaLojalnosti.getValue());
+				Boolean refaktorisiKarticeLojalnosti = chbIzmenaLojalnosti.isSelected();
 				
-				
-				if (naziv == null || vremeOtvaranja == null || vremeZatvranja == null || pragBonus == null || iznosBonus == null) {
+				if (naziv == null || vremeOtvaranja == null || vremeZatvranja == null || pragBonus == null || iznosBonus == null || pragKarticaLojalnosti == null) {
 					JOptionPane.showMessageDialog(null, "Niste uneli sve podatke.");				
 				} else {
 					controler.izmeniNazivKozmetickogSalona(naziv);
 					controler.izmeniVremeOtvaranjaSalona(LocalTime.parse(vremeOtvaranja, DateTimeFormatter.ofPattern("HH:mm")));
 					controler.izmeniVremeZatvaranjaSalona(LocalTime.parse(vremeZatvranja, DateTimeFormatter.ofPattern("HH:mm")));
 					controler.izmeniPragBonusa(pragBonus, iznosBonus);
+					
+					if (refaktorisiKarticeLojalnosti == true) {
+						controler.postaviPragZaKarticuLojalnosti(pragKarticaLojalnosti);						
+					}
 					
 					
 					setVisible(false);

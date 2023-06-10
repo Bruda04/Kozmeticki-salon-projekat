@@ -1,5 +1,8 @@
 package view.menadzerTabs;
 
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,10 +16,15 @@ public class KozmetickiSalonPnl extends JPanel{
 	private static final long serialVersionUID = -229234417170898485L;
 	
 	public KozmetickiSalonPnl(Controler controler, JFrame frame) {		
-		MigLayout mlks = new MigLayout("wrap", "[][]", "[][][][][][][][]");
+		MigLayout mlks = new MigLayout("al center, wrap 2", "[]15[]", "[]20[]20[]20[]20[]20[]20[]20[]");
 		setLayout(mlks);
 		
-		JButton btnIzmena = new JButton("Izmeni");
+		JButton btnIzmena = new JButton("IZMENI");
+		ImageIcon updIcon = new ImageIcon("img/edit.gif");		
+		ImageIcon updScaled = new ImageIcon(updIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+		updIcon = updScaled;
+		btnIzmena.setIcon(updIcon);
+		
 		KozmetickiSalon ks = controler.pronadjiKozmetickiSalon();
 				
 		add(new JLabel("PODACI KOZMETICKOG SALONA"), "al center, span 2");
@@ -28,18 +36,18 @@ public class KozmetickiSalonPnl extends JPanel{
 		JLabel lblIznosBonus = new JLabel(String.format("%.2f", ks.getBonusIznos()));
 		JLabel lblStanjeRacuna = new JLabel(String.format("%.2f", ks.getStanje()));
 		
-		add(new JLabel("Naziv: "), "growx, pushx");
-		add(lblNaziv, "growx, pushx");
-		add(new JLabel("Vreme otvaranja: "), "growx, pushx");
-		add(lblVremeOtvarnja, "growx, pushx");
-		add(new JLabel("Vreme zatvaranja: "), "growx, pushx");
-		add(lblVremeZatvaranja, "growx, pushx");
-		add(new JLabel("Prag za bonus: "), "growx, pushx");
-		add(lblPragBonus, "growx, pushx");
-		add(new JLabel("Iznos bonusa: "), "growx, pushx");
-		add(lblIznosBonus, "growx, pushx");
-		add(new JLabel("Stanje računa: "), "growx, pushx");
-		add(lblStanjeRacuna, "growx, pushx");
+		add(new JLabel("Naziv: "), "al right");
+		add(lblNaziv, " al left");
+		add(new JLabel("Vreme otvaranja: "), "al right");
+		add(lblVremeOtvarnja, "");
+		add(new JLabel("Vreme zatvaranja: "), "al right");
+		add(lblVremeZatvaranja, "");
+		add(new JLabel("Prag za bonus: "), "al right");
+		add(lblPragBonus, "");
+		add(new JLabel("Iznos bonusa: "), "al right");
+		add(lblIznosBonus, "");
+		add(new JLabel("Stanje računa: "), "al right");
+		add(lblStanjeRacuna, "");
 		
 		add(btnIzmena, "span 2, al center");
 

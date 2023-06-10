@@ -3,6 +3,7 @@ package view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,11 +24,12 @@ public class LoginFrameView extends JFrame{
 	
 	public LoginFrameView(Controler controler) {		
 		setTitle("Prijava");
-		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setIconImage(new ImageIcon("img/icon.png").getImage());
 		setResizable(false);
 		setupGUI(controler);
 		pack();
+		setLocationRelativeTo(null);
 		setVisible(true);
 		
 	}
