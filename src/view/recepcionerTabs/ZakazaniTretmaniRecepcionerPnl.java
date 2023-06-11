@@ -26,8 +26,9 @@ public class ZakazaniTretmaniRecepcionerPnl extends JPanel{
 	public ZakazaniTretmaniRecepcionerPnl(Controler controler, JFrame frame, int idUlogovan) {
 		setLayout(new BorderLayout());
 
-		JPanel pnlCrud = new JPanel(new MigLayout("al center", "[]20[]20[]20[]", "15[]25"));
+		JPanel pnlCrud = new JPanel(new MigLayout("al center", "[]20[]20[]20[]20[]", "15[]25"));
 		JButton btnZak = new JButton("ZAKAŽI");
+		JButton btnIzv = new JButton("IZVRŠI");
 		JButton btnOtkKlj = new JButton("OTKAZAO KLIJENT");
 		JButton btnOtkSln = new JButton("OTKAZAO SALON");
 		JButton btnNiPo = new JButton("NIJE SE POJAVIO");
@@ -36,6 +37,11 @@ public class ZakazaniTretmaniRecepcionerPnl extends JPanel{
 		ImageIcon zakScaled = new ImageIcon(zakIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
 		zakIcon = zakScaled;
 		btnZak.setIcon(zakIcon);
+		
+		ImageIcon izvIcon = new ImageIcon("img/done.gif");		
+		ImageIcon izvScaled = new ImageIcon(izvIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+		izvIcon = izvScaled;
+		btnIzv.setIcon(izvIcon);
 
 		ImageIcon otkIcon = new ImageIcon("img/remove.gif");		
 		ImageIcon otkScaled = new ImageIcon(otkIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
@@ -53,6 +59,7 @@ public class ZakazaniTretmaniRecepcionerPnl extends JPanel{
 		btnNiPo.setIcon(nipIcon);
 
 		pnlCrud.add(btnZak);
+		pnlCrud.add(btnIzv);
 		pnlCrud.add(btnOtkKlj);
 		pnlCrud.add(btnOtkSln);
 		pnlCrud.add(btnNiPo);
@@ -143,6 +150,31 @@ public class ZakazaniTretmaniRecepcionerPnl extends JPanel{
 					tblmdZakazanTretman.refresh();
 				}
 
+			}
+		});
+		
+		btnIzv.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row = tblZakazanTretman.getSelectedRow();
+				if (row == -1) {
+					JOptionPane.showMessageDialog(ZakazaniTretmaniRecepcionerPnl.this, "Niste označili Zakazan Tretman.", "Greška", JOptionPane.ERROR_MESSAGE);				
+					return;
+				}
+				int idZakazanTretman = (int) tblZakazanTretman.getValueAt(row, 0);		
+
+				if (controler.pronadjiZakazanTretman(idZakazanTretman).getStanje() != StanjeZakazanogTretmana.ZAKAZAN) {
+					JOptionPane.showMessageDialog(ZakazaniTretmaniRecepcionerPnl.this, "Niste označili Zakazan Tretman koji može biti izvršen.", "Greška", JOptionPane.ERROR_MESSAGE);				
+					return;
+				}
+
+				int yesNo = JOptionPane.showConfirmDialog(ZakazaniTretmaniRecepcionerPnl.this, "Da li ste sigurni da želite da označite da je tretman izvršen?", "Izvršen", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+				if (yesNo == JOptionPane.YES_OPTION) {
+					controler.izvrsiTretman(idZakazanTretman);
+					tblmdZakazanTretman.refresh();
+				}
 			}
 		});
 
