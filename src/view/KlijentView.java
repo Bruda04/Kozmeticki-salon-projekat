@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import manage.Controler;
 
 public class KlijentView extends JFrame {
+	private static final long serialVersionUID = 5862527401860068969L;
 	private Controler controler;
 	
 	public KlijentView(Controler controler) {

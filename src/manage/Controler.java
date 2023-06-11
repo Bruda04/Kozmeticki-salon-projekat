@@ -1,12 +1,23 @@
 package manage;
 
-import entity.*;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import entity.Cenovnik;
+import entity.Klijent;
+import entity.Korisnik;
+import entity.Kozmeticar;
+import entity.KozmetickiSalon;
+import entity.Menadzer;
+import entity.Recepcioner;
+import entity.StanjeZakazanogTretmana;
+import entity.TipTretmana;
+import entity.Usluga;
+import entity.ZakazanTretman;
+import entity.Zaposleni;
 
 public class Controler {
 	private ManageGlobal manager;
@@ -69,6 +80,10 @@ public class Controler {
 
 	public KozmetickiSalon pronadjiKozmetickiSalon() {
 		return manager.getKozmetickiSalonMngr().findById(1);
+	}
+	
+	public ZakazanTretman pronadjiZakazanTretman(int idZakazanTretman) {
+		return manager.getZakazanTretmanMngr().findById(idZakazanTretman);
 	}
 
 	public Korisnik prijava(String korisnickoIme, String lozinka) {
@@ -559,6 +574,10 @@ public class Controler {
 			}
 		}
     	return ret;	
+	}
+	
+	public HashMap<Integer, ZakazanTretman> sviZakazaniTretmani() {
+		return manager.getZakazanTretmanMngr().getZakazanTretmanHashMap();
 	}
 	
 	public TipTretmana nadjiTipTretmanaUsluge(int id) {

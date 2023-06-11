@@ -260,9 +260,9 @@ public class KT3 {
         controler.zakaziTretman(LocalDate.of(2023, 6, 14),
 								LocalTime.of(9, 0),
 								controler.pronadjiKlijenta("MikaMikic").getId(),
-								controler.pronadjiKozmeticara("SimaSimic").getId(),
+								controler.dodeliKozmeticara(controler.pronadjiUslugu("Spa manikir").getId(), LocalDate.of(2023, 6, 14), LocalTime.of(9, 0)).getId(),
 								controler.pronadjiUslugu("Spa manikir").getId(),
-								controler.dodeliKozmeticara(controler.pronadjiUslugu("Spa manikir").getId(), LocalDate.of(2023, 6, 14), LocalTime.of(9, 0)).getId());
+								0);
         
         System.out.println("\n----------------------------------IZVRSAVANJE TRETMANA MIKEMIKIC AUTOMATSKI DODELJEN KOZMETICAR---------------------------------------------\n");
         controler.izvrsiTretman(6);

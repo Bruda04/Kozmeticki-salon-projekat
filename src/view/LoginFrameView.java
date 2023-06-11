@@ -75,9 +75,9 @@ public class LoginFrameView extends JFrame{
 						} else if(kredencijali instanceof Menadzer) {
 							new MenadzerView(controler);
 						} else if (kredencijali instanceof Recepcioner) {
-							new RecepcionerView(controler);
+							new RecepcionerView(controler, kredencijali.getId());
 						} else if (kredencijali instanceof Kozmeticar) {
-							new KozmeticarView(controler);
+							new KozmeticarView(controler, kredencijali.getId());
 						}
 						
 						setVisible(false);
