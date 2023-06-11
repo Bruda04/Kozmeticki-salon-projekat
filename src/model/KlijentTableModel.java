@@ -13,7 +13,7 @@ public class KlijentTableModel extends AbstractTableModel{
 	
 	private List<Klijent> data;
 	private Controler controler;
-    private String[] columnNames = { "Id", "Korisničko ime", "Ime", "Prezime","Pol", "Telefon", "Adresa", "Lozinka", "Kartica lojalnosti", "Potrošeno sredstava", "Obrisan"};
+    private String[] columnNames = { "Id", "Korisničko ime", "Ime", "Prezime","Pol", "Telefon", "Adresa", "Lozinka", "Kartica lojalnosti", "Potrošeno sredstava"};
 
 	public KlijentTableModel(Controler controler) {
 		this.controler = controler;
@@ -56,8 +56,6 @@ public class KlijentTableModel extends AbstractTableModel{
 			return klijent.isKarticaLojalnosti();
 		case 9:
 			return klijent.getPotroseno();
-		case 10:
-			return klijent.isObrisan();
 		default:
 			return null;
 		}

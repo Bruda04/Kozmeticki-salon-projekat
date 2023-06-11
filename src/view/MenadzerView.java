@@ -15,6 +15,8 @@ import view.menadzerTabs.KozmeticariPnl;
 import view.menadzerTabs.KozmetickiSalonPnl;
 import view.menadzerTabs.MenadzeriPnl;
 import view.menadzerTabs.RecepcioneriPnl;
+import view.menadzerTabs.TipoviTretmanaPnl;
+import view.menadzerTabs.UslugePnl;
 
 public class MenadzerView extends JFrame {
 	private static final long serialVersionUID = -585150090946624553L;
@@ -60,14 +62,17 @@ public class MenadzerView extends JFrame {
 		JPanel pnlKozmeticari = new KozmeticariPnl(controler, this);
 		JPanel pnlRecepcioneri = new RecepcioneriPnl(controler, this);
 		JPanel pnlKlijenti = new KlijentiPnl(controler, this);
-				
+		JPanel pnlTipoviTretmana = new TipoviTretmanaPnl(controler, this);
+		JPanel pnlUsluge = new UslugePnl(controler, this);
+
 		
 		tp.add("Kozmetički salon", pnlKSSettings);
 		tp.add("Menadžeri", pnlMenadzeri);
 		tp.add("Kozmetičari", pnlKozmeticari);
 		tp.add("Recepcioneri", pnlRecepcioneri);
 		tp.add("Klijenti", pnlKlijenti);
-
+		tp.add("Tipovi tretmana", pnlTipoviTretmana);
+		tp.add("Usluge", pnlUsluge);
 		
 		
 		add(tp, BorderLayout.CENTER);

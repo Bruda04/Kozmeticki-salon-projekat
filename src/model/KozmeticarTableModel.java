@@ -17,7 +17,7 @@ public class KozmeticarTableModel extends AbstractTableModel{
 	private List<Kozmeticar> data;
 	private HashMap<Integer, TipTretmana> tipoviTretmana;
 	private Controler controler;
-	private String[] columnNames = { "Id", "Korisničko ime", "Ime", "Prezime","Pol", "Telefon", "Adresa", "Lozinka", "Stručna sprema", "Godine staža", "Bonus", "Plata", "Obucen za", "Obrisan"};
+	private String[] columnNames = { "Id", "Korisničko ime", "Ime", "Prezime","Pol", "Telefon", "Adresa", "Lozinka", "Stručna sprema", "Godine staža", "Bonus", "Plata", "Obucen za"};
 
 	public KozmeticarTableModel(Controler controler) {
 		this.controler = controler;
@@ -65,13 +65,16 @@ public class KozmeticarTableModel extends AbstractTableModel{
 		case 11:
 			return kozmeticar.getPlata();
 		case 12:
-			ArrayList<String> retTipTretmana = new ArrayList<>();
-			for (int idTipaTretmana : kozmeticar.getSpisakTretmana()) {
-				retTipTretmana.add(tipoviTretmana.get(idTipaTretmana).getNaziv());
-			}
-			return retTipTretmana;
-		case 13:
-			return kozmeticar.isObrisan();
+//			ArrayList<String> retTipTretmana = new ArrayList<>();
+//			for (int idTipaTretmana : kozmeticar.getSpisakTretmana()) {
+//				retTipTretmana.add(tipoviTretmana.get(idTipaTretmana).getNaziv());
+//			}
+			StringBuilder sb = new StringBuilder();
+	        for(int idTipaTretmana : kozmeticar.getSpisakTretmana()) {
+	            sb.append(", ").append(tipoviTretmana.get(idTipaTretmana).getNaziv());
+	        }
+	        String retStr = sb.toString();
+			return retStr.subSequence(2, retStr.length());
 		default:
 			return null;
 		}

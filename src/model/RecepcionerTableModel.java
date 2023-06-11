@@ -13,7 +13,7 @@ public class RecepcionerTableModel extends AbstractTableModel{
 	private static final long serialVersionUID = 5700995641324967796L;
 	private List<Recepcioner> data;
 	private Controler controler;
-    private String[] columnNames = { "Id", "Korisničko ime", "Ime", "Prezime","Pol", "Telefon", "Adresa", "Lozinka", "Stručna sprema", "Godine staža", "Bonus", "Plata", "Obrisan"};
+    private String[] columnNames = { "Id", "Korisničko ime", "Ime", "Prezime","Pol", "Telefon", "Adresa", "Lozinka", "Stručna sprema", "Godine staža", "Bonus", "Plata"};
 
 	public RecepcionerTableModel(Controler controler) {
 		this.controler = controler;
@@ -60,8 +60,6 @@ public class RecepcionerTableModel extends AbstractTableModel{
 			return recepcioner.getBonus();
 		case 11:
 			return recepcioner.getPlata();
-		case 12:
-			return recepcioner.isObrisan();
 		default:
 			return null;
 		}

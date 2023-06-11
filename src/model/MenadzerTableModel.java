@@ -13,7 +13,7 @@ public class MenadzerTableModel extends AbstractTableModel{
 	private static final long serialVersionUID = 5700995641324967796L;
 	private List<Menadzer> data;
 	private Controler controler;
-    private String[] columnNames = { "Id", "Korisničko ime", "Ime", "Prezime","Pol", "Telefon", "Adresa", "Lozinka", "Stručna sprema", "Godine staža", "Bonus", "Plata", "Obrisan"};
+    private String[] columnNames = { "Id", "Korisničko ime", "Ime", "Prezime","Pol", "Telefon", "Adresa", "Lozinka", "Stručna sprema", "Godine staža", "Bonus", "Plata"};
 
 	public MenadzerTableModel(Controler controler) {
 		this.controler = controler;
@@ -59,8 +59,6 @@ public class MenadzerTableModel extends AbstractTableModel{
 			return menadzer.getBonus();
 		case 11:
 			return menadzer.getPlata();
-		case 12:
-			return menadzer.isObrisan();
 		default:
 			return null;
 		}

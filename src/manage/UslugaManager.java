@@ -38,7 +38,8 @@ public class UslugaManager {
     }
 
     public void deleteById(int id){
-        this.uslugeHashMap.remove(id);
+    	this.uslugeHashMap.get(id).setObrisan(true);
+//        this.uslugeHashMap.remove(id);
         this.saveData();
     }
 
@@ -69,6 +70,9 @@ public class UslugaManager {
                 String[] tokeni = linija.split(",");
                 int id = Integer.parseInt(tokeni[0]);
                 this.uslugeHashMap.put(id ,new Usluga(id, tokeni[1], Integer.parseInt(tokeni[2])));
+                if (Boolean.parseBoolean(tokeni[3])) {
+					this.uslugeHashMap.get(id).setObrisan(true);
+				}
                 this.nextId = ++id;
             }
             br.close();

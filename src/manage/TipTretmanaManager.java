@@ -44,14 +44,16 @@ public class TipTretmanaManager {
     }
 
     public void deleteById(int id){
-        this.tipoviTretmanaHashMap.remove(id);
+    	this.tipoviTretmanaHashMap.get(id).setObrisan(true);
+//        this.tipoviTretmanaHashMap.remove(id);
         this.saveData();
     }
 
     public void deleteByNazivTipaTretmana(String nazivTretmana){
         for (TipTretmana tt : this.tipoviTretmanaHashMap.values()) {
             if (tt.getNaziv().equals(nazivTretmana)) {
-                this.tipoviTretmanaHashMap.remove(tt.getId());
+            	this.tipoviTretmanaHashMap.get(tt.getId()).setObrisan(true);
+//                this.tipoviTretmanaHashMap.remove(tt.getId());
                 break;
             }
         }
@@ -75,12 +77,15 @@ public class TipTretmanaManager {
                 String[] tokeni = linija.split(",");
                 int id = Integer.parseInt(tokeni[0]);
                 ArrayList<Integer> ListaUsluga = new ArrayList<>();
-                if (tokeni.length == 3) {
-                    for (String i : tokeni[2].split("\\|")) {
+                if (tokeni.length == 4) {
+                    for (String i : tokeni[3].split("\\|")) {
                         ListaUsluga.add(Integer.parseInt(i));
                     }
                 }
                 this.tipoviTretmanaHashMap.put(id ,new TipTretmana(id, tokeni[1], ListaUsluga));
+                if (Boolean.parseBoolean(tokeni[2])) {
+					this.tipoviTretmanaHashMap.get(id).setObrisan(true);
+				}
                 this.nextId = ++id;
             }
             br.close();

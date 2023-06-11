@@ -44,13 +44,15 @@ public class KlijentManager {
 	}
 
 	public void deleteById(int id){
-		this.klijentHashMap.remove(id);
+    	this.klijentHashMap.get(id).setObrisan(true);
+//		this.klijentHashMap.remove(id);
 		this.saveData();
 	}
 	public void deleteByKorisnickoIme(String korisnickoIme){
 		for (Klijent k : this.klijentHashMap.values()) {
 			if (k.getKorisnickoIme().equals(korisnickoIme)) {
-				this.klijentHashMap.remove(k.getId());
+		    	this.klijentHashMap.get(k.getId()).setObrisan(true);
+//				this.klijentHashMap.remove(k.getId());
 				break;
 			}
 		}

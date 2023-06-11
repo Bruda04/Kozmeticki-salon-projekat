@@ -43,13 +43,15 @@ public class RecepcionerManager {
     }
 
     public void deleteById(int id){
-        this.recepcionerHashMap.remove(id);
+    	this.recepcionerHashMap.get(id).setObrisan(true);
+//        this.recepcionerHashMap.remove(id);
         this.saveData();
     }
     public void deleteByKorisnickoIme(String korisnickoIme){
         for (Recepcioner r : this.recepcionerHashMap.values()) {
             if (r.getKorisnickoIme().equals(korisnickoIme)) {
-                this.recepcionerHashMap.remove(r.getId());
+            	this.recepcionerHashMap.get(r.getId()).setObrisan(true);
+//                this.recepcionerHashMap.remove(r.getId());
                 break;
             }
         }

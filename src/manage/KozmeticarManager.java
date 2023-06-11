@@ -51,13 +51,15 @@ public class KozmeticarManager {
     }
 
     public void deleteById(int id){
-        this.kozmeticarHashMap.remove(id);
+    	this.kozmeticarHashMap.get(id).setObrisan(true);
+//        this.kozmeticarHashMap.remove(id);
         this.saveData();
     }
     public void deleteByKorisnickoIme(String korisnickoIme){
         for (Kozmeticar k : this.kozmeticarHashMap.values()) {
             if (k.getKorisnickoIme().equals(korisnickoIme)) {
-                this.kozmeticarHashMap.remove(k.getId());
+//                this.kozmeticarHashMap.remove(k.getId());
+            	this.kozmeticarHashMap.get(k.getId()).setObrisan(true);
                 break;
             }
         }

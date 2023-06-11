@@ -41,13 +41,15 @@ public class MenadzerManager {
     }
 
     public void deleteById(int id){
-        this.menadzerHashMap.remove(id);
+//        this.menadzerHashMap.remove(id);
+    	this.menadzerHashMap.get(id).setObrisan(true);
         this.saveData();
     }
     public void deleteByKorisnickoIme(String korisnickoIme){
         for (Menadzer m : this.menadzerHashMap.values()) {
             if (m.getKorisnickoIme().equals(korisnickoIme)) {
-                this.menadzerHashMap.remove(m.getId());
+//                this.menadzerHashMap.remove(m.getId());
+            	this.menadzerHashMap.get(m.getId()).setObrisan(true);
                 break;
             }
         }
