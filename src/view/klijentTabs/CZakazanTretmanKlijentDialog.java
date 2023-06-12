@@ -1,4 +1,4 @@
-package view.recepcionerTabs;
+package view.klijentTabs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,19 +24,19 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import entity.Klijent;
 import entity.Kozmeticar;
 import entity.TipTretmana;
 import manage.Controler;
 import net.miginfocom.swing.MigLayout;
 
-public class CZakazanTretmanDialog extends JDialog{
+public class CZakazanTretmanKlijentDialog extends JDialog{
 
-	private static final long serialVersionUID = 7247432992768080272L;
+	private static final long serialVersionUID = -398617581964478884L;
+	
 	private Controler controler;
 	private int idUlogovan;
 
-	public CZakazanTretmanDialog(Controler controler, JFrame frame, int idUlogovan) {
+	public CZakazanTretmanKlijentDialog(Controler controler, JFrame frame, int idUlogovan) {
 		super(frame);
 
 		this.controler = controler;
@@ -63,16 +63,8 @@ public class CZakazanTretmanDialog extends JDialog{
 	}
 
 	private void cuGui(JFrame frame) {
-		MigLayout layout = new MigLayout("wrap 2", "[][]", "[]20[][][][][][][][][][]20[]");
+		MigLayout layout = new MigLayout("wrap 2", "[][]", "[]20[][][][][][][][]20[]");
 		setLayout(layout);
-
-		ArrayList<String> choKlijenti = new ArrayList<>();
-		choKlijenti.add(null);
-		for (Klijent k : controler.sviKlijenti().values()) {
-			choKlijenti.add(k.getKorisnickoIme());
-		}
-		String[] choKlijentiArray = choKlijenti.toArray(new String[choKlijenti.size()]); 
-		JComboBox<String> cbKlijent = new JComboBox<String>(choKlijentiArray);
 
 		ArrayList<String> choTipTretmana= new ArrayList<>();
 		choTipTretmana.add(null);
@@ -188,9 +180,6 @@ public class CZakazanTretmanDialog extends JDialog{
 
 		add(new JLabel("Molimo da popunite formu."), "span 2");
 
-		add(new JLabel("Klijent: "), "al right");
-		add(cbKlijent);
-
 		add(new JLabel("Tip tretmana: "), "al right");
 		add(cbTipTretmana);
 
@@ -218,17 +207,16 @@ public class CZakazanTretmanDialog extends JDialog{
 		btnOk.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String klijentKI = (String) cbKlijent.getSelectedItem();
 				String usluga = (String) cbUsluga.getSelectedItem();
 				String kozmeticar = (String) cbKozmeticar.getSelectedItem();
 				Date datum = (Date) dpDatum.getModel().getValue();
 				String vreme = (String) cbVreme.getSelectedItem();
 
-				if (klijentKI == null || usluga == null || kozmeticar == null || datum == null || vreme == null) {
-					JOptionPane.showMessageDialog(CZakazanTretmanDialog.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
+				if (usluga == null || kozmeticar == null || datum == null || vreme == null) {
+					JOptionPane.showMessageDialog(CZakazanTretmanKlijentDialog.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
 				} else {
 					controler.zakaziTretman(dateFormat(datum), LocalTime.parse(vreme, DateTimeFormatter.ofPattern("HH:mm")),
-					 controler.pronadjiKlijenta(klijentKI).getId(), controler.pronadjiKozmeticara(kozmeticar).getId(), controler.pronadjiUslugu(usluga).getId(), idUlogovan);
+					 idUlogovan, controler.pronadjiKozmeticara(kozmeticar).getId(), controler.pronadjiUslugu(usluga).getId(), 0);
 					setVisible(false);
 					dispose();
 				}

@@ -99,7 +99,7 @@ public class RegisterDialogView extends JDialog{
 				} else {
 					controler.registrujKlijenta(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka);
 					
-					new KlijentView(controler);
+					new KlijentView(controler, controler.pronadjiKlijenta(korisnickoIme).getId());
 					
 					frame.setVisible(false);
 					frame.dispose();

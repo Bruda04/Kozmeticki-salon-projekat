@@ -436,6 +436,17 @@ public class Controler {
 		KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
 		manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), vremeZatvaranja, ks.getStanje(), ks.getPragBonus(), ks.getBonusIznos());
 	}
+	
+	public ArrayList<LocalTime> radniSatiSalona() {
+		ArrayList<LocalTime> listaTermina = new ArrayList<>();
+		KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
+		int radnihSati = ks.getVremeZatvaranja().getHour() - ks.getVremeOtvaranja().getHour();
+		for (int i = 0; i < radnihSati; i++) {
+			LocalTime termin = ks.getVremeOtvaranja().plusHours(i);
+			listaTermina.add(termin);
+		}
+		return listaTermina;
+	}
 
 	public double[] izvestajPrihodiRashodi(LocalDate datumPocetka, LocalDate datumKraja) {
 		double prihodi = 0.00;
@@ -588,6 +599,17 @@ public class Controler {
 		}
 		return null;
 	}
+	
+//	public HashMap<Integer, Double[]> izvestajBrojPrihodKozmeticari(LocalDate pocetniDatum, LocalDate krajnjiDatum) {
+//		HashMap<Integer, Double[]> ret = new HashMap<>();
+//		for (Kozmeticar k : manager.getKozmeticarMngr().getKozmeticarHashMap().values()) {
+//		
+//			
+//		}
+//		
+//		return null;
+//		
+//	}
 	
 }
 

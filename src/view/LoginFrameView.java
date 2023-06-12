@@ -71,7 +71,7 @@ public class LoginFrameView extends JFrame{
 					} else {
 						
 						if (kredencijali instanceof Klijent) {
-							new KlijentView(controler);
+							new KlijentView(controler, kredencijali.getId());
 						} else if(kredencijali instanceof Menadzer) {
 							new MenadzerView(controler);
 						} else if (kredencijali instanceof Recepcioner) {
