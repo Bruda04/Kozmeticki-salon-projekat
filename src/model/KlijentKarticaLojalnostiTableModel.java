@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -8,16 +7,16 @@ import javax.swing.table.AbstractTableModel;
 import entity.Klijent;
 import manage.Controler;
 
-public class KlijentTableModel extends AbstractTableModel{
-	private static final long serialVersionUID = 4821982926713794279L;
+public class KlijentKarticaLojalnostiTableModel extends AbstractTableModel{
+	private static final long serialVersionUID = -3294795822481902011L;
 	
 	private List<Klijent> data;
 	private Controler controler;
     private String[] columnNames = { "Id", "Korisničko ime", "Ime", "Prezime","Pol", "Telefon", "Adresa", "Lozinka", "Kartica lojalnosti", "Potrošeno sredstava"};
 
-	public KlijentTableModel(Controler controler) {
+	public KlijentKarticaLojalnostiTableModel(Controler controler, Double prag) {
 		this.controler = controler;
-		this.data = new ArrayList<Klijent>(controler.sviKlijenti().values());
+		this.data = controler.izvestajPotencijalZaKarticuLojalnosti(prag);			
 
 	}
 	
@@ -36,6 +35,7 @@ public class KlijentTableModel extends AbstractTableModel{
 		if (data.size() == 0) {
 			return null;
 		}
+		
 		Klijent klijent = data.get(rowIndex);
 		
 		switch (columnIndex) {
@@ -72,15 +72,15 @@ public class KlijentTableModel extends AbstractTableModel{
 		if(this.getValueAt(0, c) == null) {
             return Object.class;
         }
-        return this.getValueAt(0, c).getClass();	
-    }
+        return this.getValueAt(0, c).getClass();
+	}
 
 	public boolean isCellEditable(int row, int col) {
 		return false;
 	}
 	
-	public void refresh() {
-		this.data = new ArrayList<Klijent>(controler.sviKlijenti().values());
+	public void refresh(Double prag) {
+		this.data = controler.izvestajPotencijalZaKarticuLojalnosti(prag);			
 		this.fireTableDataChanged();
 	}
 }

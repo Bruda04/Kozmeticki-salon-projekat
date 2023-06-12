@@ -37,6 +37,9 @@ public class KozmeticarTableModel extends AbstractTableModel{
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
+		if (data.size() == 0) {
+			return null;
+		}
 		Kozmeticar kozmeticar = data.get(rowIndex);
 
 		switch (columnIndex) {
@@ -85,7 +88,10 @@ public class KozmeticarTableModel extends AbstractTableModel{
 	}
 
 	public Class<?> getColumnClass(int c) {
-		return getValueAt(0, c).getClass();
+		if(this.getValueAt(0, c) == null) {
+            return Object.class;
+        }
+        return this.getValueAt(0, c).getClass();
 	}
 
 	public boolean isCellEditable(int row, int col) {

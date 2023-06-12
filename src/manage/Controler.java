@@ -81,7 +81,7 @@ public class Controler {
 	public KozmetickiSalon pronadjiKozmetickiSalon() {
 		return manager.getKozmetickiSalonMngr().findById(1);
 	}
-	
+
 	public ZakazanTretman pronadjiZakazanTretman(int idZakazanTretman) {
 		return manager.getZakazanTretmanMngr().findById(idZakazanTretman);
 	}
@@ -212,7 +212,7 @@ public class Controler {
 	public void dodajTipTretmana(String naziv, ArrayList<Integer> skupTipovaUsluga) {
 		manager.getTipTretmanaMngr().add(naziv, skupTipovaUsluga);
 	}
-	
+
 	public void izmeniTipTretmana(int idTipaTretmana, String naziv, ArrayList<Integer> skupTipovaUsluga) {
 		manager.getTipTretmanaMngr().update(idTipaTretmana, naziv, skupTipovaUsluga);
 	}
@@ -260,7 +260,7 @@ public class Controler {
 		cenovnik.getCenovnikHasMap().replace(pronadjiUslugu(id).getId(), cena);
 		manager.getCenovnikMngr().update(cenovnik.getId(), cenovnik.getCenovnikHasMap());
 	}
-	
+
 	public double nadjiCenuUsluge(int idUsluge) {
 		return manager.getCenovnikMngr().findById(1).getCenovnikHasMap().get(idUsluge);
 	}
@@ -436,7 +436,7 @@ public class Controler {
 		KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
 		manager.getKozmetickiSalonMngr().update(1, ks.getNaziv(), ks.getVremeOtvaranja(), vremeZatvaranja, ks.getStanje(), ks.getPragBonus(), ks.getBonusIznos());
 	}
-	
+
 	public ArrayList<LocalTime> radniSatiSalona() {
 		ArrayList<LocalTime> listaTermina = new ArrayList<>();
 		KozmetickiSalon ks = manager.getKozmetickiSalonMngr().findById(1);
@@ -579,18 +579,18 @@ public class Controler {
 	}
 	public HashMap<Integer, Usluga> sveUsluge() {
 		HashMap<Integer, Usluga> ret = new HashMap<>();
-    	for (Usluga u : manager.getUslugaMngr().getUslugeHashMap().values()) {
+		for (Usluga u : manager.getUslugaMngr().getUslugeHashMap().values()) {
 			if (!u.isObrisan()) {
 				ret.put(u.getId(), u);
 			}
 		}
-    	return ret;	
+		return ret;	
 	}
-	
+
 	public HashMap<Integer, ZakazanTretman> sviZakazaniTretmani() {
 		return manager.getZakazanTretmanMngr().getZakazanTretmanHashMap();
 	}
-	
+
 	public TipTretmana nadjiTipTretmanaUsluge(int id) {
 		for (TipTretmana tt : manager.getTipTretmanaMngr().getTipoviTretmanaHashMap().values()) {
 			if (!tt.isObrisan() && tt.getSkupTipovaUsluga().contains(id)) {
@@ -599,17 +599,99 @@ public class Controler {
 		}
 		return null;
 	}
+
+	public double[] izvestajBrojPrihodKozmeticari(int idKozmeticara, LocalDate datumPocetka, LocalDate datumKraja) {
+		double broj = 0.00;
+		double prihodi = 0.00;
+		double[] ret = new double[2];
+
+		for (ZakazanTretman zt : manager.getZakazanTretmanMngr().getZakazanTretmanHashMap().values()) {
+			if (zt.getDatum().isAfter(datumPocetka) && zt.getDatum().isBefore(datumKraja)) {
+				if (zt.getStanje() == StanjeZakazanogTretmana.IZVRŠEN || zt.getStanje() == StanjeZakazanogTretmana.NIJESEPOJAVIO) {
+					if (zt.getStanje() == StanjeZakazanogTretmana.IZVRŠEN) {
+						broj += 1;
+					}
+					prihodi += zt.getCena();
+				} else if (zt.getStanje() == StanjeZakazanogTretmana.OTKAZAOKLIJENT) {
+					prihodi += zt.getCena()*0.1;
+				}				
+			}
+		}
+
+		ret[0] = broj;
+		ret[1] = prihodi;
+		return ret;
+
+	}
+
+	public int[] izvestajPotvrdjenoOtkazano(LocalDate datumPocetka, LocalDate datumKraja) {
+		int zakazano = 0;
+		int izvrseno = 0;
+		int otkazaoK = 0;
+		int otkazaoS = 0;
+		int nipo = 0;
+
+		int[] ret = new int[5];
+
+		for (ZakazanTretman zt : manager.getZakazanTretmanMngr().getZakazanTretmanHashMap().values()) {
+			if (zt.getDatum().isAfter(datumPocetka) && zt.getDatum().isBefore(datumKraja)) {
+				if (zt.getStanje() == StanjeZakazanogTretmana.ZAKAZAN) {
+					zakazano += 1;
+				} else if(zt.getStanje() == StanjeZakazanogTretmana.IZVRŠEN){
+					izvrseno += 1;
+				} else if(zt.getStanje() == StanjeZakazanogTretmana.OTKAZAOKLIJENT){
+					otkazaoK += 1;
+				} else if(zt.getStanje() == StanjeZakazanogTretmana.OTKAZAOSALON){
+					otkazaoS += 1;
+				} else if(zt.getStanje() == StanjeZakazanogTretmana.NIJESEPOJAVIO){
+					nipo += 1;
+				}
+			}
+		}
+
+		ret[0] = zakazano;
+		ret[1] = izvrseno;
+		ret[2] = otkazaoK;
+		ret[3] = otkazaoS;
+		ret[4] = nipo;
+		return ret;
+	}
+
+	public HashMap<String, Object> izvestajUslugaStatistika(int idUsluge, LocalDate datumPocetka, LocalDate datumKraja) {
+		HashMap<String, Object> ret =  new HashMap<>();
+		Usluga u = manager.getUslugaMngr().findById(idUsluge);
+		ret.put("id", u.getId());
+		ret.put("naziv", u.getNazivUsluge());
+		ret.put("trajanje", u.getTrajanjeUsluge());
+		ret.put("tip", nadjiTipTretmanaUsluge(idUsluge).getNaziv());
+
+		int zakazivanja = 0;
+		double prihodi = 0.00;
+		for (ZakazanTretman zt : manager.getZakazanTretmanMngr().getZakazanTretmanHashMap().values()) {
+			if (zt.getDatum().isAfter(datumPocetka) && zt.getDatum().isBefore(datumKraja) && zt.getIdTipaUsluge() == idUsluge) {
+				zakazivanja += 1;
+				prihodi += zt.getCena();
+			}
+		}
+		ret.put("zakazivanja", zakazivanja);
+		ret.put("cena", nadjiCenuUsluge(idUsluge));
+		ret.put("prihodi", prihodi);
+
+		return ret;
+	}
 	
-//	public HashMap<Integer, Double[]> izvestajBrojPrihodKozmeticari(LocalDate pocetniDatum, LocalDate krajnjiDatum) {
-//		HashMap<Integer, Double[]> ret = new HashMap<>();
-//		for (Kozmeticar k : manager.getKozmeticarMngr().getKozmeticarHashMap().values()) {
-//		
-//			
-//		}
-//		
-//		return null;
-//		
-//	}
-	
+	public ArrayList<Klijent> izvestajPotencijalZaKarticuLojalnosti(Double prag) {
+		ArrayList<Klijent> ret = new ArrayList<>();
+		if (prag == null) {
+			return ret;
+		}
+		for (Klijent k: manager.getKlijentMngr().getKlijentHashMap().values()) {
+			if (k.getPotroseno() >= prag && !k.isObrisan()) {
+				ret.add(k);
+			}
+		}
+		return ret;
+	}
+
 }
 

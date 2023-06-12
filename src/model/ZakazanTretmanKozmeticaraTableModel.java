@@ -34,6 +34,9 @@ public class ZakazanTretmanKozmeticaraTableModel extends AbstractTableModel{
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
+		if (data.size() == 0) {
+			return null;
+		}
 		ZakazanTretman zakazanTretman = data.get(rowIndex);
 		
 		switch (columnIndex) {
@@ -65,7 +68,10 @@ public class ZakazanTretmanKozmeticaraTableModel extends AbstractTableModel{
 	}
 	
 	public Class<?> getColumnClass(int c) {
-		return getValueAt(0, c).getClass();
+		if(this.getValueAt(0, c) == null) {
+            return Object.class;
+        }
+        return this.getValueAt(0, c).getClass();
 	}
 
 	public boolean isCellEditable(int row, int col) {
