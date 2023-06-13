@@ -2,9 +2,13 @@ package manage;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.function.Function;
 
 import entity.Cenovnik;
 import entity.Klijent;
@@ -692,6 +696,99 @@ public class Controler {
 		}
 		return ret;
 	}
-
+	
+	public HashMap<Kozmeticar, Double> dijagramUdeoKozmeticara() {
+		HashMap<Kozmeticar, Double> ret = new HashMap<>();
+		LocalDate kraj = LocalDate.now();
+		LocalDate pocetak = kraj.minusDays(30);
+		HashMap<Integer, Integer> calc = new HashMap<>();
+		
+		int ukupno = 0;
+		for (ZakazanTretman zt : manager.getZakazanTretmanMngr().getZakazanTretmanHashMap().values()) {
+			if (zt.getDatum().isAfter(pocetak) && zt.getDatum().isBefore(kraj) && zt.getStanje() == StanjeZakazanogTretmana.IZVRŠEN) {
+				if (calc.get(zt.getIdKozmeticara()) == null) {
+					calc.put(zt.getIdKozmeticara(), 1);
+				} else {
+					calc.put(zt.getIdKozmeticara(), calc.get(zt.getIdKozmeticara()) + 1);
+				}
+				ukupno += 1;
+			}
+		}
+		
+		for (Map.Entry<Integer, Integer> entry : calc.entrySet()) {
+            ret.put(pronadjiKozmeticara(entry.getKey()), (double) (ukupno/entry.getValue()));
+        }
+		
+		return ret;
+	}
+	
+	public HashMap<StanjeZakazanogTretmana, Double> dijagramStatusTretmana() {
+		HashMap<StanjeZakazanogTretmana, Double> ret = new HashMap<>();
+		LocalDate kraj = LocalDate.now();
+		LocalDate pocetak = kraj.minusDays(30);
+		HashMap<StanjeZakazanogTretmana, Integer> calc = new HashMap<>();
+		
+		calc.put(StanjeZakazanogTretmana.ZAKAZAN, 0);
+		calc.put(StanjeZakazanogTretmana.IZVRŠEN, 0);
+		calc.put(StanjeZakazanogTretmana.OTKAZAOKLIJENT, 0);
+		calc.put(StanjeZakazanogTretmana.OTKAZAOSALON, 0);
+		calc.put(StanjeZakazanogTretmana.NIJESEPOJAVIO, 0);
+		
+		int ukupno = 0;
+		for (ZakazanTretman zt : manager.getZakazanTretmanMngr().getZakazanTretmanHashMap().values()) {
+			if (zt.getDatum().isAfter(pocetak) && zt.getDatum().isBefore(kraj)) {
+				if (zt.getStanje() == StanjeZakazanogTretmana.ZAKAZAN) {
+					calc.put(zt.getStanje(), calc.get(zt.getStanje()) + 1);
+				} else if(zt.getStanje() == StanjeZakazanogTretmana.IZVRŠEN){
+					calc.put(zt.getStanje(), calc.get(zt.getStanje()) + 1);
+				} else if(zt.getStanje() == StanjeZakazanogTretmana.OTKAZAOKLIJENT){
+					calc.put(zt.getStanje(), calc.get(zt.getStanje()) + 1);
+				} else if(zt.getStanje() == StanjeZakazanogTretmana.OTKAZAOSALON){
+					calc.put(zt.getStanje(), calc.get(zt.getStanje()) + 1);
+				} else if(zt.getStanje() == StanjeZakazanogTretmana.NIJESEPOJAVIO){
+					calc.put(zt.getStanje(), calc.get(zt.getStanje()) + 1);
+				}
+				ukupno += 1;
+			}
+		}
+		
+		for (Map.Entry<StanjeZakazanogTretmana, Integer> entry : calc.entrySet()) {
+			if (entry.getValue() != 0) {
+				ret.put(entry.getKey(), (double) (ukupno/entry.getValue()));				
+			} else {
+				ret.put(entry.getKey(), (double) entry.getValue());
+			}
+        }
+		
+		return ret;
+	}
+	
+	public TreeMap<Date, Double> dijagramPrihodiGodina(int idTip){
+		TreeMap<Date, Double> ret = new TreeMap<>();
+		Function<LocalDate, Date> lDC = ld -> Date.from(ld.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		 LocalDate sad = LocalDate.now();
+		 LocalDate pre = sad.minusYears(1).withDayOfMonth(1);
+		
+		for (int i = 1; i <= 12; i++) {
+			double vrednost = 0.00;
+			LocalDate datumStart = pre.plusMonths(i);
+			
+			for (ZakazanTretman zt : manager.getZakazanTretmanMngr().getZakazanTretmanHashMap().values()) {
+				if (zt.getDatum().isAfter(datumStart) && zt.getDatum().isBefore(datumStart.plusMonths(1))) {
+					if (idTip == nadjiTipTretmanaUsluge(zt.getIdTipaUsluge()).getId() || idTip == 0) {
+						if (zt.getStanje() == StanjeZakazanogTretmana.IZVRŠEN || zt.getStanje() == StanjeZakazanogTretmana.NIJESEPOJAVIO) {
+							vrednost += zt.getCena();
+						} else if (zt.getStanje() == StanjeZakazanogTretmana.OTKAZAOKLIJENT) {
+							vrednost += zt.getCena()*0.1;
+						}										
+					}	
+				}
+			}
+			
+			ret.put(lDC.apply(datumStart), vrednost);
+		}
+		
+		return ret;
+	}
 }
 

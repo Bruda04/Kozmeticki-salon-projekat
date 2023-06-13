@@ -18,6 +18,7 @@ import view.menadzerTabs.RecepcioneriPnl;
 import view.menadzerTabs.TipoviTretmanaPnl;
 import view.menadzerTabs.UslugePnl;
 import view.menadzerTabs.ZakazaniTretmaniPnl;
+import view.menadzerTabs.dijagrami.DijagramiPnl;
 import view.menadzerTabs.izvestaji.IzvestajiPnl;
 
 public class MenadzerView extends JFrame {
@@ -68,7 +69,7 @@ public class MenadzerView extends JFrame {
 		JPanel pnlUsluge = new UslugePnl(controler, this);
 		JPanel pnlZakazaniTretmani = new ZakazaniTretmaniPnl(controler, this);
 		JPanel pnlIzvestaji = new IzvestajiPnl(controler, this);
-
+		JPanel pnlDijagrami = new DijagramiPnl(controler, this);
 		
 		tp.add("Kozmetički salon", pnlKSSettings);
 		tp.add("Menadžeri", pnlMenadzeri);
@@ -79,7 +80,7 @@ public class MenadzerView extends JFrame {
 		tp.add("Usluge", pnlUsluge);
 		tp.add("Zakazani Tretmani", pnlZakazaniTretmani);
 		tp.add("Izveštaji", pnlIzvestaji);
-
+		tp.add("Dijagrami", pnlDijagrami);
 		
 		
 		add(tp, BorderLayout.CENTER);

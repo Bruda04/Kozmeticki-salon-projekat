@@ -27,7 +27,7 @@ public class IzvestajiPnl extends JPanel{
 		add(new JLabel("Broj tretmana i prihod kozmetičara - "), "al right");
 		add(izvestaj1);
 
-		add(new JLabel("Broj zakazivanja i otkazivanja tretmana- "), "al right");
+		add(new JLabel("Broj zakazivanja i otkazivanja tretmana - "), "al right");
 		add(izvestaj2);
 
 		add(new JLabel("Statistika usluge - "), "al right");
