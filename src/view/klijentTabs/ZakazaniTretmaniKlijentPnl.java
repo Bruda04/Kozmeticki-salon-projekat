@@ -13,7 +13,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableRowSorter;
 
 import entity.StanjeZakazanogTretmana;
 import manage.Controler;
@@ -43,23 +49,54 @@ public class ZakazaniTretmaniKlijentPnl extends JPanel{
 
 		pnlCrud.add(btnZak);
 		pnlCrud.add(btnOtkKlj);
-		
+
 		add(pnlCrud, BorderLayout.NORTH);
 
 		ZakazanTretmanKlijentaTableModel tblmdZakazanTretman = new ZakazanTretmanKlijentaTableModel(controler, idUlogovan);
 		JTable tblZakazanTretman = new JTable(tblmdZakazanTretman);
 		tblZakazanTretman.setAutoCreateRowSorter(true);
 		tblZakazanTretman.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tblZakazanTretman.getTableHeader().setReorderingAllowed(false);
+
 
 		JScrollPane scpTblZakazaniTretmani = new JScrollPane(tblZakazanTretman);
 
 		add(scpTblZakazaniTretmani, BorderLayout.CENTER);
+
+		TableRowSorter<AbstractTableModel> tableSorter = new TableRowSorter<AbstractTableModel>();
+		tableSorter.setModel((AbstractTableModel) tblZakazanTretman.getModel());
+		tblZakazanTretman.setRowSorter(tableSorter);
 		
-		JPanel pnlInfo = new JPanel(new MigLayout("al center", "[]20[]", "15[]25"));
-		pnlInfo.add(new JLabel("INFO"));
-		
+		JPanel pnlInfo = new JPanel(new MigLayout("al center", "[][]", "15[]25"));
+		JTextField tfSearch = new JTextField();	
+
+		tfSearch.getDocument().addDocumentListener(new DocumentListener() {
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				changedUpdate(e);
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				changedUpdate(e);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				//System.out.println("~ "+tfSearch.getText());
+				if (tfSearch.getText().trim().length() == 0) {
+					tableSorter.setRowFilter(null);
+				} else {
+					tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + tfSearch.getText().trim()));
+				}
+			}
+		});
+
+		pnlInfo.add(new JLabel("Pretraga: "), "al right");
+		pnlInfo.add(tfSearch, "w 30%");
 		add(pnlInfo, BorderLayout.SOUTH);
-		
+
 		btnOtkKlj.addActionListener(new ActionListener() {
 
 			@Override

@@ -8,11 +8,18 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableRowSorter;
 
 import manage.Controler;
 import model.UslugaTableModel;
@@ -55,8 +62,43 @@ public class UslugePnl extends JPanel{
 		JTable tblUsluga = new JTable(tblmdUsluga);
 		tblUsluga.setAutoCreateRowSorter(true);
 		tblUsluga.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+		tblUsluga.getTableHeader().setReorderingAllowed(false);
+
 		JScrollPane scpTblUsluga = new JScrollPane(tblUsluga);
+		
+
+		TableRowSorter<AbstractTableModel> tableSorter = new TableRowSorter<AbstractTableModel>();
+		tableSorter.setModel((AbstractTableModel) tblUsluga.getModel());
+		tblUsluga.setRowSorter(tableSorter);
+		
+		JPanel pnlInfo = new JPanel(new MigLayout("al center", "[][]", "15[]25"));
+		JTextField tfSearch = new JTextField();	
+
+		tfSearch.getDocument().addDocumentListener(new DocumentListener() {
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				changedUpdate(e);
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				changedUpdate(e);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				//System.out.println("~ "+tfSearch.getText());
+				if (tfSearch.getText().trim().length() == 0) {
+					tableSorter.setRowFilter(null);
+				} else {
+					tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + tfSearch.getText().trim()));
+				}
+			}
+		});
+		pnlInfo.add(new JLabel("Pretraga: "), "al right");
+		pnlInfo.add(tfSearch, "w 30%");
+		add(pnlInfo, BorderLayout.SOUTH);
 
 
 		add(scpTblUsluga, BorderLayout.CENTER);

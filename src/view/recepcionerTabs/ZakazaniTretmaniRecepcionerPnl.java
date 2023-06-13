@@ -8,11 +8,23 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import entity.StanjeZakazanogTretmana;
 import manage.Controler;
@@ -70,10 +82,131 @@ public class ZakazaniTretmaniRecepcionerPnl extends JPanel{
 		JTable tblZakazanTretman = new JTable(tblmdZakazanTretman);
 		tblZakazanTretman.setAutoCreateRowSorter(true);
 		tblZakazanTretman.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tblZakazanTretman.getTableHeader().setReorderingAllowed(false);
 
 		JScrollPane scpTblZakazaniTretmani = new JScrollPane(tblZakazanTretman);
 
 		add(scpTblZakazaniTretmani, BorderLayout.CENTER);
+		
+		TableRowSorter<AbstractTableModel> tableSorter = new TableRowSorter<AbstractTableModel>();
+		tableSorter.setModel((AbstractTableModel) tblZakazanTretman.getModel());
+		tblZakazanTretman.setRowSorter(tableSorter);
+		
+		JPanel pnlInfo = new JPanel(new MigLayout("al center", "[][][][][][]", "15[]25"));
+		JTextField tfSearch = new JTextField();	
+		JSpinner spnOd = new JSpinner(new SpinnerNumberModel(0.00, 0.00, 999999.00, 1.00));
+		JSpinner spnDo = new JSpinner(new SpinnerNumberModel(999999.00, 0.00, 999999.00, 1.00));
+
+		tfSearch.getDocument().addDocumentListener(new DocumentListener() {
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				changedUpdate(e);
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				changedUpdate(e);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+					RowFilter<TableModel, Integer> rowFilter = new RowFilter<TableModel, Integer>() {
+			            @Override
+			            public boolean include(Entry<? extends TableModel, ? extends Integer> entry) {
+			            	String filterText = tfSearch.getText().trim();
+			                Double minCena =(Double) spnOd.getValue();
+			                Double maxCena =(Double) spnDo.getValue();
+			                boolean match = false;
+
+			                double cena = 0;
+			                for (int i = 0; i < 9; i++) {
+								if (i == 6) {
+									cena = (double) entry.getValue(6);	
+								} else {
+									if (entry.getValue(i).toString().matches("(?i).*" + filterText + ".*")) {
+										match = true;
+									}
+								}
+							}
+			                
+			                boolean priceInRange = cena >= minCena && cena <= maxCena;
+
+			                return match && priceInRange;
+			            }
+			        };
+					tableSorter.setRowFilter(rowFilter);
+			}
+		});
+		
+		spnOd.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+            	RowFilter<TableModel, Integer> rowFilter = new RowFilter<TableModel, Integer>() {
+		            @Override
+		            public boolean include(Entry<? extends TableModel, ? extends Integer> entry) {
+		            	String filterText = tfSearch.getText().trim();
+		                Double minCena =(Double) spnOd.getValue();
+		                Double maxCena =(Double) spnDo.getValue();
+		                boolean match = false;
+
+		                double cena = 0;
+		                for (int i = 0; i < 9; i++) {
+							if (i == 6) {
+								cena = (double) entry.getValue(6);									
+							} else {
+								if (entry.getValue(i).toString().matches("(?i).*" + filterText + ".*")) {
+									match = true;
+								}
+							}
+						}
+		                
+		                boolean priceInRange = cena >= minCena && cena <= maxCena;
+		                return match && priceInRange;
+		            }
+		        };
+				tableSorter.setRowFilter(rowFilter);
+            }
+        });
+		
+		spnDo.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+            	RowFilter<TableModel, Integer> rowFilter = new RowFilter<TableModel, Integer>() {
+		            @Override
+		            public boolean include(Entry<? extends TableModel, ? extends Integer> entry) {
+		            	String filterText = tfSearch.getText().trim();
+		                Double minCena =(Double) spnOd.getValue();
+		                Double maxCena =(Double) spnDo.getValue();
+		                boolean match = false;
+
+		                double cena = 0;
+		                for (int i = 0; i < 9; i++) {
+							if (i == 6) {
+								cena = (double) entry.getValue(6);	
+							} else {
+								if (entry.getValue(i).toString().matches("(?i).*" + filterText + ".*")) {
+									match = true;
+								}
+							}
+						}
+		                
+		                boolean priceInRange = cena >= minCena && cena <= maxCena;
+		                return match && priceInRange;
+		            }
+		        };
+				tableSorter.setRowFilter(rowFilter);
+            }
+        });
+
+
+		pnlInfo.add(new JLabel("Pretraga: "), "al right");
+		pnlInfo.add(tfSearch, "w 30%");
+		pnlInfo.add(new JLabel("Cena od: "), "al right");
+		pnlInfo.add(spnOd);
+		pnlInfo.add(new JLabel("Cena do: "), "al right");
+		pnlInfo.add(spnDo);
+		add(pnlInfo, BorderLayout.SOUTH);
 
 		btnOtkSln.addActionListener(new ActionListener() {
 

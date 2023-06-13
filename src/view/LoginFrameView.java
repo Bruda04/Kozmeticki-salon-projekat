@@ -37,7 +37,6 @@ public class LoginFrameView extends JFrame{
 	private void setupGUI(Controler controler) {
 		MigLayout layout = new MigLayout("wrap 2", "[][]", "[]20[][]20[]10[]");
 		setLayout(layout);
-
 		JTextField tfKorisnickoIme = new JTextField(20);
 		JPasswordField pfLozinka = new JPasswordField(20);
 		JButton btnOk = new JButton("Prijavi se");
