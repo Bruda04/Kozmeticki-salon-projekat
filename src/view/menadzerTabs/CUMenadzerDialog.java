@@ -151,14 +151,18 @@ public class CUMenadzerDialog extends JDialog{
 						(idMenadzera != -1 && (bonus == null || plata == null))) {
 					JOptionPane.showMessageDialog(CUMenadzerDialog.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
 				} else {
-					if (idMenadzera == -1) {
-						controler.registrujMenadzera(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, staz);						
-					} else {
-						controler.izmeniMenadzera(idMenadzera, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, staz, bonus, plata);
+					try {
+						if (idMenadzera == -1) {
+							controler.registrujMenadzera(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, staz);						
+						} else {
+							controler.izmeniMenadzera(idMenadzera, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, staz, bonus, plata);
+						}
+						
+						setVisible(false);
+						dispose();						
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(CUMenadzerDialog.this, "Korisničko ime je zauzeto!", "Greška", JOptionPane.ERROR_MESSAGE);
 					}
-					
-					setVisible(false);
-					dispose();
 				}
 
 			}

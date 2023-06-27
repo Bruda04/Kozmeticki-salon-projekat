@@ -109,15 +109,19 @@ public class CUUslugaDialog extends JDialog{
 				if (naziv == null || trajanje == null || idTipaTretmana == null || cena == null ) {
 					JOptionPane.showMessageDialog(CUUslugaDialog.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
 				} else {
-					if (idUsluge == -1) {
-						controler.dodajUslugu(naziv, trajanje, cena, idTipaTretmana);						
-					} else {
-						controler.izmeniUslugu(idUsluge, naziv, trajanje, cena);
-						controler.premestiUslugu(idUsluge, controler.nadjiTipTretmanaUsluge(idUsluge).getId(), idTipaTretmana);
+					try {
+						if (idUsluge == -1) {
+							controler.dodajUslugu(naziv, trajanje, cena, idTipaTretmana);						
+						} else {
+							controler.izmeniUslugu(idUsluge, naziv, trajanje, cena);
+							controler.premestiUslugu(idUsluge, controler.nadjiTipTretmanaUsluge(idUsluge).getId(), idTipaTretmana);
+						}
+						
+						setVisible(false);
+						dispose();						
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(CUUslugaDialog.this, "Usluga sa tim nazivom već postoji!", "Greška", JOptionPane.ERROR_MESSAGE);
 					}
-
-					setVisible(false);
-					dispose();
 				}
 
 			}

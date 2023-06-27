@@ -109,6 +109,28 @@ public class Controler {
 		}
 		return null;
 	}
+	
+	public boolean korisnickoImeZauzeto(String korisnickoIme) {
+		boolean nadjen = false;
+		
+		if (pronadjiKlijenta(korisnickoIme) != null) {
+			nadjen = true;
+		}
+		
+		if (pronadjiKozmeticara(korisnickoIme) != null) {
+			nadjen = true;
+		}
+		
+		if (pronadjiMenadzera(korisnickoIme) != null) {
+			nadjen = true;
+		}
+		
+		if (pronadjiRecepcionera(korisnickoIme) != null) {
+			nadjen = true;
+		}
+		
+		return nadjen;
+	}
 
 	public void registrujKlijenta(String korisnickoIme,
 			String ime,
@@ -117,7 +139,11 @@ public class Controler {
 			String telefon,
 			String adresa,
 			String lozinka) {
-		manager.getKlijentMngr().add(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, false, 0.00);
+		if (korisnickoImeZauzeto(korisnickoIme)) {
+			throw new IllegalArgumentException("Korisničko ime je zauzeto.");
+		} else {
+			manager.getKlijentMngr().add(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, false, 0.00);			
+		}
 	}
 
 	public void registrujRecepcionera(String korisnickoIme,
@@ -129,10 +155,13 @@ public class Controler {
 			String lozinka,
 			int nivoStrucneSpreme,
 			int godineStaza) {
-		KozmetickiSalon salon = manager.getKozmetickiSalonMngr().findById(1);
-		Double plata = salon.izracunajPlatu(nivoStrucneSpreme, godineStaza, false);
-		manager.getRecepcionerMngr().add(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, false, plata);
-
+		if (korisnickoImeZauzeto(korisnickoIme)) {
+			throw new IllegalArgumentException("Korisničko ime je zauzeto.");
+		} else {
+			KozmetickiSalon salon = manager.getKozmetickiSalonMngr().findById(1);
+			Double plata = salon.izracunajPlatu(nivoStrucneSpreme, godineStaza, false);
+			manager.getRecepcionerMngr().add(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, false, plata);
+		}
 	}
 	public void registrujMenadzera(String korisnickoIme,
 			String ime,
@@ -143,10 +172,13 @@ public class Controler {
 			String lozinka,
 			int nivoStrucneSpreme,
 			int godineStaza) {
-		KozmetickiSalon salon = manager.getKozmetickiSalonMngr().findById(1);
-		Double plata = salon.izracunajPlatu(nivoStrucneSpreme, godineStaza, false);
-		manager.getMenadzerMngr().add(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, false, plata);
-
+		if (korisnickoImeZauzeto(korisnickoIme)) {
+			throw new IllegalArgumentException("Korisničko ime je zauzeto.");
+		} else {
+			KozmetickiSalon salon = manager.getKozmetickiSalonMngr().findById(1);
+			Double plata = salon.izracunajPlatu(nivoStrucneSpreme, godineStaza, false);
+			manager.getMenadzerMngr().add(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, false, plata);
+		}
 	}
 
 	public void registrujKozmeticara(String korisnickoIme,
@@ -159,9 +191,13 @@ public class Controler {
 			int nivoStrucneSpreme,
 			int godineStaza,
 			ArrayList<Integer> spisakTretmana) {
-		KozmetickiSalon salon = manager.getKozmetickiSalonMngr().findById(1);
-		Double plata = salon.izracunajPlatu(nivoStrucneSpreme, godineStaza, false);
-		manager.getKozmeticarMngr().add(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, false, plata, spisakTretmana);
+		if (korisnickoImeZauzeto(korisnickoIme)) {
+			throw new IllegalArgumentException("Korisničko ime je zauzeto.");
+		} else {
+			KozmetickiSalon salon = manager.getKozmetickiSalonMngr().findById(1);
+			Double plata = salon.izracunajPlatu(nivoStrucneSpreme, godineStaza, false);
+			manager.getKozmeticarMngr().add(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, false, plata, spisakTretmana);
+		}
 	}
 
 	public void obrisiKlijenta(int id) {
@@ -180,14 +216,26 @@ public class Controler {
 	}
 
 	public void izmeniKlijenta(int id, String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, Boolean karticaLojalnosti, Double potroseno) {
-		manager.getKlijentMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, karticaLojalnosti, potroseno);
+		if (korisnickoImeZauzeto(korisnickoIme)) {
+			throw new IllegalArgumentException("Korisničko ime je zauzeto.");
+		} else {
+			manager.getKlijentMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, karticaLojalnosti, potroseno);
+		}
 	}
 
 	public void izmeniRecepcionera(int id, String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
-		manager.getRecepcionerMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, bonus, plata);
+		if (korisnickoImeZauzeto(korisnickoIme)) {
+			throw new IllegalArgumentException("Korisničko ime je zauzeto.");
+		} else {
+			manager.getRecepcionerMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, bonus, plata);
+		}
 	}
 	public void izmeniMenadzera(int id, String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
-		manager.getMenadzerMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, bonus, plata);
+		if (korisnickoImeZauzeto(korisnickoIme)) {
+			throw new IllegalArgumentException("Korisničko ime je zauzeto.");
+		} else {
+			manager.getMenadzerMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, bonus, plata);
+		}
 	}
 	public void izmeniKozmeticara(int id,
 			String korisnickoIme,
@@ -202,23 +250,39 @@ public class Controler {
 			boolean bonus,
 			double plata,
 			ArrayList<Integer> spisakTretmana) {
-		manager.getKozmeticarMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, bonus, plata, spisakTretmana);
+		if (korisnickoImeZauzeto(korisnickoIme)) {
+			throw new IllegalArgumentException("Korisničko ime je zauzeto.");
+		} else {
+			manager.getKozmeticarMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, bonus, plata, spisakTretmana);
+		}
 	}
 
 	public void dodajUslugu(String nazivUsluge, int vremeTrajanja, double cena, int idTipaTretmna) {
-		Cenovnik cenovnik = manager.getCenovnikMngr().findById(1);
-		manager.getUslugaMngr().add(nazivUsluge, vremeTrajanja);
-		cenovnik.getCenovnikHasMap().put(pronadjiUslugu(nazivUsluge).getId(), cena);
-		manager.getCenovnikMngr().update(cenovnik.getId(), cenovnik.getCenovnikHasMap());
-		pridruziUsluguTipu(manager.getUslugaMngr().findByNazivUsluge(nazivUsluge).getId(), idTipaTretmna);
+		if (pronadjiUslugu(nazivUsluge) != null) {
+			throw new IllegalArgumentException("Usluga pod tim nazivom već postoji.");
+		} else {
+			Cenovnik cenovnik = manager.getCenovnikMngr().findById(1);
+			manager.getUslugaMngr().add(nazivUsluge, vremeTrajanja);
+			cenovnik.getCenovnikHasMap().put(pronadjiUslugu(nazivUsluge).getId(), cena);
+			manager.getCenovnikMngr().update(cenovnik.getId(), cenovnik.getCenovnikHasMap());
+			pridruziUsluguTipu(manager.getUslugaMngr().findByNazivUsluge(nazivUsluge).getId(), idTipaTretmna);
+		}
 	}
 
 	public void dodajTipTretmana(String naziv, ArrayList<Integer> skupTipovaUsluga) {
-		manager.getTipTretmanaMngr().add(naziv, skupTipovaUsluga);
+		if (pronadjiUslugu(naziv) != null) {
+			throw new IllegalArgumentException("Tip tretmana pod tim nazivom već postoji.");
+		} else {
+			manager.getTipTretmanaMngr().add(naziv, skupTipovaUsluga);
+		}
 	}
 
 	public void izmeniTipTretmana(int idTipaTretmana, String naziv, ArrayList<Integer> skupTipovaUsluga) {
-		manager.getTipTretmanaMngr().update(idTipaTretmana, naziv, skupTipovaUsluga);
+		if (pronadjiUslugu(naziv) != null) {
+			throw new IllegalArgumentException("Tip tretmana pod tim nazivom već postoji.");
+		} else {
+			manager.getTipTretmanaMngr().update(idTipaTretmana, naziv, skupTipovaUsluga);
+		}
 	}
 
 	public void pridruziUsluguTipu(int idUsluge, int idTipa) {
@@ -259,10 +323,14 @@ public class Controler {
 	}
 
 	public void izmeniUslugu(int id, String nazivUsluge, int vremeTrajanja, double cena) {
-		manager.getUslugaMngr().update(id, nazivUsluge, vremeTrajanja);
-		Cenovnik cenovnik = manager.getCenovnikMngr().findById(1);
-		cenovnik.getCenovnikHasMap().replace(pronadjiUslugu(id).getId(), cena);
-		manager.getCenovnikMngr().update(cenovnik.getId(), cenovnik.getCenovnikHasMap());
+		if (pronadjiUslugu(nazivUsluge) != null) {
+			throw new IllegalArgumentException("Tip tretmana pod tim nazivom već postoji.");
+		} else {
+			manager.getUslugaMngr().update(id, nazivUsluge, vremeTrajanja);
+			Cenovnik cenovnik = manager.getCenovnikMngr().findById(1);
+			cenovnik.getCenovnikHasMap().replace(pronadjiUslugu(id).getId(), cena);
+			manager.getCenovnikMngr().update(cenovnik.getId(), cenovnik.getCenovnikHasMap());
+		}
 	}
 
 	public double nadjiCenuUsluge(int idUsluge) {

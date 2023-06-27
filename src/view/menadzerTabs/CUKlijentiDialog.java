@@ -136,14 +136,18 @@ public class CUKlijentiDialog extends JDialog{
 				if (korisnickoIme == null || lozinka == null || ime == null || prezime == null || telefon == null || adresa == null || pol == null || (idKlijenta != -1 && (karticaLojalnosti == null || potroseno == null))) {
 					JOptionPane.showMessageDialog(CUKlijentiDialog.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
 				} else {
-					if (idKlijenta == -1) {
-						controler.registrujKlijenta(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka);						
-					} else {
-						controler.izmeniKlijenta(idKlijenta, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, karticaLojalnosti, potroseno);
+					try {
+						if (idKlijenta == -1) {
+							controler.registrujKlijenta(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka);						
+						} else {
+							controler.izmeniKlijenta(idKlijenta, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, karticaLojalnosti, potroseno);
+						}
+						
+						setVisible(false);
+						dispose();						
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(CUKlijentiDialog.this, "Korisničko ime je zauzeto!", "Greška", JOptionPane.ERROR_MESSAGE);
 					}
-					
-					setVisible(false);
-					dispose();
 				}
 
 			}

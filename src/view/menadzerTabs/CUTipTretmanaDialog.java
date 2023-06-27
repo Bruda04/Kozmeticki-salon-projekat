@@ -140,14 +140,18 @@ public class CUTipTretmanaDialog extends JDialog{
 				if (naziv == null ) {
 					JOptionPane.showMessageDialog(CUTipTretmanaDialog.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
 				} else {
-					if (idTipaTretmana == -1) {
-						controler.dodajTipTretmana(naziv, listaUsluga);						
-					} else {
-						controler.izmeniTipTretmana(idTipaTretmana, naziv, tt.getSkupTipovaUsluga());
+					try {
+						if (idTipaTretmana == -1) {
+							controler.dodajTipTretmana(naziv, listaUsluga);						
+						} else {
+							controler.izmeniTipTretmana(idTipaTretmana, naziv, tt.getSkupTipovaUsluga());
+						}
+						
+						setVisible(false);
+						dispose();						
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(CUTipTretmanaDialog.this, "Tip tretmana sa tim nazivom već postoji!", "Greška", JOptionPane.ERROR_MESSAGE);
 					}
-
-					setVisible(false);
-					dispose();
 				}
 
 			}

@@ -151,14 +151,18 @@ public class CURecepcionerDialog extends JDialog{
 						(idRecepcionera != -1 && (bonus == null || plata == null))) {
 					JOptionPane.showMessageDialog(CURecepcionerDialog.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
 				} else {
-					if (idRecepcionera == -1) {
-						controler.registrujRecepcionera(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, staz);						
-					} else {
-						controler.izmeniRecepcionera(idRecepcionera, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, staz, bonus, plata);
+					try {
+						if (idRecepcionera == -1) {
+							controler.registrujRecepcionera(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, staz);						
+						} else {
+							controler.izmeniRecepcionera(idRecepcionera, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, staz, bonus, plata);
+						}
+						
+						setVisible(false);
+						dispose();						
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(CURecepcionerDialog.this, "Korisničko ime je zauzeto!", "Greška", JOptionPane.ERROR_MESSAGE);
 					}
-					
-					setVisible(false);
-					dispose();
 				}
 
 			}

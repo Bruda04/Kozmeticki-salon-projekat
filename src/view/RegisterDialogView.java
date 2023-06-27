@@ -97,15 +97,20 @@ public class RegisterDialogView extends JDialog{
 				if (korisnickoIme == null || lozinka == null || ime == null || prezime == null || telefon == null || adresa == null || pol == null) {
 					JOptionPane.showMessageDialog(RegisterDialogView.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
 				} else {
-					controler.registrujKlijenta(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka);
+					try {
+						controler.registrujKlijenta(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka);						
+						new KlijentView(controler, controler.pronadjiKlijenta(korisnickoIme).getId());
+						
+						frame.setVisible(false);
+						frame.dispose();
+						
+						setVisible(false);
+						dispose();
+						
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(RegisterDialogView.this, "Korisničko ime je zauzeto!", "Greška", JOptionPane.ERROR_MESSAGE);
+					}
 					
-					new KlijentView(controler, controler.pronadjiKlijenta(korisnickoIme).getId());
-					
-					frame.setVisible(false);
-					frame.dispose();
-					
-					setVisible(false);
-					dispose();
 				}
 
 			}

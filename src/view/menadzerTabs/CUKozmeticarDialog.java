@@ -217,14 +217,18 @@ public class CUKozmeticarDialog extends JDialog{
 						(idKozmeticara != -1 && (bonus == null || plata == null))) {
 					JOptionPane.showMessageDialog(CUKozmeticarDialog.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
 				} else {
-					if (idKozmeticara == -1) {
-						controler.registrujKozmeticara(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, staz, listaTretmana);						
-					} else {
-						controler.izmeniKozmeticara(idKozmeticara, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, staz, bonus, plata, listaTretmana);
+					try {
+						if (idKozmeticara == -1) {
+							controler.registrujKozmeticara(korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, staz, listaTretmana);						
+						} else {
+							controler.izmeniKozmeticara(idKozmeticara, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, staz, bonus, plata, listaTretmana);
+						}
+						
+						setVisible(false);
+						dispose();						
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(CUKozmeticarDialog.this, "Korisničko ime je zauzeto!", "Greška", JOptionPane.ERROR_MESSAGE);
 					}
-					
-					setVisible(false);
-					dispose();
 				}
 
 			}
