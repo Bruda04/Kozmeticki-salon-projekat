@@ -16,5 +16,4 @@ public class Menadzer extends Zaposleni{
     ) {
         super(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, bonus, plata);
     }
-
 }

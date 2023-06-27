@@ -50,4 +50,23 @@ public class Kozmeticar extends Zaposleni{
         }
         return super.toString()+ ", " + String.format("Spisak tretmana koje zna: %s", sb.toString().substring(1));
     }
+    
+    @Override
+    public boolean equals(Object o){
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        if (!super.equals(o)) {
+       	 return false;
+        }
+
+        Kozmeticar other = (Kozmeticar) o;
+        if(!spisakTretmana.equals(other.getSpisakTretmana()))
+            return false;
+
+        return true;
+    }
 }

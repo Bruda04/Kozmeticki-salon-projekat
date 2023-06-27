@@ -84,4 +84,21 @@ public class KozmetickiSalonManager {
         }
         return true;
     }
+    
+    @Override
+    public boolean equals(Object o){
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        
+        KozmetickiSalonManager other = (KozmetickiSalonManager) o;
+        if (!this.kozmetickiSalonHashMap.equals(other.getkozmetickiSalonHashMap())) {
+			return false;
+		}
+        
+        return true;
+    }
 }

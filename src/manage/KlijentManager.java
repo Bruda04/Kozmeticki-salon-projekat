@@ -1,13 +1,13 @@
 package manage;
 
-import entity.Klijent;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+
+import entity.Klijent;
 
 
 public class KlijentManager {
@@ -108,4 +108,21 @@ public class KlijentManager {
 		}
 		return true;
 	}
+	
+	@Override
+    public boolean equals(Object o){
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        
+        KlijentManager other = (KlijentManager) o;
+        if (!this.klijentHashMap.equals(other.getKlijentHashMap())) {
+			return false;
+		}
+        
+        return true;
+    }
 }

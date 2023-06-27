@@ -17,6 +17,27 @@ public class Klijent extends Korisnik {
      public String toString(){
           return super.toString() + ", " + String.format("Kartica lojalnosti: %b, Potroseno sredstava: %.2f", this.karticaLojalnosti, this.potroseno);
      }
+     
+     @Override
+     public boolean equals(Object o){
+         if (this == o)
+             return true;
+         if (o == null)
+             return false;
+         if (getClass() != o.getClass())
+             return false;
+         if (!super.equals(o)) {
+        	 return false;
+         }
+
+         Klijent other = (Klijent) o;
+         if(karticaLojalnosti != other.isKarticaLojalnosti())
+             return false;
+         if(potroseno != other.getPotroseno())
+             return false;
+
+         return true;
+     }
 
      public boolean isKarticaLojalnosti() {
           return karticaLojalnosti;

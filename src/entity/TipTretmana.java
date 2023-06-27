@@ -26,6 +26,27 @@ public class TipTretmana {
         }
         return ret + sb.toString().substring(1);
     }
+    
+    @Override
+    public boolean equals(Object o){
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        
+        TipTretmana other = (TipTretmana) o;
+        
+        if(!naziv.equals(other.getNaziv())) {
+        	return false;        	
+        }
+        if(!skupTipovaUsluga.equals(other.getSkupTipovaUsluga())) {
+        	return false;        	
+        }
+
+        return true;
+    }
 
     public int getId() {
         return id;

@@ -16,4 +16,5 @@ public class Recepcioner extends Zaposleni{
     ) {
         super(id, ime, prezime, pol, telefon, adresa, korisnickoIme, lozinka,nivoStrucneSpreme, godineStaza, bonus, plata);
     }
+    
 }

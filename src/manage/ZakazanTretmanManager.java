@@ -89,4 +89,21 @@ public class ZakazanTretmanManager {
         }
         return true;
     }
+    
+    @Override
+    public boolean equals(Object o){
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        
+        ZakazanTretmanManager other = (ZakazanTretmanManager) o;
+        if (!this.getZakazanTretmanHashMap().equals(other.getZakazanTretmanHashMap())) {
+			return false;
+		}
+        
+        return true;
+    }
 }

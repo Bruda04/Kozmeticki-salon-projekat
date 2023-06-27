@@ -32,6 +32,42 @@ public abstract class Korisnik {
     public String toString() {
         return String.format("Korisnicko ime: %s, Ime: %s, Prezime: %s, Pol: %s, Telefon: %s, Adresa: %s, Lozinka: %s, Obrisan: %b", korisnickoIme,ime,prezime,pol,telefon,adresa,lozinka, obrisan);
     }
+    
+    @Override
+    public boolean equals(Object o){
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        Korisnik other = (Korisnik) o;
+        
+        if(!korisnickoIme.equals(other.getKorisnickoIme())) {
+        	return false;        	
+        }
+        if(!ime.equals(other.getIme())) {
+            return false;
+        }
+        if(!prezime.equals(other.getPrezime())) {
+        	return false;        	
+        }
+        if(!pol.equals(other.getPol())) {
+        	return false;        	
+        }
+        if(!telefon.equals(other.getTelefon())) {
+        	return false;        	
+        }
+        if(!adresa.equals(other.getAdresa())) {
+        	return false;        	
+        }
+        if(!lozinka.equals(other.getLozinka())) {
+        	return false;        	
+        }
+
+        return true;
+    }
+    
     public int getId() {
         return id;
     }
@@ -99,4 +135,5 @@ public abstract class Korisnik {
     public void setObrisan(boolean obrisan) {
         this.obrisan = obrisan;
     }
+    
 }

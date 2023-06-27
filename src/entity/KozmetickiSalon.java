@@ -40,6 +40,38 @@ public class KozmetickiSalon {
     public String toString(){
         return String.format("Naziv: %s, Vreme otvaranja: %s, Vreme zatvaranja: %s, Stanje racuna: %.2f", this.naziv, this.vremeOtvaranja.toString(), this.vremeZatvaranja.toString(), this.stanje);
     }
+    
+    @Override
+    public boolean equals(Object o){
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        KozmetickiSalon other = (KozmetickiSalon) o;
+        
+        if(!naziv.equals(other.getNaziv())) {
+        	return false;        	
+        }
+        if(!vremeOtvaranja.equals(other.getVremeOtvaranja())) {
+            return false;
+        }
+        if(!vremeZatvaranja.equals(other.getVremeZatvaranja())) {
+        	return false;        	
+        }
+        if(stanje != other.getStanje()) {
+        	return false;        	
+        }
+        if(pragBonus != other.getPragBonus()) {
+        	return false;        	
+        }
+        if(bonusIznos != other.getBonusIznos()) {
+        	return false;        	
+        }
+
+        return true;
+    }
 
     public int getId() {
         return id;

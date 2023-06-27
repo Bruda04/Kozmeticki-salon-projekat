@@ -17,6 +17,27 @@ public class Usluga {
     public String toFileString(){
         return this.id + "," + this.nazivUsluge + "," + this.trajanjeUsluge + "," + this.obrisan;
     }
+    
+    @Override
+    public boolean equals(Object o){
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        
+        Usluga other = (Usluga) o;
+        
+        if(!nazivUsluge.equals(other.getNazivUsluge())) {
+        	return false;        	
+        }
+        if(trajanjeUsluge != other.getTrajanjeUsluge()) {
+        	return false;        	
+        }
+
+        return true;
+    }
 
     public int getId() {return id;}
 

@@ -46,7 +46,8 @@ public class UslugaManager {
     public void deleteByNazivUsluge(String nazivUsluge){
         for (Usluga u : this.uslugeHashMap.values()) {
             if (u.getNazivUsluge().equals(nazivUsluge)) {
-                this.uslugeHashMap.remove(u.getId());
+//                this.uslugeHashMap.remove(u.getId());
+            	this.uslugeHashMap.get(u.getId()).setObrisan(true);
                 break;
             }
         }
@@ -94,6 +95,23 @@ public class UslugaManager {
         } catch (IOException e) {
             return false;
         }
+        return true;
+    }
+    
+    @Override
+    public boolean equals(Object o){
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        
+        UslugaManager other = (UslugaManager) o;
+        if (!this.getUslugeHashMap().equals(other.getUslugeHashMap())) {
+			return false;
+		}
+        
         return true;
     }
 }

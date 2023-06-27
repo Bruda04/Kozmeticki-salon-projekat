@@ -82,4 +82,21 @@ public class CenovnikManager {
         }
         return true;
     }
+    
+    @Override
+    public boolean equals(Object o){
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        
+        CenovnikManager other = (CenovnikManager) o;
+        if (!this.cenovniciHashMap.equals(other.getCenovnikHashMapp())) {
+			return false;
+		}
+        
+        return true;
+    }
 }

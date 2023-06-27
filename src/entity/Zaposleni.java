@@ -38,6 +38,31 @@ public abstract class Zaposleni extends Korisnik{
         return super.toString() + ", " + String.format("Nivo strucne spreme: %d, Godine staza: %d, Bonus: %b, Plata: %.2f", this.nivoStrucneSpreme,this.godineStaza,this.bonus,this.plata);
     }
 
+    @Override
+    public boolean equals(Object o){
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        if (!super.equals(o)) {
+       	 return false;
+        }
+
+        Zaposleni other = (Zaposleni) o;
+        if(nivoStrucneSpreme != other.getNivoStrucneSpreme())
+            return false;
+        if(godineStaza != other.getGodineStaza())
+            return false;
+        if(bonus != other.getBonus())
+            return false;
+        if(plata != other.getPlata())
+            return false;
+
+        return true;
+    }
+    
     public int getNivoStrucneSpreme() {
         return nivoStrucneSpreme;
     }

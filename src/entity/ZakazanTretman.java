@@ -34,6 +34,44 @@ public class ZakazanTretman {
                 this.cena +"," + this.idZakazaivaca + "," + this.stanje.toString();
     }
     
+    @Override
+    public boolean equals(Object o){
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        
+        ZakazanTretman other = (ZakazanTretman) o;
+        
+        if(!datum.equals(other.getDatum())) {
+        	return false;        	
+        }
+        if(!vreme.equals(other.getVreme())) {
+        	return false;        	
+        }
+        if(idKlijenta != other.getIdKlijenta()) {
+        	return false;        	
+        }
+        if(idKozmeticara != other.getIdKozmeticara()) {
+        	return false;        	
+        }
+        if(idTipaUsluge != other.getIdTipaUsluge()) {
+        	return false;        	
+        }
+        if(cena != other.getCena()) {
+        	return false;        	
+        }
+        if(idZakazaivaca != other.getIdZakazivaca()) {
+        	return false;        	
+        }
+        if(!stanje.equals(other.getStanje())) {
+        	return false;        	
+        }
+
+        return true;
+    }
 
     public int getId() {return id;}
 

@@ -107,5 +107,22 @@ public class MenadzerManager {
         }
         return true;
     }
+    
+    @Override
+    public boolean equals(Object o){
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        
+        MenadzerManager other = (MenadzerManager) o;
+        if (!this.menadzerHashMap.equals(other.getMenadzerHashMap())) {
+			return false;
+		}
+        
+        return true;
+    }
 
 }

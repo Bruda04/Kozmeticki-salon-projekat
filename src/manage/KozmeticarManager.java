@@ -137,4 +137,21 @@ public class KozmeticarManager {
         }
         return true;
     }
+    
+    @Override
+    public boolean equals(Object o){
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        
+        KozmeticarManager other = (        KozmeticarManager) o;
+        if (!this.kozmeticarHashMap.equals(other.getKozmeticarHashMap())) {
+			return false;
+		}
+        
+        return true;
+    }
 }
