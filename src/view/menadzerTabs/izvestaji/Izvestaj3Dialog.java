@@ -140,6 +140,8 @@ public class Izvestaj3Dialog extends JDialog{
 				
 				if (usluga == null || pocetak == null || kraj == null) {
 					JOptionPane.showMessageDialog(Izvestaj3Dialog.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
+				} else if (dateFormat(kraj).isBefore(dateFormat(pocetak))){
+					JOptionPane.showMessageDialog(Izvestaj3Dialog.this, "Datumi nisu validni.", "Greška", JOptionPane.ERROR_MESSAGE);		
 				} else {
 					HashMap<String, Object> izvestaj = controler.izvestajUslugaStatistika(controler.pronadjiUslugu(usluga).getId(), dateFormat(pocetak), dateFormat(kraj));
 					idUsluge.setText(String.format("%d", izvestaj.get("id")));

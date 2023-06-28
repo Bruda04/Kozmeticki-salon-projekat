@@ -742,7 +742,14 @@ public class Controler {
 		for (ZakazanTretman zt : manager.getZakazanTretmanMngr().getZakazanTretmanHashMap().values()) {
 			if (zt.getDatum().isAfter(datumPocetka) && zt.getDatum().isBefore(datumKraja) && zt.getIdTipaUsluge() == idUsluge) {
 				zakazivanja += 1;
-				prihodi += zt.getCena();
+				if(zt.getStanje() == StanjeZakazanogTretmana.IZVRŠEN){
+					prihodi += zt.getCena();
+				} else if(zt.getStanje() == StanjeZakazanogTretmana.OTKAZAOKLIJENT){
+					prihodi += zt.getCena()*0.1;
+				} else if(zt.getStanje() == StanjeZakazanogTretmana.NIJESEPOJAVIO){
+					prihodi += zt.getCena();
+				}
+				//prihodi += zt.getCena();
 			}
 		}
 		ret.put("zakazivanja", zakazivanja);

@@ -18,6 +18,10 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -63,9 +67,13 @@ public class CZakazanTretmanDialog extends JDialog{
 	}
 
 	private void cuGui(JFrame frame) {
-		MigLayout layout = new MigLayout("wrap 2", "[][]", "[]20[][][][][][][][][][]20[]");
+		MigLayout layout = new MigLayout("wrap 2", "[][]", "[]20[][][][][][][][][][][][]20[]");
 		setLayout(layout);
 
+		JSpinner spnCenaDo = new JSpinner(new SpinnerNumberModel(999999.00, 0.00, 999999.00, 1.00));
+		
+		JSpinner spnTrajanjeDo = new JSpinner(new SpinnerNumberModel(999999, 0, 999999, 1));
+		
 		ArrayList<String> choKlijenti = new ArrayList<>();
 		choKlijenti.add(null);
 		for (Klijent k : controler.sviKlijenti().values()) {
@@ -115,7 +123,9 @@ public class CZakazanTretmanDialog extends JDialog{
 				cbUslugeModel.addElement(null);
 				if (cbTipTretmana.getSelectedItem() != null) {
 					for (int idUSluge : controler.pronadjiTipTretmana((String) cbTipTretmana.getSelectedItem()).getSkupTipovaUsluga()) {
-						cbUslugeModel.addElement(controler.pronadjiUslugu(idUSluge).getNazivUsluge());
+						if (controler.nadjiCenuUsluge(idUSluge) <= (Double) spnCenaDo.getValue() && controler.pronadjiUslugu(idUSluge).getTrajanjeUsluge() <= (Integer) spnTrajanjeDo.getValue()) {
+							cbUslugeModel.addElement(controler.pronadjiUslugu(idUSluge).getNazivUsluge());							
+						}
 					}				
 				}
 				cbUsluga.setModel(cbUslugeModel);
@@ -182,11 +192,41 @@ public class CZakazanTretmanDialog extends JDialog{
 			}
 		});		
 
+		ChangeListener spnCenaDoAction = new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+            	for(ActionListener a: cbTipTretmana.getActionListeners()) {
+            	    a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null) {
+						private static final long serialVersionUID = 1L;
+            	    });
+            	}
+            }
+        };
+    			
+		spnCenaDo.addChangeListener(spnCenaDoAction);
+		
+		ChangeListener spnTrajanjeDoAction = new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+            	for(ActionListener a: cbTipTretmana.getActionListeners()) {
+            	    a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null) {
+						private static final long serialVersionUID = 1L;
+            	    });
+            	}
+            }
+        };
 
+		spnTrajanjeDo.addChangeListener(spnTrajanjeDoAction);
 
 		getRootPane().setDefaultButton(btnOk);
 
 		add(new JLabel("Molimo da popunite formu."), "span 2");
+		
+		add(new JLabel("Cena do: "), "al right");
+		add(spnCenaDo);
+		
+		add(new JLabel("Trajanje do(minuta): "), "al right");
+		add(spnTrajanjeDo);
 
 		add(new JLabel("Klijent: "), "al right");
 		add(cbKlijent);
@@ -225,7 +265,9 @@ public class CZakazanTretmanDialog extends JDialog{
 				String vreme = (String) cbVreme.getSelectedItem();
 
 				if (klijentKI == null || usluga == null || kozmeticar == null || datum == null || vreme == null) {
-					JOptionPane.showMessageDialog(CZakazanTretmanDialog.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
+					JOptionPane.showMessageDialog(CZakazanTretmanDialog.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);		
+				} else if (dateFormat(datum).isBefore(LocalDate.now()) || (dateFormat(datum).equals(LocalDate.now()) && LocalTime.parse(vreme, DateTimeFormatter.ofPattern("HH:mm")).isBefore(LocalTime.now()))){
+					JOptionPane.showMessageDialog(CZakazanTretmanDialog.this, "Datum i vreme ne mogu biti u prošlosti.", "Greška", JOptionPane.ERROR_MESSAGE);		
 				} else {
 					controler.zakaziTretman(dateFormat(datum), LocalTime.parse(vreme, DateTimeFormatter.ofPattern("HH:mm")),
 					 controler.pronadjiKlijenta(klijentKI).getId(), controler.pronadjiKozmeticara(kozmeticar).getId(), controler.pronadjiUslugu(usluga).getId(), idUlogovan);

@@ -118,6 +118,8 @@ public class Izvestaj2Dialog extends JDialog{
 				
 				if (pocetak == null || kraj == null) {
 					JOptionPane.showMessageDialog(Izvestaj2Dialog.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
+				} else if (dateFormat(kraj).isBefore(dateFormat(pocetak))){
+					JOptionPane.showMessageDialog(Izvestaj2Dialog.this, "Datumi nisu validni.", "Greška", JOptionPane.ERROR_MESSAGE);		
 				} else {
 					int[] izvestaj = controler.izvestajPotvrdjenoOtkazano(dateFormat(pocetak), dateFormat(kraj));
 					lblZakazani.setText(String.format("%d", izvestaj[0]));

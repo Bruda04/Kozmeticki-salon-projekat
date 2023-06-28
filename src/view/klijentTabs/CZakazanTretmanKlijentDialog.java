@@ -18,6 +18,10 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -36,6 +40,7 @@ public class CZakazanTretmanKlijentDialog extends JDialog{
 	private Controler controler;
 	private int idUlogovan;
 
+
 	public CZakazanTretmanKlijentDialog(Controler controler, JFrame frame, int idUlogovan) {
 		super(frame);
 
@@ -49,7 +54,7 @@ public class CZakazanTretmanKlijentDialog extends JDialog{
 		setModal(true);
 		cuGui(frame);
 		//		pack();
-		setSize(400, 400);
+		setSize(400, 500);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
@@ -62,9 +67,14 @@ public class CZakazanTretmanKlijentDialog extends JDialog{
 		}
 	}
 
+	
 	private void cuGui(JFrame frame) {
 		MigLayout layout = new MigLayout("wrap 2", "[][]", "[]20[][][][][][][][]20[]");
 		setLayout(layout);
+		
+		JSpinner spnCenaDo = new JSpinner(new SpinnerNumberModel(999999.00, 0.00, 999999.00, 1.00));
+		
+		JSpinner spnTrajanjeDo = new JSpinner(new SpinnerNumberModel(999999, 0, 999999, 1));
 
 		ArrayList<String> choTipTretmana= new ArrayList<>();
 		choTipTretmana.add(null);
@@ -98,8 +108,7 @@ public class CZakazanTretmanKlijentDialog extends JDialog{
 		JButton btnOk = new JButton("Zakaži");
 		JButton btnCancel = new JButton("Odustani");			
 
-
-		cbTipTretmana.addActionListener (new ActionListener () {
+		ActionListener cbTipTretmanaAction = new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
 				DefaultComboBoxModel<String> cbUslugeModel = (DefaultComboBoxModel<String>) cbUsluga.getModel();
 				cbUslugeModel.removeAllElements();
@@ -107,14 +116,18 @@ public class CZakazanTretmanKlijentDialog extends JDialog{
 				cbUslugeModel.addElement(null);
 				if (cbTipTretmana.getSelectedItem() != null) {
 					for (int idUSluge : controler.pronadjiTipTretmana((String) cbTipTretmana.getSelectedItem()).getSkupTipovaUsluga()) {
-						cbUslugeModel.addElement(controler.pronadjiUslugu(idUSluge).getNazivUsluge());
+						if (controler.nadjiCenuUsluge(idUSluge) <= (Double) spnCenaDo.getValue() && controler.pronadjiUslugu(idUSluge).getTrajanjeUsluge() <= (Integer) spnTrajanjeDo.getValue()) {
+							cbUslugeModel.addElement(controler.pronadjiUslugu(idUSluge).getNazivUsluge());							
+						}
 					}				
 				}
 				cbUsluga.setModel(cbUslugeModel);
 			}
-		});
+		};
+		
+		cbTipTretmana.addActionListener (cbTipTretmanaAction);
 
-		cbUsluga.addActionListener (new ActionListener () {
+		ActionListener cbUslugaActionPrvi = new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
 				DefaultComboBoxModel<String> cbKozmeticariModel = (DefaultComboBoxModel<String>) cbKozmeticar.getModel();
 				cbKozmeticariModel.removeAllElements();
@@ -124,11 +137,14 @@ public class CZakazanTretmanKlijentDialog extends JDialog{
 						cbKozmeticariModel.addElement(kz.getKorisnickoIme());
 					}				
 				}
-				cbKozmeticar.setModel(cbKozmeticariModel);				
-			}
-		});
+				cbKozmeticar.setModel(cbKozmeticariModel);		
 
-		cbKozmeticar.addActionListener (new ActionListener () {
+			}
+		};
+		
+		cbUsluga.addActionListener (cbUslugaActionPrvi);
+
+		ActionListener cbKozmeticarAction = new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
 				DefaultComboBoxModel<String> cbVremeModel = (DefaultComboBoxModel<String>) cbVreme.getModel();
 				cbVremeModel.removeAllElements();
@@ -138,11 +154,15 @@ public class CZakazanTretmanKlijentDialog extends JDialog{
 						cbVremeModel.addElement(v.format(DateTimeFormatter.ofPattern("HH:mm")));
 					}				
 				}
-				cbVreme.setModel(cbVremeModel);				
-			}
-		});
+				cbVreme.setModel(cbVremeModel);		
 
-		dpDatum.addActionListener(new ActionListener() {
+			}
+		};
+		
+		cbKozmeticar.addActionListener (cbKozmeticarAction);
+
+		
+		ActionListener dpDatumAction = new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -155,13 +175,17 @@ public class CZakazanTretmanKlijentDialog extends JDialog{
 					}				
 				}
 				cbVreme.setModel(cbVremeModel);		
+
 			}
-		});
+		};
+		
+		dpDatum.addActionListener(dpDatumAction);
+
 
 		JLabel lblCena = new JLabel("");
 		JLabel lblTrajanje = new JLabel("");
-
-		cbUsluga.addActionListener (new ActionListener () {
+		
+		ActionListener cbUslugaActionDrugi = new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
 				if (cbUsluga.getSelectedItem() != null) {
 					lblCena.setText(String.format("%.2f",controler.nadjiCenuUsluge(controler.pronadjiUslugu((String)cbUsluga.getSelectedItem()).getId())));		
@@ -172,13 +196,47 @@ public class CZakazanTretmanKlijentDialog extends JDialog{
 					lblTrajanje.setText("");
 				}
 			}
-		});		
+		};
 
+		cbUsluga.addActionListener (cbUslugaActionDrugi);		
+
+	
+		ChangeListener spnCenaDoAction = new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+            	for(ActionListener a: cbTipTretmana.getActionListeners()) {
+            	    a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null) {
+						private static final long serialVersionUID = 1L;
+            	    });
+            	}
+            }
+        };
+    			
+		spnCenaDo.addChangeListener(spnCenaDoAction);
+		
+		ChangeListener spnTrajanjeDoAction = new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+            	for(ActionListener a: cbTipTretmana.getActionListeners()) {
+            	    a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null) {
+						private static final long serialVersionUID = 1L;
+            	    });
+            	}
+            }
+        };
+
+		spnTrajanjeDo.addChangeListener(spnTrajanjeDoAction);
 
 
 		getRootPane().setDefaultButton(btnOk);
 
 		add(new JLabel("Molimo da popunite formu."), "span 2");
+
+		add(new JLabel("Cena do: "), "al right");
+		add(spnCenaDo);
+		
+		add(new JLabel("Trajanje do(minuta): "), "al right");
+		add(spnTrajanjeDo);
 
 		add(new JLabel("Tip tretmana: "), "al right");
 		add(cbTipTretmana);
@@ -214,6 +272,8 @@ public class CZakazanTretmanKlijentDialog extends JDialog{
 
 				if (usluga == null || kozmeticar == null || datum == null || vreme == null) {
 					JOptionPane.showMessageDialog(CZakazanTretmanKlijentDialog.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
+				} else if (dateFormat(datum).isBefore(LocalDate.now()) || (dateFormat(datum).equals(LocalDate.now()) && LocalTime.parse(vreme, DateTimeFormatter.ofPattern("HH:mm")).isBefore(LocalTime.now()))){
+					JOptionPane.showMessageDialog(CZakazanTretmanKlijentDialog.this, "Datum i vreme ne mogu biti u prošlosti.", "Greška", JOptionPane.ERROR_MESSAGE);		
 				} else {
 					controler.zakaziTretman(dateFormat(datum), LocalTime.parse(vreme, DateTimeFormatter.ofPattern("HH:mm")),
 					 idUlogovan, controler.pronadjiKozmeticara(kozmeticar).getId(), controler.pronadjiUslugu(usluga).getId(), 0);
