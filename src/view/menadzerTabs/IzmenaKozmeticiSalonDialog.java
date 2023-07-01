@@ -3,10 +3,10 @@ package view.menadzerTabs;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -42,10 +42,16 @@ public class IzmenaKozmeticiSalonDialog extends JDialog{
 
 		JTextField tfNaziv= new JTextField(20);
 		tfNaziv.setText(ks.getNaziv());
-		JTextField tfVremeOtvaranja = new JTextField(20);
-		tfVremeOtvaranja.setText(ks.getVremeOtvaranjaFormatStr());
-		JTextField tfVremeZatvaranja = new JTextField(20);
-		tfVremeZatvaranja.setText(ks.getVremeZatvaranjaFormatStr());
+		
+		LocalTime[] choVreme = new LocalTime[24];	
+		for (int i = 0; i < 24; i++) {
+			choVreme[i] = LocalTime.MIDNIGHT.plusHours(i);
+		}
+
+		JComboBox<LocalTime> cbVremeOtvaranja = new JComboBox<>(choVreme);
+		cbVremeOtvaranja.setSelectedItem(controler.pronadjiKozmetickiSalon().getVremeOtvaranja());
+		JComboBox<LocalTime> cbVremeZatvaranja = new JComboBox<>(choVreme);
+		cbVremeZatvaranja.setSelectedItem(controler.pronadjiKozmetickiSalon().getVremeZatvaranja());
 		JSpinner spnPragBonus = new JSpinner(new SpinnerNumberModel(ks.getPragBonus(), 0.0, 999999.00, 1.00));
 		JSpinner spnIznosBonus = new JSpinner(new SpinnerNumberModel(ks.getBonusIznos(), 0.0, 999999.00, 1.00));
 		JCheckBox chbIzmenaLojalnosti = new JCheckBox("Refaktoriši kartice lojalnosti");
@@ -64,10 +70,10 @@ public class IzmenaKozmeticiSalonDialog extends JDialog{
 		add(tfNaziv);
 
 		add(new JLabel("Vreme otvaranja: "), "al right");
-		add(tfVremeOtvaranja);
+		add(cbVremeOtvaranja);
 
 		add(new JLabel("Vreme zatvaranja: "), "al right");
-		add(tfVremeZatvaranja);
+		add(cbVremeZatvaranja);
 
 		add(new JLabel("Prag bonusa: "), "al right");
 		add(spnPragBonus);
@@ -100,8 +106,8 @@ public class IzmenaKozmeticiSalonDialog extends JDialog{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String naziv = tfNaziv.getText().trim();
-				String vremeOtvaranja = tfVremeOtvaranja.getText().trim();
-				String vremeZatvranja = tfVremeZatvaranja.getText().trim();
+				LocalTime vremeOtvaranja = (LocalTime) cbVremeOtvaranja.getSelectedItem();
+				LocalTime vremeZatvranja = (LocalTime) cbVremeZatvaranja.getSelectedItem();
 				Double pragBonus = (Double) (spnPragBonus.getValue());
 				Double iznosBonus = (Double) (spnIznosBonus.getValue());
 				Double pragKarticaLojalnosti = (Double) (spnPragKarticaLojalnosti.getValue());
@@ -109,10 +115,12 @@ public class IzmenaKozmeticiSalonDialog extends JDialog{
 				
 				if (naziv == null || vremeOtvaranja == null || vremeZatvranja == null || pragBonus == null || iznosBonus == null || pragKarticaLojalnosti == null) {
 					JOptionPane.showMessageDialog(null, "Niste uneli sve podatke.");				
+				} else if (vremeOtvaranja.equals(vremeZatvranja)){
+					JOptionPane.showMessageDialog(IzmenaKozmeticiSalonDialog.this, "Vreme otvaranja i zatvaranja ne mogu biti isti.", "Greška", JOptionPane.ERROR_MESSAGE);		
 				} else {
 					controler.izmeniNazivKozmetickogSalona(naziv);
-					controler.izmeniVremeOtvaranjaSalona(LocalTime.parse(vremeOtvaranja, DateTimeFormatter.ofPattern("HH:mm")));
-					controler.izmeniVremeZatvaranjaSalona(LocalTime.parse(vremeZatvranja, DateTimeFormatter.ofPattern("HH:mm")));
+					controler.izmeniVremeOtvaranjaSalona(vremeOtvaranja);
+					controler.izmeniVremeZatvaranjaSalona(vremeZatvranja);
 					controler.izmeniPragBonusa(pragBonus, iznosBonus);
 					
 					if (refaktorisiKarticeLojalnosti == true) {

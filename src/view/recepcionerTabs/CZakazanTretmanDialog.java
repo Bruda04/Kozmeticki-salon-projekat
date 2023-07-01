@@ -151,9 +151,13 @@ public class CZakazanTretmanDialog extends JDialog{
 				DefaultComboBoxModel<String> cbVremeModel = (DefaultComboBoxModel<String>) cbVreme.getModel();
 				cbVremeModel.removeAllElements();
 
-				if (dpDatum.getJDateInstantPanel().getModel().getValue() != null && cbKozmeticar.getSelectedItem() != null) {
+				if (dpDatum.getJDateInstantPanel().getModel().getValue() != null && cbKozmeticar.getSelectedItem() != null && cbUsluga.getSelectedItem() != null) {
 					for (LocalTime v : controler.kozmeticarSlobodan(controler.pronadjiKozmeticara((String) cbKozmeticar.getSelectedItem()).getId(), dateFormat((Date)dpDatum.getModel().getValue()))) {
-						cbVremeModel.addElement(v.format(DateTimeFormatter.ofPattern("HH:mm")));
+						boolean probijaRadnoVreme = v.plusMinutes(controler.pronadjiUslugu((String) cbUsluga.getSelectedItem()).getTrajanjeUsluge()).isAfter(controler.pronadjiKozmetickiSalon().getVremeZatvaranja());
+						if (!probijaRadnoVreme) {
+							cbVremeModel.addElement(v.format(DateTimeFormatter.ofPattern("HH:mm")));
+							
+						}
 					}				
 				}
 				cbVreme.setModel(cbVremeModel);				

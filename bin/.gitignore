@@ -1,3 +1,7 @@
-/view/
-/test/
+/entity/
+/main/
 /manage/
+/model/
+/test/
+/utils/
+/view/

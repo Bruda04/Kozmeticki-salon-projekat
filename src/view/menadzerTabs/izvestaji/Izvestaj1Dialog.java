@@ -3,9 +3,7 @@ package view.menadzerTabs.izvestaji;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Properties;
 
@@ -26,7 +24,6 @@ import org.jdatepicker.impl.UtilDateModel;
 import entity.Kozmeticar;
 import manage.Controler;
 import net.miginfocom.swing.MigLayout;
-import view.klijentTabs.CZakazanTretmanKlijentDialog;
 
 public class Izvestaj1Dialog extends JDialog{
 
