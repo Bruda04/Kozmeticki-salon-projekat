@@ -54,8 +54,6 @@ public class ControlerTest {
         ArrayList<Integer> zna = new ArrayList<>();
         zna.add(1);
         controler.registrujKozmeticara("kozmeticar", "kozmeticar", "kozmeticar", "M", "000000", "AdresaKozmeticar", "password", 3, 10, zna);
-        
-
 	}
 
 	@Test
@@ -141,6 +139,27 @@ public class ControlerTest {
         
         double[] izvestaj = controler.izvestajBrojPrihodKozmeticari(1, LocalDate.of(2023, 1, 1), LocalDate.of(2023, 8, 1));
         double[] ocekivano = {1, 3000.00};
+        
+        assertEquals(ocekivano[0], izvestaj[0], 0.001);
+        assertEquals(ocekivano[1], izvestaj[1], 0.001);
+
+		
+	}
+	
+	@Test
+	public void izvestajPrihodiRashodi() {
+		controler.zakaziTretman(LocalDate.of(2023, 6, 10), LocalTime.of(10, 0), 1, 1, 1, 0);
+        controler.zakaziTretman(LocalDate.of(2023, 12, 10), LocalTime.of(10, 0), 1, 1, 1, 0); //nista
+        controler.zakaziTretman(LocalDate.of(2023, 6, 8), LocalTime.of(9, 0), 1, 1, 2, 0);
+        controler.zakaziTretman(LocalDate.of(2023, 6, 10), LocalTime.of(14, 0), 2, 1, 3, 0);
+        
+        controler.izvrsiTretman(1);
+        controler.otkaziTretmanKlijent(2);
+        controler.otkaziTretmanSalon(3);
+        controler.propustenTretmanKlijent(4);
+        
+        double[] izvestaj = controler.izvestajPrihodiRashodi(LocalDate.of(2023, 6, 1), LocalDate.of(2023, 7, 1));
+        double[] ocekivano = {3000.00, controler.pronadjiKozmeticara(1).getPlata()};
         
         assertEquals(ocekivano[0], izvestaj[0], 0.001);
         assertEquals(ocekivano[1], izvestaj[1], 0.001);

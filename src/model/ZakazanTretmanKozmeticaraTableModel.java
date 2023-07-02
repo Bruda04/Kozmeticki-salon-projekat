@@ -14,7 +14,7 @@ public class ZakazanTretmanKozmeticaraTableModel extends AbstractTableModel{
 	private List<ZakazanTretman> data;
 	private Controler controler;
 	private int idUlogovanog;
-    private String[] columnNames = { "Id", "Klijent", "Usluga", "Datum", "Vreme", "Cena", "Zakazao"};
+    private String[] columnNames = {"Klijent", "Usluga", "Datum", "Vreme", "Cena", "Zakazao"};
 
 	public ZakazanTretmanKozmeticaraTableModel(Controler controler, int idUlogovanog) {
 		this.controler = controler;
@@ -41,18 +41,16 @@ public class ZakazanTretmanKozmeticaraTableModel extends AbstractTableModel{
 		
 		switch (columnIndex) {
 		case 0:
-			return zakazanTretman.getId();
-		case 1:
 			return controler.pronadjiKlijenta(zakazanTretman.getIdKlijenta()).getKorisnickoIme();
-		case 2:
+		case 1:
 			return controler.pronadjiUslugu(zakazanTretman.getIdTipaUsluge()).getNazivUsluge();
-		case 3:
+		case 2:
 			return zakazanTretman.getDatum();
-		case 4:
+		case 3:
 			return zakazanTretman.getVremeFormatStr();
-		case 5:
+		case 4:
 			return zakazanTretman.getCena();
-		case 6:
+		case 5:
 			if (zakazanTretman.getIdZakazivaca() == 0) {
 				return "Online";
 			} else {

@@ -14,7 +14,7 @@ public class ZakazanTretmanTableModel extends AbstractTableModel{
 	
 	private List<ZakazanTretman> data;
 	private Controler controler;
-    private String[] columnNames = { "Id", "Klijent", "Kozmetičar", "Usluga", "Datum", "Vreme", "Cena", "Zakazao", "Stanje"};
+    private String[] columnNames = {"Id", "Klijent", "Kozmetičar", "Usluga", "Datum", "Vreme", "Cena", "Zakazao", "Stanje"};
 
 	public ZakazanTretmanTableModel(Controler controler) {
 		this.controler = controler;

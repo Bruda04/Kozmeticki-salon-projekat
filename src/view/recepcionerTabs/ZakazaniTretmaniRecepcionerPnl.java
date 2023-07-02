@@ -28,7 +28,7 @@ import javax.swing.table.TableRowSorter;
 
 import entity.StanjeZakazanogTretmana;
 import manage.Controler;
-import model.ZakazanTretmanTableModel;
+import model.ZakazanTretmanRecepcionerTableModel;
 import net.miginfocom.swing.MigLayout;
 
 public class ZakazaniTretmaniRecepcionerPnl extends JPanel{
@@ -78,7 +78,7 @@ public class ZakazaniTretmaniRecepcionerPnl extends JPanel{
 
 		add(pnlCrud, BorderLayout.NORTH);
 
-		ZakazanTretmanTableModel tblmdZakazanTretman = new ZakazanTretmanTableModel(controler);
+		ZakazanTretmanRecepcionerTableModel tblmdZakazanTretman = new ZakazanTretmanRecepcionerTableModel(controler);
 		JTable tblZakazanTretman = new JTable(tblmdZakazanTretman);
 		tblZakazanTretman.setAutoCreateRowSorter(true);
 		tblZakazanTretman.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

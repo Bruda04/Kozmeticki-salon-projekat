@@ -36,7 +36,7 @@ public class Controler {
 			manager.getCenovnikMngr().add(new HashMap<Integer, Double>());
 		}
 		if (manager.getMenadzerMngr().getMenadzerHashMap().size() == 0) {
-			manager.getMenadzerMngr().add("", "Admin", "Admin", "null", "null", "null", "", 0, 0, false, 0);
+			manager.getMenadzerMngr().add("admin", "Admin", "Admin", "null", "null", "null", "admin", 0, 0, false, 0);
 		}
 	}
 
@@ -534,15 +534,15 @@ public class Controler {
 				}				
 			}
 		}
-		HashMap<Integer, Zaposleni> zaposleni = new HashMap<>();
-		zaposleni.putAll(manager.getKozmeticarMngr().getKozmeticarHashMap());
-		zaposleni.putAll(manager.getMenadzerMngr().getMenadzerHashMap());
-		zaposleni.putAll(manager.getRecepcionerMngr().getRecepcionerHashMap());
+		ArrayList<Zaposleni> zaposleni = new ArrayList<>();
+		zaposleni.addAll(manager.getKozmeticarMngr().getKozmeticarHashMap().values());
+		zaposleni.addAll(manager.getMenadzerMngr().getMenadzerHashMap().values());
+		zaposleni.addAll(manager.getRecepcionerMngr().getRecepcionerHashMap().values());
 
 		LocalDate datumTmp = datumPocetka;
 		while (datumTmp.isBefore(datumKraja)) {
 			if (datumTmp.getDayOfMonth() == 1) {
-				for (Zaposleni zap : zaposleni.values()) {
+				for (Zaposleni zap : zaposleni) {
 					rashodi += zap.getPlata();
 				}
 			}
@@ -555,12 +555,12 @@ public class Controler {
 	}
 
 	public ArrayList<Zaposleni> zaposleniSaBonusom() {
-		HashMap<Integer, Zaposleni> zaposleni = new HashMap<>();
-		zaposleni.putAll(manager.getKozmeticarMngr().getKozmeticarHashMap());
-		zaposleni.putAll(manager.getMenadzerMngr().getMenadzerHashMap());
-		zaposleni.putAll(manager.getRecepcionerMngr().getRecepcionerHashMap());
+		ArrayList<Zaposleni> zaposleni = new ArrayList<>();
+		zaposleni.addAll(manager.getKozmeticarMngr().getKozmeticarHashMap().values());
+		zaposleni.addAll(manager.getMenadzerMngr().getMenadzerHashMap().values());
+		zaposleni.addAll(manager.getRecepcionerMngr().getRecepcionerHashMap().values());
 		ArrayList<Zaposleni> listaZaposlenihSaBonusm = new ArrayList<>();
-		for (Zaposleni z : zaposleni.values()) {
+		for (Zaposleni z : zaposleni) {
 			if (z.getBonus()) {
 				listaZaposlenihSaBonusm.add(z);
 			}

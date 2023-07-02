@@ -30,7 +30,7 @@ public class Izvestaj4Dialog extends JDialog{
 		super(frame);
 
 		this.controler = controler;
-		setTitle("Izvestaj broj tretmana i prihodi kozmetičara");			
+		setTitle("Izvestaj potencijal za karticu lojalnosti");			
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setIconImage(new ImageIcon("img/icon.png").getImage());
 		setResizable(false);

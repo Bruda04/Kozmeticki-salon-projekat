@@ -16,27 +16,27 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 
 import manage.Controler;
-import model.ZakazanTretmanKozmeticaraTableModel;
+import model.TipTretmanaKozmeticarTableModel;
 import net.miginfocom.swing.MigLayout;
 
-public class ZakazaniTretmaniKozmeticaraPnl extends JPanel{
+public class TipoviTretmanaKozmeticaraPnl extends JPanel{
 	
-	private static final long serialVersionUID = -4088744473089428422L;
+	private static final long serialVersionUID = -4396612449728911864L;
 
-	public ZakazaniTretmaniKozmeticaraPnl(Controler controler, JFrame frame, int idUlogovanog) {
+	public TipoviTretmanaKozmeticaraPnl(Controler controler, JFrame frame, int idUlogovanog) {
 		setLayout(new BorderLayout());
 
-		ZakazanTretmanKozmeticaraTableModel tblmdZakazanTretman = new ZakazanTretmanKozmeticaraTableModel(controler, idUlogovanog);
-		JTable tblZakazanTretman = new JTable(tblmdZakazanTretman);
-		tblZakazanTretman.setAutoCreateRowSorter(true);
-		tblZakazanTretman.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tblZakazanTretman.getTableHeader().setReorderingAllowed(false);
+		TipTretmanaKozmeticarTableModel tblmdTipTretmana = new TipTretmanaKozmeticarTableModel(controler, idUlogovanog);
+		JTable tblTipTretmana = new JTable(tblmdTipTretmana);
+		tblTipTretmana.setAutoCreateRowSorter(true);
+		tblTipTretmana.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tblTipTretmana.getTableHeader().setReorderingAllowed(false);
 
-		JScrollPane scpTblZakazaniTretmani = new JScrollPane(tblZakazanTretman);
+		JScrollPane scpTblTipoviTretmana = new JScrollPane(tblTipTretmana);
 
 		TableRowSorter<AbstractTableModel> tableSorter = new TableRowSorter<AbstractTableModel>();
-		tableSorter.setModel((AbstractTableModel) tblZakazanTretman.getModel());
-		tblZakazanTretman.setRowSorter(tableSorter);
+		tableSorter.setModel((AbstractTableModel) tblTipTretmana.getModel());
+		tblTipTretmana.setRowSorter(tableSorter);
 		
 		JPanel pnlInfo = new JPanel(new MigLayout("al center", "[][]", "15[]25"));
 		JTextField tfSearch = new JTextField();	
@@ -68,7 +68,7 @@ public class ZakazaniTretmaniKozmeticaraPnl extends JPanel{
 		pnlInfo.add(tfSearch, "w 30%");
 		add(pnlInfo, BorderLayout.SOUTH);
 
-		add(scpTblZakazaniTretmani, BorderLayout.CENTER);
+		add(scpTblTipoviTretmana, BorderLayout.CENTER);
 	}
 
 

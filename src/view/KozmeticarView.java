@@ -6,9 +6,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 import manage.Controler;
 import net.miginfocom.swing.MigLayout;
+import view.kozmeticarTabs.TipoviTretmanaKozmeticaraPnl;
 import view.kozmeticarTabs.ZakazaniTretmaniKozmeticaraPnl;
 
 public class KozmeticarView extends JFrame {
@@ -36,6 +38,8 @@ public class KozmeticarView extends JFrame {
 	
 	private void setupGUI() {		
 		
+		JTabbedPane tp = new JTabbedPane();
+		
 		JPanel pnlLogout = new JPanel(new MigLayout("al center", "[]", "[]"));
 		JButton btnLogout = new JButton("Odjavi se");
 		btnLogout.addActionListener( actionListener -> {
@@ -49,8 +53,13 @@ public class KozmeticarView extends JFrame {
 		
 		
 		JPanel pnlZakazaniTretmaniKozmeticar = new ZakazaniTretmaniKozmeticaraPnl(controler, this, idUlogovanog);
+		tp.add("Raspored", pnlZakazaniTretmaniKozmeticar);
+		
+		JPanel pnlTipoviTretmanaKozmeticar = new TipoviTretmanaKozmeticaraPnl(controler, this, idUlogovanog);
+		tp.add("Dodeljeni tipovi tretmana", pnlTipoviTretmanaKozmeticar);
+		
 
-		add(pnlZakazaniTretmaniKozmeticar, BorderLayout.CENTER);
+		add(tp, BorderLayout.CENTER);
 		
 		add(pnlLogout, BorderLayout.SOUTH);
 	}

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -7,19 +8,16 @@ import javax.swing.table.AbstractTableModel;
 import entity.ZakazanTretman;
 import manage.Controler;
 
-public class ZakazanTretmanKlijentaTableModel extends AbstractTableModel{
-	
-	private static final long serialVersionUID = -5708001691966272324L;
-	
+public class ZakazanTretmanRecepcionerTableModel extends AbstractTableModel{
+		
+	private static final long serialVersionUID = -3115773116673968664L;
 	private List<ZakazanTretman> data;
 	private Controler controler;
-	private int idUlogovanog;
-    private String[] columnNames = {"Kozmetičar", "Usluga", "Datum", "Vreme", "Cena", "Zakazao", "Stanje"};
+    private String[] columnNames = {"Klijent", "Kozmetičar", "Usluga", "Datum", "Vreme", "Cena", "Zakazao", "Stanje"};
 
-	public ZakazanTretmanKlijentaTableModel(Controler controler, int idUlogovanog) {
+	public ZakazanTretmanRecepcionerTableModel(Controler controler) {
 		this.controler = controler;
-		this.idUlogovanog = idUlogovanog;
-		this.data = controler.tretmaniKlijenta(idUlogovanog);
+		this.data = new ArrayList<ZakazanTretman>(controler.sviZakazaniTretmani().values());
 	}
 	
 	@Override
@@ -41,23 +39,26 @@ public class ZakazanTretmanKlijentaTableModel extends AbstractTableModel{
 		
 		switch (columnIndex) {
 		case 0:
-			return controler.pronadjiKozmeticara(zakazanTretman.getIdKozmeticara()).getKorisnickoIme();
+			return controler.pronadjiKlijenta(zakazanTretman.getIdKlijenta()).getKorisnickoIme();
 		case 1:
-			return controler.pronadjiUslugu(zakazanTretman.getIdTipaUsluge()).getNazivUsluge();
+			return controler.pronadjiKozmeticara(zakazanTretman.getIdKozmeticara()).getKorisnickoIme();
 		case 2:
-			return zakazanTretman.getDatum();
+			return controler.pronadjiUslugu(zakazanTretman.getIdTipaUsluge()).getNazivUsluge();
 		case 3:
-			return zakazanTretman.getVremeFormatStr();
+			return zakazanTretman.getDatum();
 		case 4:
-			return zakazanTretman.getCena();
+			return zakazanTretman.getVremeFormatStr();
 		case 5:
+			return zakazanTretman.getCena();
+		case 6:
 			if (zakazanTretman.getIdZakazivaca() == 0) {
 				return "Online";
 			} else {
 				return controler.pronadjiRecepcionera(zakazanTretman.getIdZakazivaca()).getKorisnickoIme();
 			}
-		case 6:
+		case 7: {
 			return zakazanTretman.getStanje();
+		}
 		default:
 			return null;
 		}
@@ -79,7 +80,7 @@ public class ZakazanTretmanKlijentaTableModel extends AbstractTableModel{
 	}
 	
 	public void refresh() {
-		this.data = controler.tretmaniKlijenta(idUlogovanog);
+		this.data = new ArrayList<ZakazanTretman>(controler.sviZakazaniTretmani().values());
 		this.fireTableDataChanged();
 	}
 }
