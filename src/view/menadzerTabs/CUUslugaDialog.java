@@ -103,13 +103,14 @@ public class CUUslugaDialog extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				String naziv = tfNaziv.getText().trim();
 				Integer trajanje = (Integer) spnTrajanje.getValue();
-				Integer idTipaTretmana = controler.pronadjiTipTretmana((String) cbTipTretmana.getSelectedItem()).getId();
 				Double cena = (Double) spnCena.getValue();
-
-				if (naziv == null || trajanje == null || idTipaTretmana == null || cena == null ) {
+				String tipTretmana = (String) cbTipTretmana.getSelectedItem();
+				
+				if (naziv == null || trajanje == null || tipTretmana == null || cena == null ) {
 					JOptionPane.showMessageDialog(CUUslugaDialog.this, "Niste uneli sve podatke.", "Greška", JOptionPane.ERROR_MESSAGE);				
 				} else {
 					try {
+						Integer idTipaTretmana = controler.pronadjiTipTretmana(tipTretmana).getId();
 						if (idUsluge == -1) {
 							controler.dodajUslugu(naziv, trajanje, cena, idTipaTretmana);						
 						} else {

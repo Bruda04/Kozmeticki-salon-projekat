@@ -5,7 +5,6 @@ import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import manage.Controler;
@@ -38,15 +37,8 @@ public class KlijentView extends JFrame {
 	
 	private void setupGUI() {		
 		
-		JPanel pnlLogout = new JPanel(new MigLayout("al center, wrap", "[]", "10[][]10"));
-		String kartica;
-		if (controler.pronadjiKlijenta(idUlogovan).isKarticaLojalnosti()) {
-			kartica = "DA";
-		} else {
-			kartica = "NE";
-		}
+		JPanel pnlLogout = new JPanel(new MigLayout("al center, wrap", "[]", "10[]10"));
 		
-		JLabel lblInfo = new JLabel(String.format("Ima karticu lojalnosti: %s   Potrošeno: %.2f",kartica, controler.pronadjiKlijenta(idUlogovan).getPotroseno()));
 		
 		JButton btnLogout = new JButton("Odjavi se");
 		
@@ -57,7 +49,6 @@ public class KlijentView extends JFrame {
 			new MainFrame(controler);
 		});
 		
-		pnlLogout.add(lblInfo, "al center");
 		pnlLogout.add(btnLogout, "al center");
 		
 		JPanel pnlKlijent = new ZakazaniTretmaniKlijentPnl(controler, this, idUlogovan);

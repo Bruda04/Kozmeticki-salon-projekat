@@ -63,6 +63,7 @@ public class ZakazanTretmanKlijentaTableModel extends AbstractTableModel{
 		}
 	}
 	
+	
 	public String getColumnName(int col) {
 		return columnNames[col];
 	}

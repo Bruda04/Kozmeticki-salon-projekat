@@ -64,6 +64,7 @@ public class ZakazanTretmanRecepcionerTableModel extends AbstractTableModel{
 		}
 	}
 	
+	
 	public String getColumnName(int col) {
 		return columnNames[col];
 	}

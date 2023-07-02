@@ -48,7 +48,11 @@ public class TipTretmanaTableModel extends AbstractTableModel{
 	            sb.append(", ").append(controler.pronadjiUslugu(idUsluge).getNazivUsluge());
 	        }
 	        String retStr = sb.toString();
-			return retStr.subSequence(2, retStr.length());
+	        if (retStr.length() > 0) {
+	        	return retStr.subSequence(2, retStr.length());				
+			} else {
+				return "";
+			}
 		default:
 			return null;
 		}

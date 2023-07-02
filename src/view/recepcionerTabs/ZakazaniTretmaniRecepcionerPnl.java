@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -120,9 +123,9 @@ public class ZakazaniTretmaniRecepcionerPnl extends JPanel{
 			                boolean match = false;
 
 			                double cena = 0;
-			                for (int i = 0; i < 9; i++) {
-								if (i == 6) {
-									cena = (double) entry.getValue(6);	
+			                for (int i = 0; i < 8; i++) {
+								if (i == 5) {
+									cena = (double) entry.getValue(5);	
 								} else {
 									if (entry.getValue(i).toString().matches("(?i).*" + filterText + ".*")) {
 										match = true;
@@ -151,9 +154,9 @@ public class ZakazaniTretmaniRecepcionerPnl extends JPanel{
 		                boolean match = false;
 
 		                double cena = 0;
-		                for (int i = 0; i < 9; i++) {
-							if (i == 6) {
-								cena = (double) entry.getValue(6);									
+		                for (int i = 0; i < 8; i++) {
+							if (i == 5) {
+								cena = (double) entry.getValue(5);									
 							} else {
 								if (entry.getValue(i).toString().matches("(?i).*" + filterText + ".*")) {
 									match = true;
@@ -181,9 +184,9 @@ public class ZakazaniTretmaniRecepcionerPnl extends JPanel{
 		                boolean match = false;
 
 		                double cena = 0;
-		                for (int i = 0; i < 9; i++) {
-							if (i == 6) {
-								cena = (double) entry.getValue(6);	
+		                for (int i = 0; i < 8; i++) {
+							if (i == 5) {
+								cena = (double) entry.getValue(5);	
 							} else {
 								if (entry.getValue(i).toString().matches("(?i).*" + filterText + ".*")) {
 									match = true;
@@ -217,7 +220,10 @@ public class ZakazaniTretmaniRecepcionerPnl extends JPanel{
 					JOptionPane.showMessageDialog(ZakazaniTretmaniRecepcionerPnl.this, "Niste označili Zakazan Tretman.", "Greška", JOptionPane.ERROR_MESSAGE);				
 					return;
 				}
-				int idZakazanTretman = (int) tblZakazanTretman.getValueAt(row, 0);		
+				int idZakazanTretman = controler.pronadjiZakazanTretman(controler.pronadjiUslugu((String) tblZakazanTretman.getValueAt(row, 2)).getId(),
+						controler.pronadjiKozmeticara((String) tblZakazanTretman.getValueAt(row, 1)).getId(),
+						(LocalDate) tblZakazanTretman.getValueAt(row, 3),
+						LocalTime.parse((String) tblZakazanTretman.getValueAt(row, 4), DateTimeFormatter.ofPattern("HH:mm"))).getId();	
 
 				if (controler.pronadjiZakazanTretman(idZakazanTretman).getStanje() != StanjeZakazanogTretmana.ZAKAZAN) {
 					JOptionPane.showMessageDialog(ZakazaniTretmaniRecepcionerPnl.this, "Niste označili Zakazan Tretman koji može biti otkazan.", "Greška", JOptionPane.ERROR_MESSAGE);				
@@ -243,7 +249,10 @@ public class ZakazaniTretmaniRecepcionerPnl extends JPanel{
 					JOptionPane.showMessageDialog(ZakazaniTretmaniRecepcionerPnl.this, "Niste označili Zakazan Tretman.", "Greška", JOptionPane.ERROR_MESSAGE);				
 					return;
 				}
-				int idZakazanTretman = (int) tblZakazanTretman.getValueAt(row, 0);		
+				int idZakazanTretman = controler.pronadjiZakazanTretman(controler.pronadjiUslugu((String) tblZakazanTretman.getValueAt(row, 2)).getId(),
+						controler.pronadjiKozmeticara((String) tblZakazanTretman.getValueAt(row, 1)).getId(),
+						(LocalDate) tblZakazanTretman.getValueAt(row, 3),
+						LocalTime.parse((String) tblZakazanTretman.getValueAt(row, 4), DateTimeFormatter.ofPattern("HH:mm"))).getId();			
 
 				if (controler.pronadjiZakazanTretman(idZakazanTretman).getStanje() != StanjeZakazanogTretmana.ZAKAZAN) {
 					JOptionPane.showMessageDialog(ZakazaniTretmaniRecepcionerPnl.this, "Niste označili Zakazan Tretman koji može biti otkazan.", "Greška", JOptionPane.ERROR_MESSAGE);				
@@ -269,7 +278,10 @@ public class ZakazaniTretmaniRecepcionerPnl extends JPanel{
 					JOptionPane.showMessageDialog(ZakazaniTretmaniRecepcionerPnl.this, "Niste označili Zakazan Tretman.", "Greška", JOptionPane.ERROR_MESSAGE);				
 					return;
 				}
-				int idZakazanTretman = (int) tblZakazanTretman.getValueAt(row, 0);		
+				int idZakazanTretman = controler.pronadjiZakazanTretman(controler.pronadjiUslugu((String) tblZakazanTretman.getValueAt(row, 2)).getId(),
+						controler.pronadjiKozmeticara((String) tblZakazanTretman.getValueAt(row, 1)).getId(),
+						(LocalDate) tblZakazanTretman.getValueAt(row, 3),
+						LocalTime.parse((String) tblZakazanTretman.getValueAt(row, 4), DateTimeFormatter.ofPattern("HH:mm"))).getId();			
 
 				if (controler.pronadjiZakazanTretman(idZakazanTretman).getStanje() != StanjeZakazanogTretmana.ZAKAZAN) {
 					JOptionPane.showMessageDialog(ZakazaniTretmaniRecepcionerPnl.this, "Niste označili Zakazan Tretman koji može biti otkazan.", "Greška", JOptionPane.ERROR_MESSAGE);				
@@ -295,7 +307,10 @@ public class ZakazaniTretmaniRecepcionerPnl extends JPanel{
 					JOptionPane.showMessageDialog(ZakazaniTretmaniRecepcionerPnl.this, "Niste označili Zakazan Tretman.", "Greška", JOptionPane.ERROR_MESSAGE);				
 					return;
 				}
-				int idZakazanTretman = (int) tblZakazanTretman.getValueAt(row, 0);		
+				int idZakazanTretman = controler.pronadjiZakazanTretman(controler.pronadjiUslugu((String) tblZakazanTretman.getValueAt(row, 2)).getId(),
+						controler.pronadjiKozmeticara((String) tblZakazanTretman.getValueAt(row, 1)).getId(),
+						(LocalDate) tblZakazanTretman.getValueAt(row, 3),
+						LocalTime.parse((String) tblZakazanTretman.getValueAt(row, 4), DateTimeFormatter.ofPattern("HH:mm"))).getId();		
 
 				if (controler.pronadjiZakazanTretman(idZakazanTretman).getStanje() != StanjeZakazanogTretmana.ZAKAZAN) {
 					JOptionPane.showMessageDialog(ZakazaniTretmaniRecepcionerPnl.this, "Niste označili Zakazan Tretman koji može biti izvršen.", "Greška", JOptionPane.ERROR_MESSAGE);				

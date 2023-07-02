@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -67,8 +70,16 @@ public class ZakazaniTretmaniKlijentPnl extends JPanel{
 		tableSorter.setModel((AbstractTableModel) tblZakazanTretman.getModel());
 		tblZakazanTretman.setRowSorter(tableSorter);
 		
-		JPanel pnlInfo = new JPanel(new MigLayout("al center", "[][]", "15[]25"));
+		JPanel pnlInfo = new JPanel(new MigLayout("al center, wrap 2", "[][]", "15[]10[]15"));
 		JTextField tfSearch = new JTextField();	
+		String kartica;
+		if (controler.pronadjiKlijenta(idUlogovan).isKarticaLojalnosti()) {
+			kartica = "DA";
+		} else {
+			kartica = "NE";
+		}
+		
+		JLabel lblInfo = new JLabel(String.format("Ima karticu lojalnosti: %s   Potrošeno: %.2f", kartica, controler.pronadjiKlijenta(idUlogovan).getPotroseno()));
 
 		tfSearch.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -95,6 +106,7 @@ public class ZakazaniTretmaniKlijentPnl extends JPanel{
 
 		pnlInfo.add(new JLabel("Pretraga: "), "al right");
 		pnlInfo.add(tfSearch, "w 30%");
+		pnlInfo.add(lblInfo, "span 2, al center");
 		add(pnlInfo, BorderLayout.SOUTH);
 
 		btnOtkKlj.addActionListener(new ActionListener() {
@@ -106,7 +118,10 @@ public class ZakazaniTretmaniKlijentPnl extends JPanel{
 					JOptionPane.showMessageDialog(ZakazaniTretmaniKlijentPnl.this, "Niste označili Zakazan Tretman.", "Greška", JOptionPane.ERROR_MESSAGE);				
 					return;
 				}
-				int idZakazanTretman = (int) tblZakazanTretman.getValueAt(row, 0);		
+				int idZakazanTretman = controler.pronadjiZakazanTretman(controler.pronadjiUslugu((String) tblZakazanTretman.getValueAt(row, 1)).getId(),
+						controler.pronadjiKozmeticara((String) tblZakazanTretman.getValueAt(row, 0)).getId(),
+						(LocalDate) tblZakazanTretman.getValueAt(row, 2),
+						LocalTime.parse((String) tblZakazanTretman.getValueAt(row, 3), DateTimeFormatter.ofPattern("HH:mm"))).getId();			
 
 				if (controler.pronadjiZakazanTretman(idZakazanTretman).getStanje() != StanjeZakazanogTretmana.ZAKAZAN) {
 					JOptionPane.showMessageDialog(ZakazaniTretmaniKlijentPnl.this, "Niste označili Zakazan Tretman koji može biti otkazan.", "Greška", JOptionPane.ERROR_MESSAGE);				
@@ -118,6 +133,13 @@ public class ZakazaniTretmaniKlijentPnl extends JPanel{
 				if (yesNo == JOptionPane.YES_OPTION) {
 					controler.otkaziTretmanKlijent(idZakazanTretman);
 					tblmdZakazanTretman.refresh();
+					String karticaOtk;
+					if (controler.pronadjiKlijenta(idUlogovan).isKarticaLojalnosti()) {
+						karticaOtk = "DA";
+					} else {
+						karticaOtk = "NE";
+					}
+					lblInfo.setText(String.format("Ima karticu lojalnosti: %s   Potrošeno: %.2f", karticaOtk, controler.pronadjiKlijenta(idUlogovan).getPotroseno()));
 				}
 
 			}
@@ -126,6 +148,13 @@ public class ZakazaniTretmaniKlijentPnl extends JPanel{
 		btnZak.addActionListener(actionListener -> {
 			new CZakazanTretmanKlijentDialog(controler, frame, idUlogovan);
 			tblmdZakazanTretman.refresh();
+			String karticaZak;
+			if (controler.pronadjiKlijenta(idUlogovan).isKarticaLojalnosti()) {
+				karticaZak = "DA";
+			} else {
+				karticaZak = "NE";
+			}
+			lblInfo.setText(String.format("Ima karticu lojalnosti: %s   Potrošeno: %.2f", karticaZak, controler.pronadjiKlijenta(idUlogovan).getPotroseno()));
 		});
 
 

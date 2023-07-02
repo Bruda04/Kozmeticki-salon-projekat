@@ -89,6 +89,15 @@ public class Controler {
 	public ZakazanTretman pronadjiZakazanTretman(int idZakazanTretman) {
 		return manager.getZakazanTretmanMngr().findById(idZakazanTretman);
 	}
+	
+	public ZakazanTretman pronadjiZakazanTretman(int idUsluge, int idKozmeticara, LocalDate datum, LocalTime vreme) {
+		for (ZakazanTretman zt : manager.getZakazanTretmanMngr().getZakazanTretmanHashMap().values()) {
+			if (zt.getIdTipaUsluge() == idUsluge && zt.getIdKozmeticara() == idKozmeticara && zt.getDatum().equals(datum) && zt.getVreme().equals(vreme)) {
+				return zt;
+			}
+		}
+		return null;
+	}
 
 	public Korisnik prijava(String korisnickoIme, String lozinka) {
 		Klijent k = manager.getKlijentMngr().findByKorisnickoIme(korisnickoIme);
@@ -216,7 +225,7 @@ public class Controler {
 	}
 
 	public void izmeniKlijenta(int id, String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, Boolean karticaLojalnosti, Double potroseno) {
-		if (korisnickoImeZauzeto(korisnickoIme)) {
+		if (korisnickoImeZauzeto(korisnickoIme) && !pronadjiKlijenta(id).getKorisnickoIme().equals(korisnickoIme)) {
 			throw new IllegalArgumentException("Korisničko ime je zauzeto.");
 		} else {
 			manager.getKlijentMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, karticaLojalnosti, potroseno);
@@ -224,14 +233,14 @@ public class Controler {
 	}
 
 	public void izmeniRecepcionera(int id, String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
-		if (korisnickoImeZauzeto(korisnickoIme)) {
+		if (korisnickoImeZauzeto(korisnickoIme) && !pronadjiRecepcionera(id).getKorisnickoIme().equals(korisnickoIme)) {
 			throw new IllegalArgumentException("Korisničko ime je zauzeto.");
 		} else {
 			manager.getRecepcionerMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, bonus, plata);
 		}
 	}
 	public void izmeniMenadzera(int id, String korisnickoIme, String ime, String prezime, String pol, String telefon, String adresa, String lozinka, int nivoStrucneSpreme, int godineStaza, boolean bonus, double plata) {
-		if (korisnickoImeZauzeto(korisnickoIme)) {
+		if (korisnickoImeZauzeto(korisnickoIme) && !pronadjiMenadzera(id).getKorisnickoIme().equals(korisnickoIme)) {
 			throw new IllegalArgumentException("Korisničko ime je zauzeto.");
 		} else {
 			manager.getMenadzerMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, bonus, plata);
@@ -250,7 +259,7 @@ public class Controler {
 			boolean bonus,
 			double plata,
 			ArrayList<Integer> spisakTretmana) {
-		if (korisnickoImeZauzeto(korisnickoIme)) {
+		if (korisnickoImeZauzeto(korisnickoIme) && !pronadjiKozmeticara(id).getKorisnickoIme().equals(korisnickoIme)) {
 			throw new IllegalArgumentException("Korisničko ime je zauzeto.");
 		} else {
 			manager.getKozmeticarMngr().update(id, korisnickoIme, ime, prezime, pol, telefon, adresa, lozinka, nivoStrucneSpreme, godineStaza, bonus, plata, spisakTretmana);
@@ -278,7 +287,7 @@ public class Controler {
 	}
 
 	public void izmeniTipTretmana(int idTipaTretmana, String naziv, ArrayList<Integer> skupTipovaUsluga) {
-		if (pronadjiUslugu(naziv) != null) {
+		if (pronadjiUslugu(naziv) != null && !pronadjiTipTretmana(idTipaTretmana).getNaziv().equals(naziv)) {
 			throw new IllegalArgumentException("Tip tretmana pod tim nazivom već postoji.");
 		} else {
 			manager.getTipTretmanaMngr().update(idTipaTretmana, naziv, skupTipovaUsluga);
@@ -323,7 +332,7 @@ public class Controler {
 	}
 
 	public void izmeniUslugu(int id, String nazivUsluge, int vremeTrajanja, double cena) {
-		if (pronadjiUslugu(nazivUsluge) != null) {
+		if (pronadjiUslugu(nazivUsluge) != null && !pronadjiUslugu(id).getNazivUsluge().equals(nazivUsluge)) {
 			throw new IllegalArgumentException("Tip tretmana pod tim nazivom već postoji.");
 		} else {
 			manager.getUslugaMngr().update(id, nazivUsluge, vremeTrajanja);
